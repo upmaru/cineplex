@@ -16,7 +16,8 @@ defmodule Cumulus.Mixfile do
     [
       extra_applications: [
         :logger, 
-        :ffmpex
+        :ffmpex,
+        :blazay
       ],
       mod: {Cumulus.Application, []}
     ]
@@ -25,7 +26,8 @@ defmodule Cumulus.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ffmpex, "~> 0.4.1"}
+      {:ffmpex, "~> 0.4.1"},
+      {:blazay, "~> 1.1.0"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
     ]
