@@ -10,6 +10,12 @@ defmodule Cumulus.Application do
     children = [
       # Starts a worker by calling: Cumulus.Worker.start_link(arg)
       # {Cumulus.Worker, arg},
+      Honeydew.worker_spec(
+        {:global, :encoder}, 
+        Cumulus.Encoder, 
+        num: 2, 
+        nodes: [:"studio@zacks-macbook-pro"]
+      )
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
