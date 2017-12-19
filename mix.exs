@@ -17,8 +17,8 @@ defmodule Cumulus.Mixfile do
       extra_applications: [
         :logger, 
         :ffmpex,
-        :blazay,
-        :honeydew
+        :honeydew,
+        :httpoison
       ],
       mod: {Cumulus.Application, []}
     ]
@@ -28,8 +28,9 @@ defmodule Cumulus.Mixfile do
   defp deps do
     [
       {:ffmpex, "~> 0.4.1"},
-      {:blazay, "~> 1.1.0"},
-      {:honeydew, "~> 1.0.4"}
+      {:honeydew, "~> 1.0.4"},
+      {:download, "~> 0.0.4"},
+      {:httpoison, "~> 0.13"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
     ]
