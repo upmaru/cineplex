@@ -15,7 +15,9 @@ defmodule Cumulus.Application do
         Cumulus.Encoder, 
         num: 2, 
         nodes: [:"studio@zacks-macbook-pro"]
-      )
+      ),
+
+      {Task.Supervisor, name: Cumulus.TaskSupervisor}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -26,7 +26,6 @@ defmodule Cumulus.Presets do
         |> add_stream_option(option_bufsize(2 * audio_rate))
       |> add_file_option(option_pix_fmt("yuv420p"))
       |> add_file_option(option_maxrate(max_rate))
-      |> add_file_option(option_bufsize(buffer_size))
       |> add_file_option(option_movflags("faststart"))
     |> execute
   end

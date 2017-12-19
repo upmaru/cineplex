@@ -12,4 +12,7 @@ defmodule Cumulus do
       :world
 
   """
+
+  def config, do: Application.get_env(:cumulus, Cumulus)
+  def config(key), do: Keyword.get(config(), key)
 end
