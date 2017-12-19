@@ -28,3 +28,41 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env}.exs"
+config :blazay, Blazay,
+  account_id: System.get_env("B2_ACCOUNT_ID"),
+  application_key: System.get_env("B2_APPLICATION_KEY"),
+  bucket_id: System.get_env("B2_BUCKET_ID"),
+  bucket_name: System.get_env("B2_BUCKET_NAME"),
+  concurrency: 2
+
+config :cumulus, Cumulus,
+  presets: [
+    %{
+      name: "1080p",
+      resolution: "1920x1080",
+      video: %{
+        bitrate: "4M"
+      },
+      audio: %{
+        bitrate: "192K"
+      },
+      file: %{
+        maxrate: "6M",
+        bufsize: "4M"
+      }
+    },
+    %{
+      name: "720p",
+      resolution: "1280x720",
+      video: %{
+        bitrate: "2M"
+      },
+      audio: %{
+        bitrate: "128K"
+      },
+      file: %{
+        maxrate: "4M",
+        bufsize: "2M"
+      }
+    }
+  ]

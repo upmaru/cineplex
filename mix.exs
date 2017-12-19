@@ -3,7 +3,7 @@ defmodule Cumulus.Mixfile do
 
   def project do
     [
-      app: :cumulus,
+      app: :muxx,
       version: "0.1.0",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
@@ -17,7 +17,8 @@ defmodule Cumulus.Mixfile do
       extra_applications: [
         :logger, 
         :ffmpex,
-        :blazay
+        :blazay,
+        :honeydew
       ],
       mod: {Cumulus.Application, []}
     ]
@@ -27,7 +28,8 @@ defmodule Cumulus.Mixfile do
   defp deps do
     [
       {:ffmpex, "~> 0.4.1"},
-      {:blazay, "~> 1.1.0"}
+      {:blazay, "~> 1.1.0"},
+      {:honeydew, "~> 1.0.4"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
     ]
