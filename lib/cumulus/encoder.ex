@@ -11,7 +11,7 @@ defmodule Cumulus.Encoder do
   @behaviour Honeydew.Worker
   use Honeydew.Progress
 
-  def perform(name, token) do
+  def perform(name, owner, token) do
     # with {:ok, file_path} <- Download.from(source_url, [path: name]),
     #   do: create_variations(file_path)
   end
