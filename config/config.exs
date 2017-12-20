@@ -33,35 +33,4 @@ config :blazay, Blazay,
   application_key: System.get_env("B2_APPLICATION_KEY"),
   bucket_id: System.get_env("B2_BUCKET_ID"),
   bucket_name: System.get_env("B2_BUCKET_NAME"),
-  concurrency: 2
-
-config :cumulus, Cumulus,
-  presets: [[
-    resolution: "1920x1080",
-    video_rate: 4_000_000,
-    audio_rate: 192_000,
-    audio_sample: 44100,
-    max_rate: 6_000_000,
-    name: "1080p"
-  ], [
-    resolution: "1280x720",
-    video_rate: 2_000_000,
-    audio_rate: 128_000,
-    audio_sample: 44100,
-    max_rate: 4_000_000,
-    name: "720p"
-  ], [
-    resolution: "1024x576",
-    video_rate: 1_000_000,
-    audio_rate: 96_000,
-    audio_sample: 44100,
-    max_rate: 2_000_000,
-    name: "576p"
-  ], [
-    resolution: "640x360",
-    video_rate: 500_000,
-    audio_rate: 64_000,
-    audio_sample: 44100,
-    max_rate: 1_000_000,
-    name: "360p"
-  ]]
+  concurrency: 2  

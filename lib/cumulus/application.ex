@@ -12,8 +12,8 @@ defmodule Cumulus.Application do
       # {Cumulus.Worker, arg},
       Honeydew.worker_spec(
         {:global, :encoder}, 
-        Cumulus.Encoder, 
-        num: 2, 
+        Cumulus.Encoder,
+        num: 1,
         nodes: [:"studio@zacks-macbook-pro"]
       ),
 
