@@ -3,7 +3,7 @@ defmodule Cumulus.Encoder do
   Handles the encoding
   """
   alias Cumulus.{
-    Presets, TaskSupervisor, Setting
+    Presets, TaskSupervisor, Current
   }
 
   alias HTTPoison.{
@@ -14,10 +14,10 @@ defmodule Cumulus.Encoder do
   use Honeydew.Progress
 
   def perform(name, setting_url, token) do
-    {:ok, _pid} = prepare(name, setting_url, token)
-
-    # with {:ok, file_path} <- Download.from(source_url, [path: name]),
-    #   do: create_variations(file_path)
+    with {:ok, _pid} <- prepare(name, setting_url, token),
+         url <- get_download_url(name),
+         {:ok, file_path} <- Download.from(url, [path: name]),
+         do: create_variations(file_path)
   end
 
   def encode(options, file_path) do
@@ -32,16 +32,22 @@ defmodule Cumulus.Encoder do
     headers = ["Authorization": "Bearer #{token}"]
     case HTTPoison.get(setting_url, headers) do
       {:ok, %Response{status_code: 200, body: body}} ->
-        body
-        |> Poison.decode!
-        |> Setting.start_link
+        with {:ok, settings} <- Poison.Parser.parse(body, keys: :atoms!),
+             {:ok, _pid} <- Current.start_link(settings),
+             do: Blazay.set_config(Current.storage)
       {:error, %Error{reason: reason}} ->
         {:error, reason}
     end
   end
 
   defp get_download_url(name) do
-    
+    {:ok, token} =
+      name
+      |> String.split("/")
+      |> List.first
+      |> Blazay.B2.Download.authorize(3600)
+
+    Blazay.B2.Download.url(name, token)
   end
 
   defp create_variations(file_path) do
