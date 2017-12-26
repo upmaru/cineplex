@@ -6,12 +6,14 @@ defmodule Cumulus.Encoder do
     Presets, TaskSupervisor
   }
 
-  @setting_id "encoder"
+  alias HTTPoison.{
+    Response, Error
+  }
 
   @behaviour Honeydew.Worker
   use Honeydew.Progress
 
-  def perform(name, owner, token) do
+  def perform(name, setting_url, token) do
     # with {:ok, file_path} <- Download.from(source_url, [path: name]),
     #   do: create_variations(file_path)
   end
@@ -24,8 +26,14 @@ defmodule Cumulus.Encoder do
     progress("-----> encoded #{name}")
   end
 
-  defp prepare(token) do
-    
+  defp prepare(setting_url, token) do
+    headers = ["Authorization": "Bearer #{token}"]
+    case HTTPoison.get(setting_url, headers) do
+      {:ok, %Response{status_code: 200, body: body} ->
+        
+      {:error, %Error{reason: reason}} ->
+        {:error, reason}
+    end 
   end
 
   defp get_download_url(name) do
@@ -39,7 +47,7 @@ defmodule Cumulus.Encoder do
       __MODULE__, 
       :encode, 
       [file_path], 
-      max_concurrency: 2,
+      max_concurrency: 1,
       timeout: :infinity
     ) |> Enum.to_list
   end
