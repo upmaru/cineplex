@@ -1,8 +1,8 @@
-defmodule Cumulus.Encoder do
+defmodule Compressor.Encoder do
   @moduledoc """
   Handles the encoding
   """
-  alias Cumulus.{
+  alias Compressor.{
     Presets, TaskSupervisor, Current
   }
 
@@ -53,7 +53,7 @@ defmodule Cumulus.Encoder do
     task =
       Task.Supervisor.async_stream(
         TaskSupervisor,
-        Cumulus.config(:presets),
+        Compressor.config(:presets),
         __MODULE__,
         :encode,
         [file_path],
