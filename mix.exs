@@ -8,7 +8,11 @@ defmodule Compressor.Mixfile do
       version: "0.2.0",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
-      deps: deps()
+      source_url: "https://github.com/upmaru/compressor",
+      name: "Compressor",
+      description: description(),
+      deps: deps(),
+      package: package()
     ]
   end
 
@@ -35,6 +39,22 @@ defmodule Compressor.Mixfile do
       {:blazay, "~> 1.2.0"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
+    ]
+  end
+
+  defp description do
+    """
+    Compressor is a distributed video compressor. It's designed to be used with Upmaru Studio
+    """
+  end
+
+  defp package do
+    [
+      name: :blazay,
+      files: ["lib", "mix.exs", "README*", "LICENSE*"],
+      maintainers: ["Zack Siri"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/upmaru/compressor"}
     ]
   end
 end
