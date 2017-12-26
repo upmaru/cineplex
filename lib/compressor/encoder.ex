@@ -71,6 +71,6 @@ defmodule Compressor.Encoder do
       |> Path.basename
       |> String.split(".")
 
-    Enum.join([file_name, "_", name, ".", extension]) 
+    Enum.join([file_name, "_", name, ".", extension])
   end
 end
