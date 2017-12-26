@@ -51,7 +51,7 @@ defmodule Compressor.Mixfile do
 
   defp package do
     [
-      name: :blazay,
+      name: :compressor,
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Zack Siri"],
       licenses: ["MIT"],
