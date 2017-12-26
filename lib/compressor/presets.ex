@@ -14,10 +14,10 @@ defmodule Cumulus.Presets do
     max_rate = integer_opt(opts, :max_rate, 6_000_000)
 
     new_command_common_options()
-    |> add_input_file(input_file_path) 
+    |> add_input_file(input_file_path)
     |> add_output_file(output_file_path)
       |> add_stream_specifier(stream_type: :video)
-        |> add_stream_option(option_s(resolution)) 
+        |> add_stream_option(option_s(resolution))
         |> add_stream_option(option_profile("main"))
         |> add_stream_option(option_b(video_rate))
         |> add_stream_option(option_bufsize(2 * video_rate))

@@ -1,11 +1,11 @@
-defmodule Cumulus.Mixfile do
+defmodule Compressor.Mixfile do
   @moduledoc false
   use Mix.Project
 
   def project do
     [
-      app: :cumulus,
-      version: "0.1.0",
+      app: :compressor,
+      version: "0.2.0",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       deps: deps()
@@ -22,7 +22,7 @@ defmodule Cumulus.Mixfile do
         :httpoison,
         :blazay
       ],
-      mod: {Cumulus.Application, []}
+      mod: {Compressor.Application, []}
     ]
   end
 
