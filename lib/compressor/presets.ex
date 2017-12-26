@@ -1,4 +1,4 @@
-defmodule Cumulus.Presets do
+defmodule Compressor.Presets do
   @moduledoc """
   A Collection of presets
   """

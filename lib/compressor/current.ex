@@ -1,4 +1,4 @@
-defmodule Cumulus.Current do
+defmodule Compressor.Current do
   @moduledoc """
   The Setting Module stores the setting for a job. Settings tells the
   encoder where to store the file after encoding, and which presets
