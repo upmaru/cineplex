@@ -45,7 +45,7 @@ defmodule Cumulus.Encoder do
   end
 
   defp create_variations(file_path) do
-    tasks =
+    task =
       Task.Supervisor.async_stream(
         TaskSupervisor,
         Cumulus.config(:presets),
@@ -56,7 +56,7 @@ defmodule Cumulus.Encoder do
         timeout: :infinity
       )
 
-    Enum.to_list(tasks)
+    Enum.to_list(task)
   end
 
   defp generate_output_name(name, file_path) do
