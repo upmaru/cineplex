@@ -10,7 +10,7 @@ by adding `cumulus` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:cumulus, "~> 0.1.0"}
+    {:compressor, "~> 0.1.0"}
   ]
 end
 ```
