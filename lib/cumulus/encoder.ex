@@ -10,6 +10,8 @@ defmodule Cumulus.Encoder do
     Response, Error
   }
 
+  alias Posion.Parser
+
   @behaviour Honeydew.Worker
   use Honeydew.Progress
 
@@ -30,13 +32,13 @@ defmodule Cumulus.Encoder do
 
   defp prepare(name, setting_url, token) do
     headers = ["Authorization": "Bearer #{token}"]
-    case HTTPoison.get(setting_url, headers) do
-      {:ok, %Response{status_code: 200, body: body}} ->
-        with {:ok, settings} <- Poison.Parser.parse(body, keys: :atoms!),
-             {:ok, _pid} <- Current.start_link(settings),
-             do: Blazay.set_config(Current.storage)
-      {:error, %Error{reason: reason}} ->
-        {:error, reason}
+
+    with {:ok, response} <- HTTPoison.get(setting_url, headers),
+         {:ok, settings} <- Parser.parse(response.body, keys: :atoms!),
+         {:ok, _pid} <- Current.start_link(settings) do
+      Blazay.set_config(Current.storage)
+    else
+      {:error, %Error{reason: reason}} -> {:error, reason}
     end
   end
 
@@ -72,6 +74,6 @@ defmodule Cumulus.Encoder do
       |> Path.basename
       |> String.split(".")
 
-    Enum.join([file_name, "_", name, ".", extension]) 
+    Enum.join([file_name, "_", name, ".", extension])
   end
 end

@@ -7,17 +7,19 @@ defmodule Cumulus.Current do
 
   use Agent
 
-  def start_link(settings) do
-    Agent.start_link(fn -> settings end, name: __MODULE__)
+  def start_link(configuration) do
+    Agent.start_link(fn -> configuration end, name: __MODULE__)
   end
 
   def storage do
-    Agent.get(__MODULE__, fn settings ->
-      Enum.into(settings.storage, [])
+    Agent.get(__MODULE__, fn configuration ->
+      Enum.into(configuration.storage, [])
     end)
   end
 
   def presets do
-    Agent.get(__MODULE__, fn settings -> settings.presets end)
+    Agent.get(__MODULE__, fn configuration ->
+      configuration.presets
+    end)
   end
 end

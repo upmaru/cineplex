@@ -1,7 +1,8 @@
 defmodule Cumulus.Presets do
-  @doc """
-  A Preset for 1080p web video stream
+  @moduledoc """
+  A Collection of presets
   """
+
   import FFmpex
   use FFmpex.Options
 
@@ -9,7 +10,7 @@ defmodule Cumulus.Presets do
     resolution = Map.get(opts, :resolution, "1920x1080")
     video_rate = integer_opt(opts, :video_rate, 4_000_000)
     audio_rate = integer_opt(opts, :audio_rate, 192_000)
-    audio_sample = integer_opt(opts, :audio_sample, 44100)
+    audio_sample = integer_opt(opts, :audio_sample, 44_100)
     max_rate = integer_opt(opts, :max_rate, 6_000_000)
 
     new_command_common_options()
@@ -31,8 +32,7 @@ defmodule Cumulus.Presets do
   end
 
   defp new_command_common_options do
-    FFmpex.new_command 
-    |> add_global_option(option_y()) 
+    add_global_option(FFmpex.new_command, option_y())
   end
 
   def integer_opt(opts, key, default) do
