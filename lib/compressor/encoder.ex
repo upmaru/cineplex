@@ -55,8 +55,8 @@ defmodule Compressor.Encoder do
   end
 
   defp download_source(url, path) do
+    progress("downloading_source_file")
     Logger.info "[Compressor] -----> downloading #{path}"
-    progress("download_source")
     Download.from(url, [path: path])
   end
 
