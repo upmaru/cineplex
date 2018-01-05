@@ -7,53 +7,66 @@ defmodule Compressor.Encoder do
   }
 
   alias HTTPoison.Error
-  alias Poison.Parser
+  use Honeydew.Progress
 
   @behaviour Honeydew.Worker
-  use Honeydew.Progress
+
+  require IEx
 
   def perform(name, setting_url, token) do
     with {:ok, _pid} <- prepare(setting_url, token),
-         url <- get_download_url(name),
-         {:ok, file_path} <- Download.from(url, [path: name]),
+         {:ok, url, path} <- setup_download(name),
+         {:ok, file_path} <- download_source(url, path),
          do: create_variations(file_path)
   end
 
   def encode(options, file_path) do
-    name = Map.get(options, :name)
+    name = Map.get(options, "name")
     output_name = generate_output_name(name, file_path)
 
     Presets.streamable(file_path, output_name, options)
-    progress("-----> encoded #{name}")
+    progress("[#{__MODULE__}] Encoded #{name}")
   end
 
   defp prepare(setting_url, token) do
     headers = ["Authorization": "Bearer #{token}"]
 
     with {:ok, response} <- HTTPoison.get(setting_url, headers),
-         {:ok, settings} <- Parser.parse(response.body, keys: :atoms!),
-         {:ok, _pid} <- Current.start_link(settings) do
+         {:ok, settings} <- Poison.decode(response.body),
+         {:ok, _pid} <- Current.start_link(settings["data"]) do
       Blazay.set_config(Current.storage)
     else
       {:error, %Error{reason: reason}} -> {:error, reason}
     end
   end
 
-  defp get_download_url(name) do
-    {:ok, token} =
+  defp setup_download(name) do
+    {:ok, auth} =
       name
       |> String.split("/")
       |> List.first
       |> Blazay.B2.Download.authorize(3600)
 
-    Blazay.B2.Download.url(name, token)
+    path = "tmp/" <> name
+
+    with :ok <- path |> Path.dirname |> File.mkdir_p,
+         url <- Blazay.B2.Download.url(name, auth.authorization_token) do
+      {:ok, url, path}
+    end
+  end
+
+  defp download_source(url, path) do
+    progress("[#{__MODULE__}] Downloading source")
+    result = Download.from(url, [path: System.cwd() <> "/" <> path])
+
+    IEx.pry
   end
 
   defp create_variations(file_path) do
     task =
       Task.Supervisor.async_stream(
         TaskSupervisor,
-        Compressor.config(:presets),
+        Current.presets,
         __MODULE__,
         :encode,
         [file_path],

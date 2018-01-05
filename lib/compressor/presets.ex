@@ -7,11 +7,11 @@ defmodule Compressor.Presets do
   use FFmpex.Options
 
   def streamable(input_file_path, output_file_path, opts \\ %{}) do
-    resolution = Map.get(opts, :resolution, "1920x1080")
-    video_rate = integer_opt(opts, :video_rate, 4_000_000)
-    audio_rate = integer_opt(opts, :audio_rate, 192_000)
-    audio_sample = integer_opt(opts, :audio_sample, 44_100)
-    max_rate = integer_opt(opts, :max_rate, 6_000_000)
+    resolution = Map.get(opts, "resolution", "1920x1080")
+    video_rate = integer_opt(opts, "video_rate", 4_000_000)
+    audio_rate = integer_opt(opts, "audio_rate", 192_000)
+    audio_sample = integer_opt(opts, "audio_sample", 44_100)
+    max_rate = integer_opt(opts, "max_rate", 6_000_000)
 
     new_command_common_options()
     |> add_input_file(input_file_path)
