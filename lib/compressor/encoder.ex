@@ -11,7 +11,7 @@ defmodule Compressor.Encoder do
 
   @behaviour Honeydew.Worker
 
-  require IEx
+  require Logger
 
   def perform(name, setting_url, token) do
     with {:ok, _pid} <- prepare(setting_url, token),
@@ -25,7 +25,6 @@ defmodule Compressor.Encoder do
     output_name = generate_output_name(name, file_path)
 
     Presets.streamable(file_path, output_name, options)
-    progress("[#{__MODULE__}] Encoded #{name}")
   end
 
   defp prepare(setting_url, token) do
@@ -56,14 +55,16 @@ defmodule Compressor.Encoder do
   end
 
   defp download_source(url, path) do
-    progress("[#{__MODULE__}] Downloading source")
-    result = Download.from(url, [path: System.cwd() <> "/" <> path])
-
-    IEx.pry
+    Logger.info "[Compressor] -----> downloading #{path}"
+    progress("download_source")
+    Download.from(url, [path: path])
   end
 
   defp create_variations(file_path) do
-    task =
+    progress("encoded [0]")
+    Logger.info "[Compressor] -----> encoding #{file_path}"
+
+    Stream.run(
       Task.Supervisor.async_stream(
         TaskSupervisor,
         Current.presets,
@@ -73,8 +74,10 @@ defmodule Compressor.Encoder do
         max_concurrency: 1,
         timeout: :infinity
       )
+    )
 
-    Enum.to_list(task)
+    progress("encoded [100]")
+    Logger.info "[Compressor] -----> encoded #{file_path}"
   end
 
   defp generate_output_name(name, file_path) do
@@ -84,6 +87,11 @@ defmodule Compressor.Encoder do
       |> Path.basename
       |> String.split(".")
 
-    Enum.join([file_name, "_", name, ".", extension])
+    Enum.join(
+      [
+        Path.dirname(file_path), "/",
+        file_name, "_", name, ".", extension
+      ]
+    )
   end
 end

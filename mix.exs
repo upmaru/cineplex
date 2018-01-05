@@ -35,7 +35,7 @@ defmodule Compressor.Mixfile do
     [
       {:ffmpex, "~> 0.4.1"},
       {:honeydew, "~> 1.0.4"},
-      {:download, "~> 0.0.4"},
+      {:download, github: "little-bobby-tables/download", branch: "fix-process-communication"},
       {:blazay, "~> 1.2.0"},
       {:ex_doc, ">= 0.0.0", only: :dev}
       # {:dep_from_hexpm, "~> 0.3.0"},
