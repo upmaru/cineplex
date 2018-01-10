@@ -3,7 +3,7 @@ defmodule Compressor.Encoder do
   Handles the encoding
   """
   alias Compressor.{
-    Presets, TaskSupervisor, Current, Store
+    Presets, TaskSupervisor, Current, Keeper, Events
   }
 
   alias HTTPoison.Error
@@ -15,8 +15,9 @@ defmodule Compressor.Encoder do
   def perform(name, callback, token) do
     with {:ok, _pid} <- prepare(callback, token),
          {:ok, url, path} <- setup_download(name),
-         {:ok, file_path} <- download_source(url, path),
-         do: create_variations(file_path)
+         {:ok, file_path} <- download_source(url, path) do
+      tasks = create_variations(file_path)
+    end
   end
 
   def encode(options, file_path) do
@@ -37,8 +38,9 @@ defmodule Compressor.Encoder do
 
     with {:ok, response} <- HTTPoison.get(callback.setting, headers),
          {:ok, settings} <- Poison.decode(response.body),
-         {:ok, _pid} <- Current.start_link(settings["data"]) do
+         {:ok, _pid} <- Current.start_link(settings["data"], callback.resource, headers) do
       Upstream.set_config(Current.storage)
+      Events.start_link
     else
       {:error, %Error{reason: reason}} -> {:error, reason}
     end
@@ -67,7 +69,7 @@ defmodule Compressor.Encoder do
   defp create_variations(file_path) do
     Logger.info "[Compressor] encoding #{file_path}"
 
-    Stream.run(
+    Enum.to_list(
       Task.Supervisor.async_stream(
         TaskSupervisor,
         Current.presets,
@@ -78,8 +80,6 @@ defmodule Compressor.Encoder do
         timeout: :infinity
       )
     )
-
-    Logger.info "[Compressor] encoded #{file_path}"
   end
 
   defp generate_output_name(name, file_path) do
