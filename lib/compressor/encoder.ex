@@ -3,18 +3,17 @@ defmodule Compressor.Encoder do
   Handles the encoding
   """
   alias Compressor.{
-    Presets, TaskSupervisor, Current
+    Presets, TaskSupervisor, Current, Store
   }
 
   alias HTTPoison.Error
-  use Honeydew.Progress
 
   @behaviour Honeydew.Worker
 
   require Logger
 
-  def perform(name, setting_url, token) do
-    with {:ok, _pid} <- prepare(setting_url, token),
+  def perform(name, callback, token) do
+    with {:ok, _pid} <- prepare(callback, token),
          {:ok, url, path} <- setup_download(name),
          {:ok, file_path} <- download_source(url, path),
          do: create_variations(file_path)
@@ -25,15 +24,21 @@ defmodule Compressor.Encoder do
     output_name = generate_output_name(name, file_path)
 
     Presets.streamable(file_path, output_name, options)
+    Task.async(fn -> upload(output_name) end)
   end
 
-  defp prepare(setting_url, token) do
+  def upload(file_path) do
+    name = Path.basename(file_path)
+    Uploader.upload_file!(file_path, name)
+  end
+
+  def prepare(callback, token) do
     headers = ["Authorization": "Bearer #{token}"]
 
-    with {:ok, response} <- HTTPoison.get(setting_url, headers),
+    with {:ok, response} <- HTTPoison.get(callback.setting, headers),
          {:ok, settings} <- Poison.decode(response.body),
          {:ok, _pid} <- Current.start_link(settings["data"]) do
-      Blazay.set_config(Current.storage)
+      Upstream.set_config(Current.storage)
     else
       {:error, %Error{reason: reason}} -> {:error, reason}
     end
@@ -44,25 +49,23 @@ defmodule Compressor.Encoder do
       name
       |> String.split("/")
       |> List.first
-      |> Blazay.B2.Download.authorize(3600)
+      |> Upstream.B2.Download.authorize(3600)
 
     path = "tmp/" <> name
 
     with :ok <- path |> Path.dirname |> File.mkdir_p,
-         url <- Blazay.B2.Download.url(name, auth.authorization_token) do
+         url <- Upstream.B2.Download.url(name, auth.authorization_token) do
       {:ok, url, path}
     end
   end
 
   defp download_source(url, path) do
-    progress("downloading_source_file")
-    Logger.info "[Compressor] -----> downloading #{path}"
+    Logger.info "[Compressor] downloading #{path}"
     Download.from(url, [path: path])
   end
 
   defp create_variations(file_path) do
-    progress("encoded [0]")
-    Logger.info "[Compressor] -----> encoding #{file_path}"
+    Logger.info "[Compressor] encoding #{file_path}"
 
     Stream.run(
       Task.Supervisor.async_stream(
@@ -76,8 +79,7 @@ defmodule Compressor.Encoder do
       )
     )
 
-    progress("encoded [100]")
-    Logger.info "[Compressor] -----> encoded #{file_path}"
+    Logger.info "[Compressor] encoded #{file_path}"
   end
 
   defp generate_output_name(name, file_path) do
