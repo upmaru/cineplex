@@ -38,7 +38,7 @@ defmodule Compressor.Event do
     Agent.update(__MODULE__, fn existing_events ->
       %{url: url, headers: headers} = Current.resource
 
-      Source.patch!(url, [%{name: name} | existing_events], headers)
+      Source.patch!(url, [%{"name" => name} | existing_events], headers)
     end)
   end
 end

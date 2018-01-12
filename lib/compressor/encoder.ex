@@ -3,7 +3,7 @@ defmodule Compressor.Encoder do
   Handles the encoding
   """
   alias Compressor.{
-    Presets, TaskSupervisor, Current, Keeper, Events
+    Presets, TaskSupervisor, Current, Uploader, Events
   }
 
   alias HTTPoison.Error
@@ -16,21 +16,19 @@ defmodule Compressor.Encoder do
     with {:ok, _pid} <- prepare(callback, token),
          {:ok, url, path} <- setup_download(name),
          {:ok, file_path} <- download_source(url, path) do
-      tasks = create_variations(file_path)
+
+      file_path
+      |> create_variations
+      |> Task.yield_many(:infinity)
     end
   end
 
-  def encode(options, file_path) do
+  def encode_and_upload(options, file_path) do
     name = Map.get(options, "name")
     output_name = generate_output_name(name, file_path)
 
     Presets.streamable(file_path, output_name, options)
-    Task.async(fn -> upload(output_name) end)
-  end
-
-  def upload(file_path) do
-    name = Path.basename(file_path)
-    Uploader.upload_file!(file_path, name)
+    Task.async(Uploader, :upload, output_name)
   end
 
   def prepare(callback, token) do
@@ -74,7 +72,7 @@ defmodule Compressor.Encoder do
         TaskSupervisor,
         Current.presets,
         __MODULE__,
-        :encode,
+        :encode_and_upload,
         [file_path],
         max_concurrency: 1,
         timeout: :infinity
