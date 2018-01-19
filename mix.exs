@@ -7,7 +7,7 @@ defmodule Compressor.Mixfile do
       app: :compressor,
       version: "0.2.0",
       elixir: "~> 1.5",
-      start_permanent: Mix.env == :prod,
+      start_permanent: Mix.env() == :prod,
       source_url: "https://github.com/upmaru/compressor",
       name: "Compressor",
       description: description(),

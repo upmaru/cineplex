@@ -16,7 +16,6 @@ defmodule Compressor.Application do
         num: 1,
         nodes: [:"studio@zacks-macbook-pro"]
       ),
-
       {Task.Supervisor, name: Compressor.TaskSupervisor}
     ]
 

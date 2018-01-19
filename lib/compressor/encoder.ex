@@ -3,7 +3,11 @@ defmodule Compressor.Encoder do
   Handles the encoding
   """
   alias Compressor.{
-    Presets, TaskSupervisor, Current, Uploader, Events
+    Presets,
+    TaskSupervisor,
+    Current,
+    Uploader,
+    Events
   }
 
   alias HTTPoison.Error
@@ -16,7 +20,6 @@ defmodule Compressor.Encoder do
     with {:ok, _pid} <- prepare(callback, token),
          {:ok, url, path} <- setup_download(name),
          {:ok, file_path} <- download_source(url, path) do
-
       file_path
       |> create_variations
       |> Task.yield_many(:infinity)
@@ -32,13 +35,13 @@ defmodule Compressor.Encoder do
   end
 
   def prepare(callback, token) do
-    headers = ["Authorization": "Bearer #{token}"]
+    headers = [Authorization: "Bearer #{token}"]
 
     with {:ok, response} <- HTTPoison.get(callback.setting, headers),
          {:ok, settings} <- Poison.decode(response.body),
          {:ok, _pid} <- Current.start_link(settings["data"], callback.resource, headers) do
-      Upstream.set_config(Current.storage)
-      Events.start_link
+      Upstream.set_config(Current.storage())
+      Events.start_link()
     else
       {:error, %Error{reason: reason}} -> {:error, reason}
     end
@@ -48,29 +51,29 @@ defmodule Compressor.Encoder do
     {:ok, auth} =
       name
       |> String.split("/")
-      |> List.first
+      |> List.first()
       |> Upstream.B2.Download.authorize(3600)
 
     path = "tmp/" <> name
 
-    with :ok <- path |> Path.dirname |> File.mkdir_p,
+    with :ok <- path |> Path.dirname() |> File.mkdir_p(),
          url <- Upstream.B2.Download.url(name, auth.authorization_token) do
       {:ok, url, path}
     end
   end
 
   defp download_source(url, path) do
-    Logger.info "[Compressor] downloading #{path}"
-    Download.from(url, [path: path])
+    Logger.info("[Compressor] downloading #{path}")
+    Download.from(url, path: path)
   end
 
   defp create_variations(file_path) do
-    Logger.info "[Compressor] encoding #{file_path}"
+    Logger.info("[Compressor] encoding #{file_path}")
 
     Enum.to_list(
       Task.Supervisor.async_stream(
         TaskSupervisor,
-        Current.presets,
+        Current.presets(),
         __MODULE__,
         :encode_and_upload,
         [file_path],
@@ -83,15 +86,18 @@ defmodule Compressor.Encoder do
   defp generate_output_name(name, file_path) do
     [file_name, extension] =
       file_path
-      |> Path.expand
-      |> Path.basename
+      |> Path.expand()
+      |> Path.basename()
       |> String.split(".")
 
-    Enum.join(
-      [
-        Path.dirname(file_path), "/",
-        file_name, "_", name, ".", extension
-      ]
-    )
+    Enum.join([
+      Path.dirname(file_path),
+      "/",
+      file_name,
+      "_",
+      name,
+      ".",
+      extension
+    ])
   end
 end

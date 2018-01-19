@@ -8,15 +8,19 @@ defmodule Compressor.Current do
   use Agent
 
   def start_link(configuration, resource_url, headers) do
-    Agent.start_link(fn ->
-      %{
-        resource: %{
-          url: resource_url, headers: headers
-        },
-        storage: to_keyword_list(configuration["storage"]),
-        presets: configuration["presets"]
-      }
-    end, name: __MODULE__)
+    Agent.start_link(
+      fn ->
+        %{
+          resource: %{
+            url: resource_url,
+            headers: headers
+          },
+          storage: to_keyword_list(configuration["storage"]),
+          presets: configuration["presets"]
+        }
+      end,
+      name: __MODULE__
+    )
   end
 
   def resource do

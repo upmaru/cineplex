@@ -16,23 +16,23 @@ defmodule Compressor.Presets do
     new_command_common_options()
     |> add_input_file(input_file_path)
     |> add_output_file(output_file_path)
-      |> add_stream_specifier(stream_type: :video)
-        |> add_stream_option(option_s(resolution))
-        |> add_stream_option(option_profile("main"))
-        |> add_stream_option(option_b(video_rate))
-        |> add_stream_option(option_bufsize(2 * video_rate))
-      |> add_stream_specifier(stream_type: :audio)
-        |> add_stream_option(option_b(audio_rate))
-        |> add_stream_option(option_ar(audio_sample))
-        |> add_stream_option(option_bufsize(2 * audio_rate))
-      |> add_file_option(option_pix_fmt("yuv420p"))
-      |> add_file_option(option_maxrate(max_rate))
-      |> add_file_option(option_movflags("faststart"))
+    |> add_stream_specifier(stream_type: :video)
+    |> add_stream_option(option_s(resolution))
+    |> add_stream_option(option_profile("main"))
+    |> add_stream_option(option_b(video_rate))
+    |> add_stream_option(option_bufsize(2 * video_rate))
+    |> add_stream_specifier(stream_type: :audio)
+    |> add_stream_option(option_b(audio_rate))
+    |> add_stream_option(option_ar(audio_sample))
+    |> add_stream_option(option_bufsize(2 * audio_rate))
+    |> add_file_option(option_pix_fmt("yuv420p"))
+    |> add_file_option(option_maxrate(max_rate))
+    |> add_file_option(option_movflags("faststart"))
     |> execute
   end
 
   defp new_command_common_options do
-    add_global_option(FFmpex.new_command, option_y())
+    add_global_option(FFmpex.new_command(), option_y())
   end
 
   def integer_opt(opts, key, default) do

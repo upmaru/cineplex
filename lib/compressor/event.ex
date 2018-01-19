@@ -23,11 +23,14 @@ defmodule Compressor.Event do
   end
 
   def start_link do
-    Agent.start_link(fn ->
-      %{url: url, headers: headers} = Current.resource
+    Agent.start_link(
+      fn ->
+        %{url: url, headers: headers} = Current.resource()
 
-      Source.get!(url, headers)
-    end, name: __MODULE__)
+        Source.get!(url, headers)
+      end,
+      name: __MODULE__
+    )
   end
 
   def all do
@@ -36,7 +39,7 @@ defmodule Compressor.Event do
 
   def track(name) do
     Agent.update(__MODULE__, fn existing_events ->
-      %{url: url, headers: headers} = Current.resource
+      %{url: url, headers: headers} = Current.resource()
 
       Source.patch!(url, [%{"name" => name} | existing_events], headers)
     end)
