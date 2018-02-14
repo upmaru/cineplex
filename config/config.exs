@@ -2,6 +2,12 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
+config :exq,
+  name: Exq,
+  namespace: "exq",
+  concurrency: 1,
+  queues: ["encoder"],
+  start_on_application: false
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
 # file won't be loaded nor affect the parent project. For this reason,
