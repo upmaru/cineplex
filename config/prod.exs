@@ -2,8 +2,7 @@ use Mix.Config
 
 config :exq,
   name: Exq,
-  host: "${REDIS_HOST}",
-  port: 6379,
+  url: "${REDIS_URL}"
   namespace: "exq",
   concurrency: 1,
   queues: ["encoder"],
