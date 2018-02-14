@@ -6,17 +6,13 @@ defmodule Compressor.Application do
   use Application
 
   def start(_type, _args) do
+    import Supervisor.Spec
     # List all child processes to be supervised
     children = [
       # Starts a worker by calling: Compressor.Worker.start_link(arg)
       # {Compressor.Worker, arg},
-      Honeydew.worker_spec(
-        {:global, :encoder},
-        Compressor.Encoder,
-        num: 1,
-        nodes: [:"studio@zacks-macbook-pro"]
-      ),
-      {Task.Supervisor, name: Compressor.TaskSupervisor}
+      supervisor(Task.Supervisor, [[name: Compressor.TaskSupervisor]]),
+      supervisor(Exq, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

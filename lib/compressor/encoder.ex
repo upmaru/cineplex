@@ -2,6 +2,7 @@ defmodule Compressor.Encoder do
   @moduledoc """
   Handles the encoding
   """
+  
   alias Compressor.{
     Presets,
     TaskSupervisor,
@@ -11,9 +12,6 @@ defmodule Compressor.Encoder do
   }
 
   alias HTTPoison.Error
-
-  @behaviour Honeydew.Worker
-
   require Logger
 
   def perform(name, callback, token) do

@@ -22,7 +22,7 @@ defmodule Compressor.Mixfile do
       extra_applications: [
         :logger,
         :ffmpex,
-        :honeydew,
+        :exq,
         :httpoison,
         :upstream
       ],
@@ -34,9 +34,9 @@ defmodule Compressor.Mixfile do
   defp deps do
     [
       {:ffmpex, "~> 0.4.1"},
-      {:honeydew, "~> 1.0.4"},
+      {:exq, "~> 0.10.1"},
       {:download, github: "little-bobby-tables/download", branch: "fix-process-communication"},
-      {:upstream, path: "../upstream"},
+      {:upstream, "~> 1.2.3"},
       {:ex_doc, ">= 0.0.0", only: :dev}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
