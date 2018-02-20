@@ -1,4 +1,4 @@
-defmodule Compressor.Event do
+defmodule Compressor.Events do
   @moduledoc """
   Tracks all events emitted by the encoder
   """
@@ -21,6 +21,8 @@ defmodule Compressor.Event do
       body["data"]["encoding_events"]
     end
   end
+
+  alias Compressor.Current
 
   def start_link do
     Agent.start_link(

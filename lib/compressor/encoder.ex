@@ -26,10 +26,14 @@ defmodule Compressor.Encoder do
 
   def encode_and_upload(options, file_path) do
     name = Map.get(options, "name")
+    Events.track("encoding_#{name}")
     output_name = generate_output_name(name, file_path)
 
-    Presets.streamable(file_path, output_name, options)
-    Task.async(Uploader, :upload, output_name)
+    unless File.exists?(output_name) do
+      Presets.streamable(file_path, output_name, options)
+    end
+
+    Task.Supervisor.async(TaskSupervisor, Uploader, :upload, output_name)
   end
 
   def prepare(callback, token) do
@@ -46,6 +50,7 @@ defmodule Compressor.Encoder do
   end
 
   defp setup_download(name) do
+    Events.track("starting")
     {:ok, auth} =
       name
       |> String.split("/")
@@ -61,11 +66,18 @@ defmodule Compressor.Encoder do
   end
 
   defp download_source(url, path) do
+    Events.track("downloading_source")
     Logger.info("[Compressor] downloading #{path}")
-    Download.from(url, path: path)
+
+    unless File.exists?(path) do
+      Logger.info("[Compressor] file_exists")
+
+      Download.from(url, path: path)
+    end
   end
 
   defp create_variations(file_path) do
+    Events.track("creating_variations")
     Logger.info("[Compressor] encoding #{file_path}")
 
     Enum.to_list(
@@ -75,7 +87,7 @@ defmodule Compressor.Encoder do
         __MODULE__,
         :encode_and_upload,
         [file_path],
-        max_concurrency: 1,
+        max_concurrency: 2,
         timeout: :infinity
       )
     )
