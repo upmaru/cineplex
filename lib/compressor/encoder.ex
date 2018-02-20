@@ -35,9 +35,9 @@ defmodule Compressor.Encoder do
   def prepare(callback, token) do
     headers = [Authorization: "Bearer #{token}"]
 
-    with {:ok, response} <- HTTPoison.get(callback.setting, headers),
+    with {:ok, response} <- HTTPoison.get(callback["settings"], headers),
          {:ok, settings} <- Poison.decode(response.body),
-         {:ok, _pid} <- Current.start_link(settings["data"], callback.resource, headers) do
+         {:ok, _pid} <- Current.start_link(settings["data"], callback["resource"], headers) do
       Upstream.set_config(Current.storage())
       Events.start_link()
     else
