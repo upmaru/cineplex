@@ -3,6 +3,7 @@ defmodule Compressor.Events do
   Tracks all events emitted by the encoder
   """
   use Agent
+  require IEx
 
   defmodule Source do
     @moduledoc """
@@ -29,7 +30,7 @@ defmodule Compressor.Events do
       fn ->
         %{url: url, headers: headers} = Current.resource()
 
-        Source.get!(url, headers)
+        Source.get!(url, headers).body
       end,
       name: __MODULE__
     )
@@ -43,7 +44,7 @@ defmodule Compressor.Events do
     Agent.update(__MODULE__, fn existing_events ->
       %{url: url, headers: headers} = Current.resource()
 
-      Source.patch!(url, [%{"name" => name} | existing_events], headers)
-    end)
+      Source.patch!(url, [%{"name" => name} | existing_events], headers).body
+    end, :infinity)
   end
 end

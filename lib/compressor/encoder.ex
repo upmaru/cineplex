@@ -37,7 +37,7 @@ defmodule Compressor.Encoder do
   end
 
   def prepare(callback, token) do
-    headers = [Authorization: "Bearer #{token}"]
+    headers = [{"Authorization", "Bearer #{token}"}, {"Content-Type", "application/json"}]
 
     with {:ok, response} <- HTTPoison.get(callback["settings"], headers),
          {:ok, settings} <- Poison.decode(response.body),
