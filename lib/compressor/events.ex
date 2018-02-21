@@ -1,8 +1,9 @@
-defmodule Compressor.Event do
+defmodule Compressor.Events do
   @moduledoc """
   Tracks all events emitted by the encoder
   """
   use Agent
+  require Logger
 
   defmodule Source do
     @moduledoc """
@@ -22,12 +23,14 @@ defmodule Compressor.Event do
     end
   end
 
+  alias Compressor.Current
+
   def start_link do
     Agent.start_link(
       fn ->
         %{url: url, headers: headers} = Current.resource()
 
-        Source.get!(url, headers)
+        Source.get!(url, headers).body
       end,
       name: __MODULE__
     )
@@ -38,10 +41,16 @@ defmodule Compressor.Event do
   end
 
   def track(name) do
+    Logger.info("[Compressor] #{name}")
+
     Agent.update(__MODULE__, fn existing_events ->
       %{url: url, headers: headers} = Current.resource()
 
-      Source.patch!(url, [%{"name" => name} | existing_events], headers)
+      Source.patch!(url, [%{"name" => name} | existing_events], headers).body
     end)
+  end
+
+  def stop do
+    Agent.stop(__MODULE__)
   end
 end

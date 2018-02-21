@@ -2,7 +2,7 @@ defmodule Compressor.Encoder do
   @moduledoc """
   Handles the encoding
   """
-  
+
   alias Compressor.{
     Presets,
     TaskSupervisor,
@@ -11,29 +11,29 @@ defmodule Compressor.Encoder do
     Events
   }
 
+  alias Upstream.B2
+
   alias HTTPoison.Error
-  require Logger
 
   def perform(name, callback, token) do
     with {:ok, _pid} <- prepare(callback, token),
+         {:ok, encode_presets} <- check_for_encoded_preset(name),
          {:ok, url, path} <- setup_download(name),
          {:ok, file_path} <- download_source(url, path) do
-      file_path
-      |> create_variations
-      |> Task.yield_many(:infinity)
+
+      encode_presets
+      |> create_variations(file_path)
+      |> Enum.to_list
+      |> finish
+    else
+      {:error, reason} ->
+        Events.track("#{reason}")
+        finish([])
     end
   end
 
-  def encode_and_upload(options, file_path) do
-    name = Map.get(options, "name")
-    output_name = generate_output_name(name, file_path)
-
-    Presets.streamable(file_path, output_name, options)
-    Task.async(Uploader, :upload, output_name)
-  end
-
-  def prepare(callback, token) do
-    headers = [Authorization: "Bearer #{token}"]
+  defp prepare(callback, token) do
+    headers = [{"Authorization", "Bearer #{token}"}, {"Content-Type", "application/json"}]
 
     with {:ok, response} <- HTTPoison.get(callback["settings"], headers),
          {:ok, settings} <- Poison.decode(response.body),
@@ -46,6 +46,7 @@ defmodule Compressor.Encoder do
   end
 
   defp setup_download(name) do
+    Events.track("starting")
     {:ok, auth} =
       name
       |> String.split("/")
@@ -61,24 +62,79 @@ defmodule Compressor.Encoder do
   end
 
   defp download_source(url, path) do
-    Logger.info("[Compressor] downloading #{path}")
-    Download.from(url, path: path)
+    Events.track("checking_source")
+
+    if File.exists?(path) do
+      Events.track("file_exists")
+      {:ok, path}
+    else
+      Events.track("downloading_source")
+      Download.from(url, path: path)
+    end
   end
 
-  defp create_variations(file_path) do
-    Logger.info("[Compressor] encoding #{file_path}")
+  defp check_for_encoded_preset(name) do
+    Events.track("check_for_encoded")
 
-    Enum.to_list(
-      Task.Supervisor.async_stream(
-        TaskSupervisor,
-        Current.presets(),
-        __MODULE__,
-        :encode_and_upload,
-        [file_path],
-        max_concurrency: 1,
-        timeout: :infinity
-      )
+    case B2.List.by_file_name(name) do
+      {:ok, %B2.List.FileNames{files: files}} ->
+        existing = Enum.map(files, fn file -> file["fileInfo"]["preset_name"] end)
+        encode_presets = Enum.reject(Current.presets(), fn preset ->
+          Enum.member?(existing, preset["name"])
+        end)
+
+        if Enum.count(encode_presets) > 0 do
+          {:ok, encode_presets}
+        else
+          {:error, :already_encoded}
+        end
+
+      {:error, _reason} ->
+        {:error, :checking_encoded}
+    end
+  end
+
+  def encode_and_upload(options, file_path) do
+    name = Map.get(options, "name")
+    output_name = generate_output_name(name, file_path)
+    metadata = %{preset_name: name, uploader: "compressor"}
+
+    with :ok <- encode(file_path, output_name, options),
+         {:ok, _file} <- Uploader.upload(output_name, metadata) do
+      %{name: name, encoding: :ok, uploading: :ok}
+    else
+      {:error, reason} -> %{name: name, error: reason}
+    end
+  end
+
+  defp encode(file_path, output_name, options) do
+    name = Map.get(options, "name")
+
+    if File.exists?(output_name) do
+      Events.track("variation_#{name}_exists")
+      :ok
+    else
+      Events.track("encoding_#{name}")
+      Presets.streamable(file_path, output_name, options)
+    end
+  end
+
+  defp create_variations(presets, file_path) do
+    Task.Supervisor.async_stream(
+      TaskSupervisor,
+      presets,
+      __MODULE__,
+      :encode_and_upload,
+      [file_path],
+      max_concurrency: 2,
+      timeout: :infinity
     )
+  end
+
+  defp finish(results) do
+    Upstream.reset()
+    Current.stop()
+    Events.stop()
   end
 
   defp generate_output_name(name, file_path) do

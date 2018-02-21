@@ -5,7 +5,7 @@ defmodule Compressor.Mixfile do
   def project do
     [
       app: :compressor,
-      version: "0.3.5",
+      version: "0.4.0",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       source_url: "https://github.com/upmaru/compressor",
@@ -36,7 +36,8 @@ defmodule Compressor.Mixfile do
       {:ffmpex, "~> 0.4.1"},
       {:exq, "~> 0.10.1"},
       {:download, github: "little-bobby-tables/download", branch: "fix-process-communication"},
-      {:upstream, "~> 1.2.3"},
+      {:httpoison, "~> 1.0"},
+      {:upstream, "~> 1.3.4"},
       {:pid_file, "~> 0.1.1", only: [:prod]},
       {:distillery, "~> 1.5", runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev}
