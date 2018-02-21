@@ -3,7 +3,7 @@ defmodule Compressor.Events do
   Tracks all events emitted by the encoder
   """
   use Agent
-  require IEx
+  require Logger
 
   defmodule Source do
     @moduledoc """
@@ -41,6 +41,8 @@ defmodule Compressor.Events do
   end
 
   def track(name) do
+    Logger.info("[Compressor] #{name}")
+
     Agent.update(__MODULE__, fn existing_events ->
       %{url: url, headers: headers} = Current.resource()
 

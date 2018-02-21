@@ -11,6 +11,8 @@ defmodule Compressor.Encoder do
     Events
   }
 
+  alias Upstream.B2
+
   alias HTTPoison.Error
   require Logger
 
@@ -18,38 +20,22 @@ defmodule Compressor.Encoder do
 
   def perform(name, callback, token) do
     with {:ok, _pid} <- prepare(callback, token),
+         {:ok, encode_presets} <- check_for_encoded_preset(name),
          {:ok, url, path} <- setup_download(name),
          {:ok, file_path} <- download_source(url, path) do
 
-      file_path
-      |> create_variations
+      encode_presets
+      |> create_variations(file_path)
       |> Enum.to_list
-    end
-  end
-
-  def encode_and_upload(options, file_path) do
-    name = Map.get(options, "name")
-    output_name = generate_output_name(name, file_path)
-
-    encoding =
-      if File.exists?(output_name) do
-        Events.track("variation_#{name}_exists")
-        :ok
-      else
-        Events.track("encoding_#{name}")
-        Presets.streamable(file_path, output_name, options)
-      end
-
-    case Uploader.upload(output_name) do
-      {:ok, result} ->
-        %{name: name, encoding: encoding, uploading: :ok}
-
+      |> finish
+    else
       {:error, reason} ->
-        %{name: name, encoding: encoding, uploading: :error}
+        finish([])
+        Logger.info("[Upstream] error #{reason}")
     end
   end
 
-  def prepare(callback, token) do
+  defp prepare(callback, token) do
     headers = [{"Authorization", "Bearer #{token}"}, {"Content-Type", "application/json"}]
 
     with {:ok, response} <- HTTPoison.get(callback["settings"], headers),
@@ -80,32 +66,79 @@ defmodule Compressor.Encoder do
 
   defp download_source(url, path) do
     Events.track("checking_source")
-    Logger.info("[Compressor] checking_source")
 
     if File.exists?(path) do
       Events.track("file_exists")
-      Logger.info("[Compressor] file_exists")
       {:ok, path}
     else
       Events.track("downloading_source")
-      Logger.info("[Compressor] downloading_source")
       Download.from(url, path: path)
     end
   end
 
-  defp create_variations(file_path) do
-    Events.track("creating_variations")
-    Logger.info("[Compressor] creating_variations")
+  defp check_for_encoded_preset(name) do
+    Events.track("check_for_encoded")
 
+    case B2.List.by_file_name(name) do
+      {:ok, %B2.List.FileNames{files: files}} ->
+        existing = Enum.map(files, fn file -> file["fileInfo"]["preset_name"] end)
+        encode_presets = Enum.reject(Current.presets(), fn preset ->
+          Enum.member?(existing, preset["name"])
+        end)
+
+        if Enum.count(encode_presets) > 0 do
+          {:ok, encode_presets}
+        else
+          Events.track("already_encoded")
+          {:error, :already_encoded}
+        end
+
+      {:error, _reason} ->
+        {:error, :checking_encoded}
+    end
+  end
+
+  def encode_and_upload(options, file_path) do
+    name = Map.get(options, "name")
+    output_name = generate_output_name(name, file_path)
+    metadata = %{preset_name: name, uploader: "compressor"}
+
+    with :ok <- encode(file_path, output_name, options),
+         {:ok, _file} <- Uploader.upload(output_name, metadata) do
+      %{name: name, encoding: :ok, uploading: :ok}
+    else
+      {:error, reason} -> %{name: name, error: reason}
+    end
+  end
+
+  defp encode(file_path, output_name, options) do
+    name = Map.get(options, "name")
+
+    if File.exists?(output_name) do
+      Events.track("variation_#{name}_exists")
+      :ok
+    else
+      Events.track("encoding_#{name}")
+      Presets.streamable(file_path, output_name, options)
+    end
+  end
+
+  defp create_variations(presets, file_path) do
     Task.Supervisor.async_stream(
       TaskSupervisor,
-      Current.presets(),
+      presets,
       __MODULE__,
       :encode_and_upload,
       [file_path],
       max_concurrency: 2,
       timeout: :infinity
     )
+  end
+
+  defp finish(results) do
+    Upstream.reset()
+    Current.stop()
+    Events.stop()
   end
 
   defp generate_output_name(name, file_path) do

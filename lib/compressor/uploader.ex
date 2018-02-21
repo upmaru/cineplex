@@ -6,19 +6,20 @@ defmodule Compressor.Uploader do
   alias Upstream.Uploader
   alias Compressor.Events
 
-  def upload(file_path) do
+  def upload(file_path, metadata) do
     [_, name] = String.split(file_path, "tmp/")
 
-    Uploader.upload_file!(file_path, name, self())
+    Events.track("uploading_#{metadata.preset_name}")
+    Uploader.upload_file!(file_path, name, self(), metadata)
 
     case wait_for_uploader() do
-      {:ok, result} -> {:ok, result}
-      {:error, reason} -> {:error, reason}
+      {:ok, result} ->
+        Events.track("uploaded_#{metadata.preset_name}")
+        {:ok, result}
+      {:error, reason} ->
+        Events.track("upload_failed_#{metadata.preset_name}")
+        {:error, reason}
     end
-  end
-
-  defp check_existence(file_path) do
-    
   end
 
   defp wait_for_uploader() do
