@@ -14,9 +14,6 @@ defmodule Compressor.Encoder do
   alias Upstream.B2
 
   alias HTTPoison.Error
-  require Logger
-
-  require IEx
 
   def perform(name, callback, token) do
     with {:ok, _pid} <- prepare(callback, token),
@@ -30,8 +27,8 @@ defmodule Compressor.Encoder do
       |> finish
     else
       {:error, reason} ->
+        Events.track("#{reason}")
         finish([])
-        Logger.info("[Upstream] error #{reason}")
     end
   end
 
@@ -89,7 +86,6 @@ defmodule Compressor.Encoder do
         if Enum.count(encode_presets) > 0 do
           {:ok, encode_presets}
         else
-          Events.track("already_encoded")
           {:error, :already_encoded}
         end
 
