@@ -16,6 +16,7 @@ defmodule Compressor.Uploader do
       {:ok, result} ->
         Events.track("uploaded_#{metadata.preset_name}")
         {:ok, result}
+
       {:error, reason} ->
         Events.track("upload_failed_#{metadata.preset_name}")
         {:error, reason}
