@@ -48,4 +48,8 @@ defmodule Compressor.Current do
       {String.to_atom(key), value}
     end)
   end
+
+  def stop do
+    Agent.stop(__MODULE__)
+  end
 end

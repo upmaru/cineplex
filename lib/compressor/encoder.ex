@@ -2,7 +2,7 @@ defmodule Compressor.Encoder do
   @moduledoc """
   Handles the encoding
   """
-  
+
   alias Compressor.{
     Presets,
     TaskSupervisor,
@@ -14,26 +14,39 @@ defmodule Compressor.Encoder do
   alias HTTPoison.Error
   require Logger
 
+  require IEx
+
   def perform(name, callback, token) do
     with {:ok, _pid} <- prepare(callback, token),
          {:ok, url, path} <- setup_download(name),
          {:ok, file_path} <- download_source(url, path) do
+
       file_path
       |> create_variations
-      |> Task.yield_many(:infinity)
+      |> Enum.to_list
     end
   end
 
   def encode_and_upload(options, file_path) do
     name = Map.get(options, "name")
-    Events.track("encoding_#{name}")
     output_name = generate_output_name(name, file_path)
 
-    unless File.exists?(output_name) do
-      Presets.streamable(file_path, output_name, options)
-    end
+    encoding =
+      if File.exists?(output_name) do
+        Events.track("variation_#{name}_exists")
+        :ok
+      else
+        Events.track("encoding_#{name}")
+        Presets.streamable(file_path, output_name, options)
+      end
 
-    Task.Supervisor.async(TaskSupervisor, Uploader, :upload, output_name)
+    case Uploader.upload(output_name) do
+      {:ok, result} ->
+        %{name: name, encoding: encoding, uploading: :ok}
+
+      {:error, reason} ->
+        %{name: name, encoding: encoding, uploading: :error}
+    end
   end
 
   def prepare(callback, token) do
@@ -66,30 +79,32 @@ defmodule Compressor.Encoder do
   end
 
   defp download_source(url, path) do
-    Events.track("downloading_source")
-    Logger.info("[Compressor] downloading #{path}")
+    Events.track("checking_source")
+    Logger.info("[Compressor] checking_source")
 
-    unless File.exists?(path) do
+    if File.exists?(path) do
+      Events.track("file_exists")
       Logger.info("[Compressor] file_exists")
-
+      {:ok, path}
+    else
+      Events.track("downloading_source")
+      Logger.info("[Compressor] downloading_source")
       Download.from(url, path: path)
     end
   end
 
   defp create_variations(file_path) do
     Events.track("creating_variations")
-    Logger.info("[Compressor] encoding #{file_path}")
+    Logger.info("[Compressor] creating_variations")
 
-    Enum.to_list(
-      Task.Supervisor.async_stream(
-        TaskSupervisor,
-        Current.presets(),
-        __MODULE__,
-        :encode_and_upload,
-        [file_path],
-        max_concurrency: 2,
-        timeout: :infinity
-      )
+    Task.Supervisor.async_stream(
+      TaskSupervisor,
+      Current.presets(),
+      __MODULE__,
+      :encode_and_upload,
+      [file_path],
+      max_concurrency: 2,
+      timeout: :infinity
     )
   end
 

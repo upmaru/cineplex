@@ -45,6 +45,10 @@ defmodule Compressor.Events do
       %{url: url, headers: headers} = Current.resource()
 
       Source.patch!(url, [%{"name" => name} | existing_events], headers).body
-    end, :infinity)
+    end)
+  end
+
+  def stop do
+    Agent.stop(__MODULE__)
   end
 end
