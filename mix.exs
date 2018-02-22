@@ -36,8 +36,8 @@ defmodule Compressor.Mixfile do
       {:ffmpex, "~> 0.4.1"},
       {:exq, "~> 0.10.1"},
       {:download, github: "little-bobby-tables/download", branch: "fix-process-communication"},
-      {:httpoison, "~> 1.0"},
-      {:upstream, "~> 1.3.5"},
+      {:httpoison, "~> 0.13"},
+      {:upstream, "~> 1.3.7"},
       {:pid_file, "~> 0.1.1", only: [:prod]},
       {:distillery, "~> 1.5", runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev}
