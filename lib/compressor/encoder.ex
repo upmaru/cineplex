@@ -36,9 +36,8 @@ defmodule Compressor.Encoder do
 
     with {:ok, response} <- HTTPoison.get(callback["settings"], headers),
          {:ok, settings} <- Poison.decode(response.body),
-         {:ok, _pid} <- Current.start_link(settings["data"], callback["resource"], headers) do
+         {:ok, _pid} <- Current.start_link(settings["data"], callback["events"], headers) do
       Upstream.set_config(Current.storage())
-      Events.start_link()
     else
       {:error, %Error{reason: reason}} -> {:error, reason}
     end
@@ -133,10 +132,9 @@ defmodule Compressor.Encoder do
     )
   end
 
-  defp finish(results) do
+  defp finish(_results) do
     Upstream.reset()
     Current.stop()
-    Events.stop()
   end
 
   defp generate_output_name(name, file_path) do
