@@ -2,8 +2,10 @@ defmodule Compressor.Events do
   @moduledoc """
   Tracks all events emitted by the encoder
   """
-  use Agent
   require Logger
+  alias Compressor.Current
+
+  alias HTTPoison.Error
 
   defmodule Source do
     @moduledoc """
@@ -11,46 +13,18 @@ defmodule Compressor.Events do
     """
     use HTTPoison.Base
 
-    def process_request_body(body) do
-      Poison.encode!(%{
-        encoding_events: body
-      })
-    end
-
-    def process_response_body(body) do
-      {:ok, body} = Poison.decode(body)
-      body["data"]["encoding_events"]
-    end
+    def process_request_body(body), do: Poison.encode!(body)
   end
 
-  alias Compressor.Current
-
-  def start_link do
-    Agent.start_link(
-      fn ->
-        %{url: url, headers: headers} = Current.resource()
-
-        Source.get!(url, headers).body
-      end,
-      name: __MODULE__
-    )
-  end
-
-  def all do
-    Agent.get(__MODULE__, fn events -> events end)
-  end
-
-  def track(name) do
+  def track(name, metadata \\ %{}) do
     Logger.info("[Compressor] #{name}")
+    %{url: url, headers: headers} = Current.resource()
+    case Source.post(url, %{"name" => name, "metadata" => metadata}, headers) do
+      {:ok, _response} ->
+        Logger.info("[Compressor] #{name} tracked")
 
-    Agent.update(__MODULE__, fn existing_events ->
-      %{url: url, headers: headers} = Current.resource()
-
-      Source.patch!(url, [%{"name" => name} | existing_events], headers).body
-    end)
-  end
-
-  def stop do
-    Agent.stop(__MODULE__)
+      {:error, %Error{id: _, reason: reason}} ->
+        Logger.info("[Compressor] error_tracking #{reason}")
+    end
   end
 end

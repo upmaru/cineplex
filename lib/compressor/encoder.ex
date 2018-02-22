@@ -20,10 +20,9 @@ defmodule Compressor.Encoder do
          {:ok, encode_presets} <- check_for_encoded_preset(name),
          {:ok, url, path} <- setup_download(name),
          {:ok, file_path} <- download_source(url, path) do
-
       encode_presets
       |> create_variations(file_path)
-      |> Enum.to_list
+      |> Enum.to_list()
       |> finish
     else
       {:error, reason} ->
@@ -37,9 +36,8 @@ defmodule Compressor.Encoder do
 
     with {:ok, response} <- HTTPoison.get(callback["settings"], headers),
          {:ok, settings} <- Poison.decode(response.body),
-         {:ok, _pid} <- Current.start_link(settings["data"], callback["resource"], headers) do
+         {:ok, _pid} <- Current.start_link(settings["data"], callback["events"], headers) do
       Upstream.set_config(Current.storage())
-      Events.start_link()
     else
       {:error, %Error{reason: reason}} -> {:error, reason}
     end
@@ -47,6 +45,7 @@ defmodule Compressor.Encoder do
 
   defp setup_download(name) do
     Events.track("starting")
+
     {:ok, auth} =
       name
       |> String.split("/")
@@ -79,9 +78,11 @@ defmodule Compressor.Encoder do
     case B2.List.by_file_name(name) do
       {:ok, %B2.List.FileNames{files: files}} ->
         existing = Enum.map(files, fn file -> file["fileInfo"]["preset_name"] end)
-        encode_presets = Enum.reject(Current.presets(), fn preset ->
-          Enum.member?(existing, preset["name"])
-        end)
+
+        encode_presets =
+          Enum.reject(Current.presets(), fn preset ->
+            Enum.member?(existing, preset["name"])
+          end)
 
         if Enum.count(encode_presets) > 0 do
           {:ok, encode_presets}
@@ -131,10 +132,9 @@ defmodule Compressor.Encoder do
     )
   end
 
-  defp finish(results) do
+  defp finish(_results) do
     Upstream.reset()
     Current.stop()
-    Events.stop()
   end
 
   defp generate_output_name(name, file_path) do
