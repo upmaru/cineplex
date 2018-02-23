@@ -27,6 +27,8 @@ defmodule Compressor.Encoder do
     else
       {:error, :already_encoded, existing} ->
         Events.track("already_encoded", %{"existing" => existing})
+        finish(existing)
+
       {:error, reason} ->
         Events.track("#{reason}")
         finish([])
