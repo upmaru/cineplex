@@ -25,6 +25,8 @@ defmodule Compressor.Encoder do
       |> Enum.to_list()
       |> finish
     else
+      {:error, :already_encoded, existing} ->
+        Events.track("already_encoded", %{"existing" => existing})
       {:error, reason} ->
         Events.track("#{reason}")
         finish([])
@@ -77,7 +79,10 @@ defmodule Compressor.Encoder do
 
     case B2.List.by_file_name(name) do
       {:ok, %B2.List.FileNames{files: files}} ->
-        existing = Enum.map(files, fn file -> file["fileInfo"]["preset_name"] end)
+        existing =
+          files
+          |> Enum.map(fn file -> file["fileInfo"]["preset_name"] end)
+          |> Enum.reject(&is_nil/1)
 
         encode_presets =
           Enum.reject(Current.presets(), fn preset ->
@@ -87,11 +92,11 @@ defmodule Compressor.Encoder do
         if Enum.count(encode_presets) > 0 do
           {:ok, encode_presets}
         else
-          {:error, :already_encoded}
+          {:error, :already_encoded, existing}
         end
 
       {:error, _reason} ->
-        {:error, :checking_encoded}
+        {:error, :check_for_encoded_preset}
     end
   end
 
