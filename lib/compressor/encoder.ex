@@ -119,10 +119,10 @@ defmodule Compressor.Encoder do
     name = Map.get(options, "name")
 
     if File.exists?(output_name) do
-      Events.track("variation_#{name}_exists")
+      Events.track("variation_exists", %{preset_name: name})
       :ok
     else
-      Events.track("encoding_#{name}")
+      Events.track("encoding", %{preset_name: name})
       Presets.streamable(file_path, output_name, options)
     end
   end
