@@ -19,6 +19,7 @@ defmodule Compressor.Events do
   def track(name, metadata \\ %{}) do
     Logger.info("[Compressor] #{name}")
     %{url: url, headers: headers} = Current.resource()
+
     case Source.post(url, %{"name" => name, "metadata" => metadata}, headers) do
       {:ok, _response} ->
         Logger.info("[Compressor] #{name} tracked")
