@@ -34,3 +34,6 @@ config :exq,
 # here (which is why it is important to import them last).
 #
 import_config "#{Mix.env}.exs"
+
+# Import Timber, structured logging
+import_config "timber.exs"
