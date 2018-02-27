@@ -10,9 +10,8 @@ defmodule Compressor.Uploader do
     [_, name] = String.split(file_path, "tmp/")
 
     Events.track("uploading", metadata)
-    Uploader.upload_file!(file_path, name, self(), metadata)
 
-    case wait_for_uploader() do
+    case Uploader.upload_file!(file_path, name, metadata) do
       {:ok, result} ->
         Events.track("uploaded", metadata)
         {:ok, result}
@@ -20,14 +19,6 @@ defmodule Compressor.Uploader do
       {:error, reason} ->
         Events.track("upload_failed", metadata)
         {:error, reason}
-    end
-  end
-
-  defp wait_for_uploader() do
-    receive do
-      {:finished, result} -> {:ok, result}
-      {:errored, reason} -> {:error, reason}
-      _ -> wait_for_uploader()
     end
   end
 end
