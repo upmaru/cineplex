@@ -37,7 +37,7 @@ defmodule Compressor.Mixfile do
       {:exq, "~> 0.10.1"},
       {:download, github: "little-bobby-tables/download", branch: "fix-process-communication"},
       {:httpoison, "~> 0.13"},
-      {:upstream, "~> 1.3.7"},
+      {:upstream, path: "../upstream"},
       {:pid_file, "~> 0.1.1", only: [:prod]},
       {:distillery, "~> 1.5", runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev}
