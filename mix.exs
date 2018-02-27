@@ -5,8 +5,9 @@ defmodule Compressor.Mixfile do
   def project do
     [
       app: :compressor,
-      version: "0.4.6",
+      version: "0.4.7",
       elixir: "~> 1.6",
+      build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       source_url: "https://github.com/upmaru/compressor",
       name: "Compressor",
