@@ -12,6 +12,7 @@ defmodule Compressor.Presets do
     audio_rate = integer_opt(opts, "audio_rate", 192_000)
     audio_sample = integer_opt(opts, "audio_sample", 44_100)
     max_rate = integer_opt(opts, "max_rate", 6_000_000)
+    gop_duration = get_fps(input_file_path) * 2
 
     new_command_common_options()
     |> add_input_file(input_file_path)
@@ -28,6 +29,8 @@ defmodule Compressor.Presets do
     |> add_file_option(option_pix_fmt("yuv420p"))
     |> add_file_option(option_maxrate(max_rate))
     |> add_file_option(option_movflags("faststart"))
+    |> add_file_option(option_preset("veryfast"))
+    |> add_file_option(option_g(gop_duration))
     |> execute
   end
 
@@ -35,8 +38,20 @@ defmodule Compressor.Presets do
     add_global_option(FFmpex.new_command(), option_y())
   end
 
-  def integer_opt(opts, key, default) do
+  defp integer_opt(opts, key, default) do
     value = Map.get(opts, key)
     if is_integer(value), do: value, else: default
+  end
+
+  defp get_fps(file_path) do
+    {raw_data, _} =
+      file_path
+      |> FFprobe.format
+      |> Enum.at(0)
+
+    Regex.scan(~r/\d+ fps/, raw_data)
+    |> List.first |> List.first
+    |> String.split(" ") |> List.first
+    |> String.to_integer
   end
 end
