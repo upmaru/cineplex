@@ -6,13 +6,12 @@ defmodule Compressor.Application do
   use Application
 
   def start(_type, _args) do
-    import Supervisor.Spec
     # List all child processes to be supervised
     children = [
       # Starts a worker by calling: Compressor.Worker.start_link(arg)
       # {Compressor.Worker, arg},
-      supervisor(Task.Supervisor, [[name: Compressor.TaskSupervisor]]),
-      supervisor(Exq, [])
+      {Task.Supervisor, name: Compressor.TaskSupervisor},
+      %{id: Exq, start: {Exq, :start_link, []}},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
