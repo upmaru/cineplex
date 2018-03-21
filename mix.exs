@@ -40,7 +40,7 @@ defmodule Compressor.Mixfile do
       {:download, github: "little-bobby-tables/download", branch: "fix-process-communication"},
       {:httpoison, "~> 0.13"},
       {:timber, "~> 2.5"},
-      {:upstream, "~> 1.4.4"},
+      {:upstream, "~> 1.4.5"},
       {:pid_file, "~> 0.1.1", only: [:prod]},
       {:distillery, "~> 1.5", runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev}
