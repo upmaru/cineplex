@@ -63,7 +63,7 @@ defmodule Compressor.Encoder do
       {:ok, url, path}
     end
   end
-
+  require IEx
   defp download_source(url, path) do
     Events.track("checking_source")
 
@@ -72,6 +72,7 @@ defmodule Compressor.Encoder do
       {:ok, path}
     else
       Events.track("downloading_source")
+      IEx.pry
       Download.from(url, path: path)
     end
   end
