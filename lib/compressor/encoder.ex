@@ -145,6 +145,7 @@ defmodule Compressor.Encoder do
   end
 
   defp finish(_results) do
+    Events.track("finish")
     Upstream.reset()
     Current.stop()
   end
