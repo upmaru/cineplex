@@ -27,6 +27,7 @@ defmodule Compressor.Mixfile do
         :exq,
         :httpoison,
         :upstream,
+        :parse_trans,
         :downstream
       ],
       mod: {Compressor.Application, []}
