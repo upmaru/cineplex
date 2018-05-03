@@ -41,7 +41,7 @@ defmodule Compressor.Mixfile do
       {:downstream, "~> 0.1.0"},
       {:httpoison, "~> 1.0.0"},
       {:timber, "~> 2.5"},
-      {:upstream, "~> 1.4.6"},
+      {:upstream, "~> 1.5.0"},
       {:pid_file, "~> 0.1.1", only: [:prod]},
       {:distillery, "~> 1.5", runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev}
