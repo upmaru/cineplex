@@ -1,0 +1,26 @@
+env:
+  REPODEST: /home/zacksiri/packages/${BUILDKITE_PIPELINE_DEFAULT_BRANCH}
+
+steps:
+  - label: ":s3:"
+    branches: "master develop"
+    command: 
+      - "s3cmd sync s3://artellectual.apk.build/packages/ /home/zacksiri/packages/"
+
+  - wait
+
+  - label: ":elixir:"
+    command:
+      - "cd .apk/upmaru/compressor"
+      - "abuild check"
+
+  - wait
+
+  - label: ":package: + :s3:"
+    branches: "master develop"
+    command: 
+      - "cd .apk/upmaru/compressor"
+      - "abuild snapshot"
+      - "abuild -r"
+      - "abuild cleanoldpkg"
+      - "s3cmd sync --skip-existing --delete-removed /home/zacksiri/packages/ s3://artellectual.apk.build/packages/"
