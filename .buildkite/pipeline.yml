@@ -9,13 +9,6 @@ steps:
 
   - wait
 
-  - label: ":elixir:"
-    command:
-      - "cd .apk/upmaru/compressor"
-      - "abuild check"
-
-  - wait
-
   - label: ":package: + :s3:"
     branches: "master develop"
     command: 
