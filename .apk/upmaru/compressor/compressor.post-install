@@ -1,0 +1,8 @@
+#!/bin/sh
+
+signature=$(cat /sys/class/dmi/id/product_name)
+
+echo ${signature} > /var/lib/compressor/machine_signature
+
+rc-update add compressor
+rc-service compressor start

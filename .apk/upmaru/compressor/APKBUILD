@@ -1,0 +1,76 @@
+# Contributor: Zack Siri <zack@artellectual.com>
+# Maintainer: Zack Siri <zack@artellectual.com>
+pkgname=compressor
+pkgver=0.5.3
+pkgrel=0
+pkgdesc="Video Encoder"
+url="https://github.com/"
+options="!check"
+arch="all"
+license="MIT"
+install="
+  $pkgname.post-install 
+  $pkgname.pre-upgrade 
+  $pkgname.post-upgrade 
+  $pkgname.pre-deinstall
+"
+subpackages=""
+
+source="
+  $pkgname-$pkgver.tar  
+  $pkgname.initd
+"
+
+depends="
+  bash
+  curl 
+  ffmpeg
+"
+
+makedepends="
+  elixir 
+  erlang-crypto 
+  erlang-syntax-tools 
+  erlang-parsetools
+"
+
+_giturl="git@github.com:upmaru/$pkgname.git"
+
+builddir="${srcdir}/${pkgname}"
+
+snapshot() {
+  abuild clean
+  abuild deps
+  
+  git clone -q ${_giturl} ${pkgname}
+  cd $pkgname
+  git checkout -q ${pkgver}
+  cd $startdir
+  tar cf $pkgname-$pkgver.tar $pkgname
+  rm -rf $pkgname
+
+  abuild checksum
+}
+
+build() {
+	cd "$builddir"
+
+  export MIX_ENV=prod
+
+  mix local.hex --force
+  mix local.rebar --force
+  mix do deps.get --only prod, compile
+  mix release --env=prod
+}
+
+package() {
+  mkdir -p "$pkgdir"
+
+	cd "$pkgdir"
+
+	install -dm755 ./var/lib/"$pkgname"/
+
+	mv -v "$builddir"/_build/prod/rel/"$pkgname"/* ./var/lib/"$pkgname"/
+
+  install -Dm755 "$srcdir"/$pkgname.initd ./etc/init.d/$pkgname
+}
