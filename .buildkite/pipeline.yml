@@ -16,4 +16,4 @@ steps:
       - "abuild snapshot"
       - "abuild -r"
       - "abuild cleanoldpkg"
-      - "s3cmd sync --skip-existing --delete-removed /home/zacksiri/packages/ s3://artellectual.apk.build/packages/"
+      - "s3cmd sync --delete-removed /home/zacksiri/packages/ s3://artellectual.apk.build/packages/"
