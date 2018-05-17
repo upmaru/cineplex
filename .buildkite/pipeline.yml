@@ -1,5 +1,5 @@
 env:
-  REPODEST: /home/zacksiri/packages/${BUILDKITE_PIPELINE_DEFAULT_BRANCH}
+  REPODEST: /home/zacksiri/packages/${BUILDKITE_BRANCH}
 
 steps:
   - label: ":package: + :s3:"
