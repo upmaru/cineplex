@@ -2,6 +2,8 @@
 
 Video Compressor for Upmaru Studio
 
+[![Build status](https://badge.buildkite.com/b2f06054c2b4fc46f6d54f60df30547591dcb98a2abdf2529a.svg)](https://buildkite.com/upmaru/compressor)
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
