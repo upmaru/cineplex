@@ -63,7 +63,7 @@ defmodule Compressor.Mixfile do
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Zack Siri"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/upmaru/compressor"}
+      links: %{"GitLab" => "https://gitlab.com/upmaru/compressor"}
     ]
   end
 end
