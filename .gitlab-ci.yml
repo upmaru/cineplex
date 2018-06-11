@@ -1,0 +1,33 @@
+stages:
+  - build
+  - sync
+
+variables:
+  REPODEST: /home/builder/packages/${CI_COMMIT_REF_NAME}
+  PACKAGE_DEST: /home/builder/packages/${CI_COMMIT_REF_NAME}/${CI_PROJECT_NAMESPACE}/
+  S3_DEST: s3://artellectual.apk.build/packages/${CI_COMMIT_REF_NAME}/${CI_PROJECT_NAMESPACE}/
+  GIT_STRATEGY: fetch
+
+build:
+  stage: build
+  only:
+    refs:
+      - master
+      - develop
+  script:
+    - "rm -rf ${PACKAGE_DEST}"
+    - "cd .apk/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
+    - "abuild snapshot"
+    - "abuild -r"
+
+sync:
+  stage: sync
+  only:
+    refs:
+      - master
+      - develop
+  script:
+    - "cd .apk/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
+    - "s3cmd sync ${S3_DEST} ${PACKAGE_DEST}"
+    - "abuild cleanoldpkg"
+    - "s3cmd sync --delete-removed ${PACKAGE_DEST} ${S3_DEST}"
