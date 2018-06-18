@@ -9,7 +9,7 @@ config :exq,
   queues: ["encoder"],
   start_on_application: false
 
-config :compressor, :storage
+config :compressor, :storage,
   upload_timeout: 0
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
