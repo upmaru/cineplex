@@ -1,6 +1,5 @@
 stages:
   - build
-  - sync
 
 variables:
   REPODEST: /home/builder/packages/${CI_COMMIT_REF_NAME}
@@ -19,15 +18,6 @@ build:
     - "cd .apk/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
     - "abuild snapshot"
     - "abuild -r"
-
-sync:
-  stage: sync
-  only:
-    refs:
-      - master
-      - develop
-  script:
-    - "cd .apk/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
     - "s3cmd sync ${S3_DEST} ${PACKAGE_DEST}"
     - "abuild cleanoldpkg"
     - "s3cmd sync --delete-removed ${PACKAGE_DEST} ${S3_DEST}"
