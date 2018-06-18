@@ -31,7 +31,10 @@ defmodule Compressor.Current do
 
   def storage do
     Agent.get(__MODULE__, fn configuration ->
-      configuration.storage
+      Keyword.merge(
+        Application.get_env(:compressor, :storage), 
+        configuration.storage
+      )
     end)
   end
 
