@@ -1,40 +1,17 @@
 #!/sbin/openrc-run
 
+name='compressor'
 description="Compressor Encoder"
-
-pidfile=/var/run/compressor.pid
-home=/var/lib/compressor
+supervisor="s6"
+s6_service_path="${RC_SVCDIR}/s6-scan/${name}"
 command=/var/lib/compressor/bin/compressor
-keys="
-  REDIS_URL \
-  TIMBER_API_KEY \
-"
-
-config() {
-  for k in ${keys}; do
-    export ${k}=$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.${k});
-  done
-  export HOME=$home
-  export PID_FILE_LOCATION=$pidfile
-  export REPLACE_OS_VARS=true
-  export MIX_ENV=prod
-}
 
 depend() {
-  need net
+  need net s6-svscan
 }
 
-start() {
-  ebegin "Starting Compressor"
-  config && \
-  start-stop-daemon --start --pidfile $pidfile \
-    --exec $command start
-  eend $?
-}
-
-stop() {
-  ebegin "Stopping Compressor" 
-  start-stop-daemon --signal QUIT --retry TERM/5/KILL/10 \
-    --pidfile $pidfile
-  eend $?
+start_pre() {
+  if [ ! -L "${RC_SVCDIR}/s6-scan/${name}" ]; then
+    ln -s "/var/lib/${name}/service" "${RC_SVCDIR}/s6-scan/${name}"
+  fi
 }

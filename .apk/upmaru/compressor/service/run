@@ -1,0 +1,6 @@
+#!/bin/sh
+
+name=compressor
+command=/var/lib/compressor/bin/compressor
+
+source config_${name} && exec ${command} foreground > /var/log/${name}.log 2>&1
