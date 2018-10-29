@@ -37,7 +37,7 @@ defmodule Compressor.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ffmpex, "~> 0.4.1"},
+      {:ffmpex, "~> 0.5.2"},
       {:exq, "~> 0.10.1"},
       {:downstream, "~> 0.1.0"},
       {:httpoison, "~> 1.0.0"},
