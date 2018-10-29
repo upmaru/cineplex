@@ -25,7 +25,7 @@ variable "nodes" {
 
 resource "lxd_container" "encoder" {
   count    = "${var.nodes[terraform.workspace]}"
-  name     = "encoder-${terraform.workspace}-${count.index + 1}"
+  name     = "compressor-${terraform.workspace}-${count.index + 1}"
   image    = "app-${terraform.workspace}"
   profiles = ["compressor-${terraform.workspace}"]
 
