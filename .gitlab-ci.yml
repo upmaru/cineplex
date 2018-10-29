@@ -19,6 +19,7 @@ build:
       - develop
   script:
     - "rm -rf ${PACKAGE_DEST}"
+    - "mkdir -p ${PACKAGE_DEST}"
     - "cd .apk/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
     - "gsutil -m rsync -r ${GCS_DEST} ${PACKAGE_DEST}"
     - "abuild snapshot"
