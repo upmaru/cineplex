@@ -1,11 +1,13 @@
 terraform {
-  backend "s3" {
-    bucket = "terraform.upmaru.cloud"
-    key    = "encoders/terraform"
-    region = "eu-central-1"
+  backend "gcs" {
+    bucket  = "terraform.artello.network"
+    prefix  = "upmaru/compressor/state"
   }
 
-  provider "lxd" {}
+  provider "lxd" {
+    generate_client_certificates = true
+    accept_remote_certificate    = true
+  }
 }
 
 variable "version" {
