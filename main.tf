@@ -38,8 +38,9 @@ resource "lxd_container" "encoder" {
 
   provisioner "remote-exec" {
     inline = [
-      "apk update",
-      "apk add compressor@upmaru"
+      "gcsfuse -o ro --implicit-dirs packages.apk.build /mnt/packages",
+      "apk update && apk add compressor@upmaru",
+      "fusermount -u /mnt/packages"
     ]
     
     connection {
@@ -57,8 +58,9 @@ resource "null_resource" "updater" {
 
   provisioner "remote-exec" {
     inline     = [
-      "apk update",
-      "apk add --upgrade compressor@upmaru"
+      "gcsfuse -o ro --implicit-dirs packages.apk.build /mnt/packages",
+      "apk update && apk add --upgrade compressor@upmaru",
+      "fusermount -u /mnt/packages"
     ]
     
     connection {
