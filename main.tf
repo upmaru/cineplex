@@ -62,7 +62,7 @@ resource "null_resource" "updater" {
     ]
     
     connection {
-      host = "${lxd_container.encoders.*.ip_address[count.index]}"
+      host = "${lxd_container.encoder.*.ip_address[count.index]}"
       private_key = "${file("/home/builder/.ssh/id_rsa")}"
     }
   }
