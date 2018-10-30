@@ -5,7 +5,7 @@ defmodule Compressor.Mixfile do
   def project do
     [
       app: :compressor,
-      version: "0.6.4",
+      version: "0.7.0",
       elixir: "~> 1.6",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -37,12 +37,23 @@ defmodule Compressor.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ffmpex, "~> 0.4.1"},
+      # ffmpeg
+      {:ffmpex, "~> 0.5.2"},
+
+      # queue
       {:exq, "~> 0.10.1"},
+
+      # for transfer
       {:downstream, "~> 0.1.0"},
-      {:httpoison, "~> 1.0.0"},
-      {:timber, "~> 2.5"},
       {:upstream, "~> 1.6.0"},
+
+      # http client
+      {:httpoison, "~> 1.0.0"},
+
+      # logging
+      {:timber, "~> 2.5"},
+
+      # deployment
       {:distillery, "~> 1.5", runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev}
       # {:dep_from_hexpm, "~> 0.3.0"},

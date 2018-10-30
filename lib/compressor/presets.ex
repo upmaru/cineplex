@@ -44,14 +44,14 @@ defmodule Compressor.Presets do
   end
 
   defp get_fps(file_path) do
-    {raw_data, _} =
+    [numerator, denominator] =
       file_path
-      |> FFprobe.format
-      |> Enum.at(0)
+      |> FFprobe.streams
+      |> Enum.map(fn r -> r["r_frame_rate"] end)
+      |> List.first
+      |> String.split("/")
+      |> Enum.map(&String.to_integer/1)
 
-    Regex.scan(~r/\d+ fps/, raw_data)
-    |> List.first |> List.first
-    |> String.split(" ") |> List.first
-    |> String.to_integer
+    numerator / denominator
   end
 end

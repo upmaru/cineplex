@@ -1,23 +1,56 @@
 stages:
   - build
+  - deploy
 
 variables:
   REPODEST: /home/builder/packages/${CI_COMMIT_REF_NAME}
   PACKAGE_DEST: /home/builder/packages/${CI_COMMIT_REF_NAME}/${CI_PROJECT_NAMESPACE}/
-  S3_DEST: s3://artellectual.apk.build/packages/${CI_COMMIT_REF_NAME}/${CI_PROJECT_NAMESPACE}/
+  GCS_DEST: gs://packages.apk.build/${CI_COMMIT_REF_NAME}/${CI_PROJECT_NAMESPACE}/
   GIT_STRATEGY: fetch
 
 build:
   stage: build
+  tags:
+    - gcp
+    - apk
   only:
     refs:
       - master
       - develop
   script:
     - "rm -rf ${PACKAGE_DEST}"
+    - "mkdir -p ${PACKAGE_DEST}"
     - "cd .apk/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
+    - "gsutil -m rsync -r ${GCS_DEST} ${PACKAGE_DEST}"
     - "abuild snapshot"
     - "abuild -r"
-    - "s3cmd sync ${S3_DEST} ${PACKAGE_DEST}"
     - "abuild cleanoldpkg"
-    - "s3cmd sync --delete-removed ${PACKAGE_DEST} ${S3_DEST}"
+    - "gsutil -m rsync -r -d ${PACKAGE_DEST} ${GCS_DEST}"
+
+.terraform: &terraform
+  tags:
+    - gcp
+  script:
+    - terraform init
+    - terraform workspace select ${CI_ENVIRONMENT_SLUG}
+    - terraform plan -out=tfplan -var version="$(git describe --tags --always)"
+    - terraform apply -auto-approve -var version="$(git describe --tags --always)"
+
+deploy_staging:
+  <<: *terraform
+  only:
+    refs:
+      - develop
+  stage: deploy
+  environment:
+    name: staging
+
+deploy_production:
+  <<: *terraform
+  only:
+    refs:
+      - master
+  stage: deploy
+  environment:
+    name: production
+
