@@ -50,7 +50,7 @@ resource "lxd_container" "encoder" {
 }
 
 resource "null_resource" "updater" {
-  count = "${terraform.workspace == "production" ? 3 : 1}"
+  count = "${var.nodes[terraform.workspace]}"
 
   triggers {
     version = "${var.version}"
