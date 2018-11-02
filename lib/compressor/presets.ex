@@ -6,6 +6,8 @@ defmodule Compressor.Presets do
   import FFmpex
   use FFmpex.Options
 
+  @spec streamable(binary(), binary() | FFmpex.File.t(), map()) ::
+          :ok | {:error, {any(), pos_integer()}}
   def streamable(input_file_path, output_file_path, opts \\ %{}) do
     resolution = Map.get(opts, "resolution", "1920x1080")
     video_rate = integer_opt(opts, "video_rate", 4_000_000)
