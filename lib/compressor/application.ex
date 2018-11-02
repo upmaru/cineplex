@@ -5,9 +5,11 @@ defmodule Compressor.Application do
 
   use Application
 
+  @spec start(any(), any()) :: :ignore | {:error, any()} | {:ok, pid()}
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
+      {Plug.Cowboy, scheme: :http, plug: Compressor.Router, options: [port: 4001]},
       # Starts a worker by calling: Compressor.Worker.start_link(arg)
       # {Compressor.Worker, arg},
       {Task.Supervisor, name: Compressor.TaskSupervisor},

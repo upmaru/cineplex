@@ -22,11 +22,11 @@ defmodule Compressor.Mixfile do
     [
       extra_applications: [
         :timber,
-        :cowboy,
         :logger,
         :ffmpex,
         :httpoison,
         :upstream,
+        :plug_cowboy,
         :plug,
         :parse_trans,
         :downstream
@@ -49,7 +49,7 @@ defmodule Compressor.Mixfile do
       {:tesla, "~> 1.2.0"},
 
       # web
-      {:cowboy, "~> 2.4"},
+      {:plug_cowboy, "~> 2.0"},
       {:plug, "~> 1.6"},
       {:jsonapi, "~> 0.8.0"},
 
