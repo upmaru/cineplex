@@ -13,6 +13,6 @@ defmodule Compressor do
 
   """
 
-  def config, do: Application.get_env(:Compressor, Compressor)
+  def config, do: Application.get_env(:compressor, Compressor)
   def config(key), do: Keyword.get(config(), key)
 end

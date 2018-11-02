@@ -24,7 +24,6 @@ defmodule Compressor.Mixfile do
         :timber,
         :logger,
         :ffmpex,
-        :exq,
         :httpoison,
         :upstream,
         :parse_trans,
@@ -40,18 +39,24 @@ defmodule Compressor.Mixfile do
       # ffmpeg
       {:ffmpex, "~> 0.5.2"},
 
-      # queue
-      {:exq, "~> 0.10.1"},
-
       # for transfer
       {:downstream, "~> 0.1.0"},
       {:upstream, "~> 1.6.0"},
 
       # http client
-      {:httpoison, "~> 1.0.0"},
+      {:tesla, "~> 1.2.0"},
+
+      # database
+      {:ecto_sql, "~> 3.0"},
+      {:ecto, "~> 3.0", override: true},
+      {:postgrex, "~> 0.14.0"},
+
+
+      # json
+      {:jason, ">= 1.0.0"},
 
       # logging
-      {:timber, "~> 2.5"},
+      {:timber, "~> 2.8"},
 
       # deployment
       {:distillery, "~> 1.5", runtime: false},

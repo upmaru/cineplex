@@ -2,12 +2,11 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :exq,
-  name: Exq,
-  namespace: "exq",
-  concurrency: 1,
-  queues: ["encoder"],
-  start_on_application: false
+config :compressor, Compressor.Repo,
+  database: "compressor_repo",
+  username: "user",
+  password: "pass",
+  hostname: "localhost"
 
 config :compressor, :storage,
   upload_timeout: 0
