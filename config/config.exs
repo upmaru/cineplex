@@ -3,9 +3,8 @@
 use Mix.Config
 
 config :compressor, Compressor.Repo,
-  database: "compressor_repo",
-  username: "user",
-  password: "pass",
+  database: "compressor_dev",
+  username: "zacksiri",
   hostname: "localhost"
 
 config :compressor, :storage,
