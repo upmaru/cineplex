@@ -5,5 +5,3 @@ config :compressor, Compressor.Repo,
   username: "zacksiri",
   hostname: "localhost"
 
-config :exq,
-  url: "redis://127.0.0.1:6379/0"

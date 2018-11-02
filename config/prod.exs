@@ -1,4 +1,6 @@
 use Mix.Config
 
-config :exq,
-  url: "${REDIS_URL}"
+config :compressor, Compressor.Repo,
+  database: "compressor_production",
+  username: "zacksiri",
+  hostname: "localhost"

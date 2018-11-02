@@ -22,10 +22,12 @@ defmodule Compressor.Mixfile do
     [
       extra_applications: [
         :timber,
+        :cowboy,
         :logger,
         :ffmpex,
         :httpoison,
         :upstream,
+        :plug,
         :parse_trans,
         :downstream
       ],
