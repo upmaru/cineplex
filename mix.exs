@@ -41,16 +41,19 @@ defmodule Compressor.Mixfile do
 
       # for transfer
       {:downstream, "~> 0.1.0"},
-      {:upstream, "~> 1.6.0"},
+      {:upstream, "~> 1.7.0"},
 
       # http client
       {:tesla, "~> 1.2.0"},
+
+      # web
+      {:plug, "~> 1.6"},
+      {:jsonapi, "~> 0.8.0"},
 
       # database
       {:ecto_sql, "~> 3.0"},
       {:ecto, "~> 3.0", override: true},
       {:postgrex, "~> 0.14.0"},
-
 
       # json
       {:jason, ">= 1.0.0"},
