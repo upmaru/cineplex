@@ -47,6 +47,7 @@ defmodule Compressor.Mixfile do
       {:tesla, "~> 1.2.0"},
 
       # web
+      {:cowboy, "~> 2.4"},
       {:plug, "~> 1.6"},
       {:jsonapi, "~> 0.8.0"},
 
