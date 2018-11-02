@@ -2,10 +2,8 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :compressor, Compressor.Repo,
-  database: "compressor_dev",
-  username: "zacksiri",
-  hostname: "localhost"
+config :compressor,
+  ecto_repos: [Compressor.Repo]
 
 config :compressor, :storage,
   upload_timeout: 0
