@@ -1,4 +1,4 @@
-defmodule Compressor.Encode.Job.Fetcher do
+defmodule Compressor.Encode.Job.Poller do
   use GenServer
 
   require Logger
@@ -22,8 +22,8 @@ defmodule Compressor.Encode.Job.Fetcher do
   @spec init(any()) :: {:ok, nil}
   def init(_) do
     if enabled() do
-      Logger.info("[Compressor.Encode.Job.Fetcher] Started...")
-      schedule_fetching()
+      Logger.info("[Compressor.Encode.Job.Poller] Started...")
+      schedule_polling()
       {:ok, nil}
     else
       :ignore
@@ -33,11 +33,11 @@ defmodule Compressor.Encode.Job.Fetcher do
   @impl true
   def handle_info(:perform, state) do
     # do something here to fetch jobs
-    schedule_fetching()
+    schedule_polling()
     {:noreply, state}
   end
 
-  defp schedule_fetching() do
+  defp schedule_polling() do
     Process.send_after(self(), :perform, :timer.seconds(5))
   end
 
