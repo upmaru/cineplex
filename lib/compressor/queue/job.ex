@@ -1,7 +1,7 @@
-defmodule Compressor.Encode.Job do
+defmodule Compressor.Queue.Job do
   use Ecto.Schema
 
-  alias Compressor.Encode.Job.Entry
+  alias Compressor.Queue.Job.Entry
 
   schema "encode_jobs" do
     field :metadata, :map

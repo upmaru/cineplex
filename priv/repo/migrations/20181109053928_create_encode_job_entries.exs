@@ -1,13 +1,13 @@
-defmodule Compressor.Repo.Migrations.CreateEncodeJobEntries do
+defmodule Compressor.Repo.Migrations.CreateQueueJobEntries do
   use Ecto.Migration
 
   def change do
-    create table(:encode_job_entries) do
+    create table(:queue_job_entries) do
       add :name, :string
       add :parameters, :map
-      add :job_id, references(:encode_jobs)
+      add :job_id, references(:queue_jobs)
     end
 
-    create index(:encode_job_entries, [:job_id])
+    create index(:queue_job_entries, [:job_id])
   end
 end
