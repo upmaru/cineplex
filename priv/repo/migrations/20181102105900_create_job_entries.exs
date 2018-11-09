@@ -1,8 +1,8 @@
-defmodule Compressor.Repo.Migrations.CreateJobs do
+defmodule Compressor.Repo.Migrations.CreateJobEntries do
   use Ecto.Migration
 
   def change do
-    create table(:jobs) do
+    create table(:job_entries) do
       add :metadata, :map
       add :source, :string
     end

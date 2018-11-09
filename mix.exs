@@ -50,7 +50,7 @@ defmodule Compressor.Mixfile do
 
       # web
       {:plug_cowboy, "~> 2.0"},
-      {:plug, "~> 1.6"},
+      {:plug, "~> 1.7"},
       {:jsonapi, "~> 0.8.0"},
 
       # database
