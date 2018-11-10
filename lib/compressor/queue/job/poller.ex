@@ -1,4 +1,4 @@
-defmodule Compressor.Encode.Job.Poller do
+defmodule Compressor.Queue.Job.Poller do
   use GenServer
 
   require Logger
@@ -22,7 +22,7 @@ defmodule Compressor.Encode.Job.Poller do
   @spec init(any()) :: {:ok, nil}
   def init(_) do
     if enabled() do
-      Logger.info("[Compressor.Encode.Job.Poller] Started...")
+      Logger.info("[Compressor.Queue.Job.Poller] Started...")
       schedule_polling()
       {:ok, nil}
     else
