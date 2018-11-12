@@ -6,15 +6,15 @@ defmodule Compressor.Queue do
 
   @spec enqueue(map, binary) :: {:error, Ecto.Changeset.t()} | {:ok, Job.t()}
   def enqueue(metadata, source) do
-    changeset = Job.changeset(%Job{}, %{metadata: metadata, source: source})
-
-    case Repo.insert(changeset) do
-      {:ok, job} -> {:ok, job}
-      {:error, changeset} -> {:error, changeset}
-    end
+    %Job{}
+    |> Job.changeset(%{metadata: metadata, source: source})
+    |> Repo.insert()
   end
 
-  def add_entry(Job.Entry()) do
-
+  @spec enqueue(Job.t(), binary(), map()) :: {:error, Ecto.Changeset.t()} | {:ok, Entry.t()}
+  def enqueue(job, name, parameters) do
+    %Entry{job: job}
+    |> Entry.changeset(%{name: name, parameters: parameters})
+    |> Repo.insert()
   end
 end

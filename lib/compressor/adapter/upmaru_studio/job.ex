@@ -20,7 +20,7 @@ defmodule Compressor.Adapter.UpmaruStudio.Job do
   end
 
   defp setting(job) do
-    Connect.get(job.metadata["callbacks"]["settings_url"]) do
+    case Connect.get(job.metadata["callbacks"]["settings_url"]) do
       {:ok, %{body: body, status: 200}} -> {:ok, {body}}
       _ -> {:error, :invalid_request}
     end
