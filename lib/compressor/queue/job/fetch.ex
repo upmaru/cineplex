@@ -4,9 +4,9 @@ defmodule Compressor.Queue.Job.Fetch do
 
   alias Job.Extract
 
-  @spec perform() :: {:error, Ecto.Changeset.t() | atom} | {:ok, Job.t()}
-  def perform() do
-    module = Compressor.Adapter.job(:upmaru_studio)
+  @spec perform(atom) :: {:error, Ecto.Changeset.t() | atom} | {:ok, Job.t()}
+  def perform(adapter) do
+    module = Compressor.Adapter.job(adapter)
 
     with {:ok, {metadata, source}} <- module.fetch(),
          {:ok, job} <- Queue.enqueue(metadata, source) do
