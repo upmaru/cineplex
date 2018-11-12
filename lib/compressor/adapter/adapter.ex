@@ -1,4 +1,6 @@
 defmodule Compressor.Adapter do
+  def job(module), do: Module.concat(module, Job)
+
   def url(module) do
     Keyword.get(config(module), :url, nil)
   end
