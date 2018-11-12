@@ -1,15 +1,19 @@
 defmodule Compressor.Queue.Job.Fetch do
   alias Compressor.Queue
+  alias Compressor.Queue.Job
 
-  @spec perform() :: {:error, Ecto.Changeset.t()} | {:ok, any()}
+  alias Job.Extract
+
+  @spec perform() :: {:error, Ecto.Changeset.t() | atom} | {:ok, Job.t()}
   def perform() do
     module = Compressor.Adapter.job(:upmaru_studio)
 
-    case module.fetch() do
-      {:ok, {metadata, source}} -> store(metadata, source)
-      {:error, :invalid_job} -> {:error, :invalid_job}
+    with {:ok, {metadata, source}} <- module.fetch(),
+         {:ok, job} <- Queue.enqueue(metadata, source) do
+      Extract.perform(job)
+      {:ok, job}
+    else
+      {:error, reason} -> {:error, reason}
     end
   end
-
-  defp store(metadata, source), do: Queue.enqueue(metadata, source)
 end

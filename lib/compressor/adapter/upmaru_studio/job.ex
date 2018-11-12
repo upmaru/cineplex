@@ -15,8 +15,6 @@ defmodule Compressor.Adapter.UpmaruStudio.Job do
 
   def extract(job) do
     setting = setting(job)
-
-
   end
 
   defp setting(job) do
