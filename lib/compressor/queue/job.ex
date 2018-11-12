@@ -3,7 +3,7 @@ defmodule Compressor.Queue.Job do
 
   alias Compressor.Queue.Job.Entry
 
-  schema "encode_jobs" do
+  schema "queue_jobs" do
     field :metadata, :map
     field :source, :string
 
