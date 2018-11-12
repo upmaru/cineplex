@@ -20,7 +20,6 @@ defmodule Compressor.Encoder do
          {:ok, encode_presets} <- check_for_encoded_preset(name),
          {:ok, url, path} <- setup_download(name),
          {:ok, file_path} <- download_source(url, path) do
-
       encode_presets
       |> create_variations(file_path)
       |> Enum.to_list()
@@ -74,6 +73,7 @@ defmodule Compressor.Encoder do
     else
       Events.track("downloading_source")
       file = File.open!(path, [:write])
+
       case Downstream.get(url, file, timeout: :infinity) do
         {:ok, _device} -> {:ok, path}
         {:error, reason} -> {:error, reason}

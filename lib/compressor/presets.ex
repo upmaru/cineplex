@@ -48,9 +48,9 @@ defmodule Compressor.Presets do
   defp get_fps(file_path) do
     [numerator, denominator] =
       file_path
-      |> FFprobe.streams
+      |> FFprobe.streams()
       |> Enum.map(fn r -> r["r_frame_rate"] end)
-      |> List.first
+      |> List.first()
       |> String.split("/")
       |> Enum.map(&String.to_integer/1)
 
