@@ -4,7 +4,9 @@ defmodule Compressor.Repo.Migrations.CreateQueueJobs do
   def change do
     create table(:queue_jobs) do
       add :metadata, :map
-      add :source, :string
+      add :source_id, references(:queue_sources)
     end
+
+    create index(:queue_sources, [:source_id])
   end
 end
