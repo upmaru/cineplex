@@ -14,9 +14,9 @@ defmodule Compressor.Queue.Job.Fetch do
     client = adapter.client(source.endpoint, source.token)
 
     with {:ok, metadata} <- adapter.job(client),
-         {:ok, job} <- Queue.create_job(source, metadata) do
+         {:ok, job} <- Queue.create_job(source, metadata)
+    do
       Extract.perform(job)
-      {:ok, job}
     else
       {:error, reason} -> {:error, reason}
     end
