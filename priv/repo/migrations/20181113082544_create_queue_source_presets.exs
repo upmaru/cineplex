@@ -10,6 +10,6 @@ defmodule Compressor.Repo.Migrations.CreateQueueSourcePresets do
     end
 
     create index(:queue_source_presets, [:source_id])
-    create index(:queue_source_presets, [:name], unique: true)
+    create index(:queue_source_presets, [:name, :source_id], unique: true)
   end
 end
