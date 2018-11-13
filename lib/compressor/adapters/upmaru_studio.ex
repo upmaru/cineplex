@@ -1,4 +1,7 @@
 defmodule Compressor.Adapters.UpmaruStudio do
+  @behaviour Compressor.Adapter
+
+  @spec client(any(), binary()) :: Tesla.Client.t()
   def client(endpoint, token) do
     middleware = [
       {Tesla.Middleware.BaseUrl, endpoint},
