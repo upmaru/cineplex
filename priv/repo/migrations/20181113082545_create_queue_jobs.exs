@@ -3,10 +3,16 @@ defmodule Compressor.Repo.Migrations.CreateQueueJobs do
 
   def change do
     create table(:queue_jobs) do
-      add :metadata, :map
+      add :resource, :string
+      add :object, :string
+      add :events_callback_url, :string
+
       add :source_id, references(:queue_sources)
+
+      timestamps
     end
 
     create index(:queue_jobs, [:source_id])
+    create index(:queue_jobs, [:resource], unique: true)
   end
 end

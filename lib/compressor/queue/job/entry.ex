@@ -2,7 +2,8 @@ defmodule Compressor.Queue.Job.Entry do
   use Ecto.Schema
 
   alias Compressor.Queue.{
-    Job, Source
+    Job,
+    Source
   }
 
   schema "queue_job_entries" do

@@ -6,7 +6,8 @@ defmodule Compressor.Queue do
 
   alias Compressor.Repo
 
-  @spec create_source(binary(), binary(), binary()) :: {:error, Ecto.Changeset.t()} | {:ok, Source.t()}
+  @spec create_source(binary(), binary(), binary()) ::
+          {:error, Ecto.Changeset.t()} | {:ok, Source.t()}
   def create_source(endpoint, token, adapter) do
     %Source{}
     |> Source.changeset(%{endpoint: endpoint, token: token, adapter: adapter})

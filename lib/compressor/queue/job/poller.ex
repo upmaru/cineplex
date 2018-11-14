@@ -2,7 +2,8 @@ defmodule Compressor.Queue.Job.Poller do
   use GenServer
 
   alias Compressor.{
-    Repo, Queue
+    Repo,
+    Queue
   }
 
   require Logger

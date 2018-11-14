@@ -1,6 +1,7 @@
 defmodule Compressor.Queue.Job.Extract do
   alias Compressor.{
-    Queue, Repo
+    Queue,
+    Repo
   }
 
   alias Queue.Job

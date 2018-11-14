@@ -10,6 +10,8 @@ defmodule Compressor.Repo.Migrations.CreateQueueSources do
       add :token, :text
 
       add :storage, :map
+
+      timestamps()
     end
 
     create index(:queue_sources, [:endpoint], unique: true)

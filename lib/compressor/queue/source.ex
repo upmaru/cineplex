@@ -3,7 +3,8 @@ defmodule Compressor.Queue.Source do
   import Ecto.Changeset
 
   alias Compressor.Queue.{
-    Job, Source
+    Job,
+    Source
   }
 
   alias Source.Preset
