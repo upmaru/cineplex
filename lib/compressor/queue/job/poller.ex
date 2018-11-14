@@ -1,6 +1,10 @@
 defmodule Compressor.Queue.Job.Poller do
   use GenServer
 
+  alias Compressor.{
+    Repo, Queue
+  }
+
   require Logger
 
   @spec start_link(any()) :: :ignore | {:error, any()} | {:ok, pid()}
@@ -32,9 +36,17 @@ defmodule Compressor.Queue.Job.Poller do
 
   @impl true
   def handle_info(:perform, state) do
-    # do something here to fetch jobs
+    fetch_jobs()
     schedule_polling()
     {:noreply, state}
+  end
+
+  defp fetch_jobs do
+    sources = Repo.all(Queue.Source)
+
+    Compressor.TaskSupervisor
+    |> Task.Supervisor.async_stream(sources, Queue.Job.Fetch, :perform, [])
+    |> Stream.run()
   end
 
   defp schedule_polling() do

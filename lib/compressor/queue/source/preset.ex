@@ -1,6 +1,5 @@
 defmodule Compressor.Queue.Source.Preset do
   use Ecto.Schema
-  import Ecto.Changeset
 
   alias Compressor.Queue.Source
 

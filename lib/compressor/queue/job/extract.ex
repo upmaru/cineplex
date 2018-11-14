@@ -1,19 +1,22 @@
 defmodule Compressor.Queue.Job.Extract do
-  alias Compressor.Queue.Job
+  alias Compressor.{
+    Queue, Repo
+  }
 
-  @spec perform(Job.t()) :: {:error, Ecto.Changeset.t()} | {:ok, Job.t()}
+  alias Queue.Job
+
+  @spec perform(Job.t()) :: {:ok, %{job: Job.t(), entries: [Job.Entry.t()]}}
   def perform(%Job{source: source} = job) do
-    # Enum.map(source.presets, fn preset ->
-    #   %Entry{job: job}
-    # end)
+    source = Repo.preload(source, [:presets])
 
-    # with {:ok, %{presets: presets, storage: storage}} <- module.extract(job) do
-    #      {:ok, job}
-    # else
+    entries = Enum.map(source.presets, &entry_from_preset(&1, job))
 
-    # end
+    {_count, created_entries} = Repo.insert_all(Job.Entry, entries)
+
+    {:ok, %{job: job, entries: created_entries}}
   end
 
-  def entry_from_preset(preset) do
+  defp entry_from_preset(preset, job) do
+    %{preset_id: preset.id, job_id: job.id}
   end
 end

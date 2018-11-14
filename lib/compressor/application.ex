@@ -14,7 +14,8 @@ defmodule Compressor.Application do
       # Starts a worker by calling: Compressor.Worker.start_link(arg)
       # {Compressor.Worker, arg},
       {Task.Supervisor, name: Compressor.TaskSupervisor},
-      {Compressor.Repo, []}
+      {Compressor.Repo, []},
+      Compressor.Queue.Job.Poller
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

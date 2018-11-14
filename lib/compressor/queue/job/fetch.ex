@@ -8,10 +8,10 @@ defmodule Compressor.Queue.Job.Fetch do
 
   alias Job.Extract
 
-  @spec perform(Source.t()) :: {:error, Ecto.Changeset.t() | atom} | {:ok, Job.t()}
-  def perform(source) do
+  @spec perform(Source.t()) :: {:error, Ecto.Changeset.t() | atom} | {:ok, %{job: Job.t, entries: [Job.Entry.t()]}}
+  def perform(%Source{endpoint: endpoint, token: token} = source) do
     adapter = Compressor.Adapter.from_source(source)
-    client = adapter.client(source.endpoint, source.token)
+    client = adapter.client(endpoint, token)
 
     with {:ok, metadata} <- adapter.job(client),
          {:ok, job} <- Queue.create_job(source, metadata)

@@ -4,6 +4,8 @@ config :compressor, :adapters, %{
   "upmaru_studio" => Compressor.Adapters.UpmaruStudio
 }
 
+config :compressor, :server, enabled: true
+
 config :compressor, :old, %{
   name: "Codemy Staging",
   endpoint: "https://staging.codemy.net",
