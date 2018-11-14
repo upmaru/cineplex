@@ -19,9 +19,12 @@ defmodule Compressor.Queue.Job do
     has_many(:entries, Entry)
   end
 
+  @valid_attrs ~w(resource object events_callback_url)a
+  @required_attrs ~w(resource object)
   def changeset(job, params \\ %{}) do
     job
-    |> cast(params, [:metadata])
-    |> validate_required([:metadata])
+    |> cast(params, @valid_attrs)
+    |> validate_required(@required_attrs)
+    |> unique_constraint(:resource)
   end
 end

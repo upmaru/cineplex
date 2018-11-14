@@ -28,5 +28,6 @@ defmodule Compressor.Queue.Source do
     source
     |> cast(params, @valid_attrs)
     |> validate_required(@required_attrs)
+    |> unique_constraint(:endpoint)
   end
 end
