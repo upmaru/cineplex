@@ -19,6 +19,8 @@ defmodule Compressor.Queue.Source do
 
     has_many(:presets, Preset)
     has_many(:jobs, Job)
+
+    timestamps(type: :utc_datetime)
   end
 
   @valid_attrs ~w(endpoint adapter token storage)a

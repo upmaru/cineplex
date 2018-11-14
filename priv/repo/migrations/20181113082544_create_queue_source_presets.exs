@@ -8,7 +8,7 @@ defmodule Compressor.Repo.Migrations.CreateQueueSourcePresets do
 
       add :source_id, references(:queue_sources)
 
-      timestamps
+      timestamps()
     end
 
     create index(:queue_source_presets, [:source_id])

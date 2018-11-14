@@ -22,9 +22,9 @@ defmodule Compressor.Queue do
   end
 
   @spec create_job(Source.t(), map()) :: {:error, Ecto.Changeset.t()} | {:ok, Job.t()}
-  def create_job(source, metadata) do
+  def create_job(source, params) do
     %Job{source: source}
-    |> Job.changeset(%{metadata: metadata})
+    |> Job.changeset(params)
     |> Repo.insert()
   end
 

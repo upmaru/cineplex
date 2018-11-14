@@ -28,11 +28,14 @@ defmodule Compressor.Queue.Source.Add do
   end
 
   defp insert_all_presets(source, %{presets: presets} = _setting) do
-    source_presets =
-      Enum.map(presets, fn preset ->
-        %{source_id: source.id, parameters: preset, name: preset["name"]}
-      end)
+    source_presets = Enum.map(presets, &preset_from_params(&1, source))
 
     Repo.insert_all(Source.Preset, source_presets)
+  end
+
+  defp preset_from_params(preset, source) do
+    timestamp = DateTime.truncate(DateTime.utc_now(), :second)
+
+    %{source_id: source.id, parameters: preset, name: preset["name"], inserted_at: timestamp, updated_at: timestamp}
   end
 end

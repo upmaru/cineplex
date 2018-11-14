@@ -18,6 +18,8 @@ defmodule Compressor.Queue.Job.Extract do
   end
 
   defp entry_from_preset(preset, job) do
-    %{preset_id: preset.id, job_id: job.id}
+    timestamp = DateTime.truncate(DateTime.utc_now(), :second)
+
+    %{preset_id: preset.id, job_id: job.id, inserted_at: timestamp, updated_at: timestamp}
   end
 end

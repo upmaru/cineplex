@@ -17,10 +17,12 @@ defmodule Compressor.Queue.Job do
     belongs_to(:source, Source)
 
     has_many(:entries, Entry)
+
+    timestamps(type: :utc_datetime)
   end
 
   @valid_attrs ~w(resource object events_callback_url)a
-  @required_attrs ~w(resource object)
+  @required_attrs ~w(resource object)a
   def changeset(job, params \\ %{}) do
     job
     |> cast(params, @valid_attrs)

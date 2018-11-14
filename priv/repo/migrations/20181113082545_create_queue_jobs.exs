@@ -9,7 +9,7 @@ defmodule Compressor.Repo.Migrations.CreateQueueJobs do
 
       add :source_id, references(:queue_sources)
 
-      timestamps
+      timestamps()
     end
 
     create index(:queue_jobs, [:source_id])

@@ -8,5 +8,7 @@ defmodule Compressor.Queue.Source.Preset do
     field(:parameters, :map)
 
     belongs_to(:source, Source)
+
+    timestamps(type: :utc_datetime)
   end
 end
