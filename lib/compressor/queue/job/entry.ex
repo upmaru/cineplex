@@ -7,8 +7,8 @@ defmodule Compressor.Queue.Job.Entry do
   }
 
   schema "queue_job_entries" do
-    belongs_to(:preset, Source.Preset)
     belongs_to(:job, Job)
+    belongs_to(:source_preset, Source.Preset)
 
     field :started_at, :utc_datetime
     field :finished_at, :utc_datetime
