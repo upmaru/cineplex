@@ -1,4 +1,4 @@
-defmodule Compressor.Router do
+defmodule CompressorWeb.Router do
   use Plug.Router
 
   plug(:match)

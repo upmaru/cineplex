@@ -55,6 +55,6 @@ defmodule Compressor.Queue.Job.Poller do
   end
 
   defp enabled do
-    Application.get_env(:compressor, :server)[:enabled]
+    Application.get_env(:compressor, :role) == "server"
   end
 end

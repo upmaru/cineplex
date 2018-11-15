@@ -7,20 +7,27 @@ defmodule Compressor.Application do
 
   @spec start(any(), any()) :: {:error, any()} | {:ok, pid()}
   def start(_type, _args) do
+    role = Application.get_env(:compressor, :role)
     # List all child processes to be supervised
-    children = [
-      {Plug.Cowboy,
-       scheme: :http, plug: Compressor.Router, options: [port: 4000, compress: true]},
-      # Starts a worker by calling: Compressor.Worker.start_link(arg)
-      # {Compressor.Worker, arg},
-      {Task.Supervisor, name: Compressor.TaskSupervisor},
-      {Compressor.Repo, []},
-      Compressor.Queue.Job.Poller
-    ]
+    children = %{
+      "server" => [
+        {Plug.Cowboy,
+        scheme: :http, plug: CompressorWeb.Router, options: [port: 4000, compress: true]},
+        # Starts a worker by calling: Compressor.Worker.start_link(arg)
+        # {Compressor.Worker, arg},
+        {Task.Supervisor, name: Compressor.TaskSupervisor},
+        {Compressor.Repo, []},
+        Compressor.Queue.Job.Poller
+      ],
+
+      "worker" => [
+
+      ]
+    }
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Compressor.Supervisor]
-    Supervisor.start_link(children, opts)
+    Supervisor.start_link(children[role], opts)
   end
 end

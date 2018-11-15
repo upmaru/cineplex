@@ -13,5 +13,6 @@ defmodule Compressor.Repo.Migrations.CreateEncodeWorkers do
     end
 
     create index(:encode_workers, [:job_entry_id])
+    create index(:encode_workers, [:address], unique: true)
   end
 end
