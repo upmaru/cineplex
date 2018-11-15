@@ -11,7 +11,7 @@ defmodule Compressor.Worker do
     {:ok, nil}
   end
 
-  defp register do
+  def register do
 
   end
 end
