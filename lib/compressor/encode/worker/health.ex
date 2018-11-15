@@ -30,14 +30,17 @@ defmodule Compressor.Encode.Worker.Health do
 
   @impl true
   def handle_info(:check, state) do
+    health_check()
+    schedule_health_check()
+    {:noreply, state}
+  end
+
+  defp health_check() do
     workers = Encode.get_workers(state: "ready")
 
     Compressor.TaskSupervisor
     |> Task.Supervisor.async_stream(workers, Encode.Worker.Check, :perform, [])
     |> Stream.run()
-
-    schedule_health_check()
-    {:noreply, state}
   end
 
   defp schedule_health_check() do
