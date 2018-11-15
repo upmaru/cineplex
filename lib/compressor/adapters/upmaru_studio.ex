@@ -12,7 +12,9 @@ defmodule Compressor.Adapters.UpmaruStudio do
     Tesla.client(middleware)
   end
 
-  @spec job(Tesla.Client.t()) :: {:ok, %{object: binary, resource: binary, events_callback_url: binary}} | {:error, :invalid_job}
+  @spec job(Tesla.Client.t()) ::
+          {:ok, %{object: binary, resource: binary, events_callback_url: binary}}
+          | {:error, :invalid_job}
   def job(client) do
     case Tesla.get(client, "/v1/bot/compressor/media/jobs") do
       {:ok, %{body: body, status: 200}} ->

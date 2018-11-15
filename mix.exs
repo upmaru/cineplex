@@ -22,7 +22,6 @@ defmodule Compressor.Mixfile do
     [
       extra_applications: [
         :timber,
-        :peerage,
         :logger,
         :ffmpex,
         :httpoison,
@@ -58,12 +57,8 @@ defmodule Compressor.Mixfile do
 
       # database
       {:ecto_sql, "~> 3.0"},
-      {:ecto_network, "~> 1.0.0"},
       {:ecto, "~> 3.0", override: true},
       {:postgrex, "~> 0.14.0"},
-
-      # clustering
-      {:peerage, "~> 1.0.3"},
 
       # logging
       {:timber, "~> 2.8"},

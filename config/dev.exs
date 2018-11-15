@@ -5,11 +5,14 @@ config :compressor, :adapters, %{
 }
 
 # can be worker or server
-config :compressor, :role, "server"
+config :compressor, :role, "worker"
+
+config :compressor, :worker,
+  server: :compressor_server@oneeight
 
 # configuration for server
 config :compressor, :server,
-  poller: true
+  poller: false
 
 # config :compressor, :old, %{
 #   name: "Codemy Staging",

@@ -12,14 +12,13 @@ defmodule Compressor.Application do
     children = %{
       "server" => [
         {Plug.Cowboy,
-        scheme: :http, plug: CompressorWeb.Router, options: [port: 4000, compress: true]},
+         scheme: :http, plug: CompressorWeb.Router, options: [port: 4000, compress: true]},
         # Starts a worker by calling: Compressor.Worker.start_link(arg)
         # {Compressor.Worker, arg},
         {Task.Supervisor, name: Compressor.TaskSupervisor},
         {Compressor.Repo, []},
         Compressor.Queue.Job.Poller
       ],
-
       "worker" => [
         {Compressor.Repo, []},
         Compressor.Worker

@@ -36,6 +36,12 @@ defmodule Compressor.Queue.Source.Add do
   defp preset_from_params(preset, source) do
     timestamp = DateTime.truncate(DateTime.utc_now(), :second)
 
-    %{source_id: source.id, parameters: preset, name: preset["name"], inserted_at: timestamp, updated_at: timestamp}
+    %{
+      source_id: source.id,
+      parameters: preset,
+      name: preset["name"],
+      inserted_at: timestamp,
+      updated_at: timestamp
+    }
   end
 end

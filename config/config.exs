@@ -4,6 +4,9 @@ use Mix.Config
 
 config :tesla, adapter: Tesla.Adapter.Hackney
 
+config :compressor, :networking,
+  interface: "eth0"
+
 config :compressor,
   ecto_repos: [Compressor.Repo]
 

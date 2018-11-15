@@ -10,9 +10,9 @@ defmodule Compressor.Queue.Job do
   alias Job.Entry
 
   schema "queue_jobs" do
-    field :object, :string
-    field :resource, :string
-    field :events_callback_url, :string
+    field(:object, :string)
+    field(:resource, :string)
+    field(:events_callback_url, :string)
 
     belongs_to(:source, Source)
 
