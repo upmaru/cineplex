@@ -17,9 +17,6 @@ defmodule Compressor.Queue.Job.Poller do
       {:error, {:already_started, pid}} ->
         Process.link(pid)
         {:ok, pid}
-
-      :ignore ->
-        :ignore
     end
   end
 

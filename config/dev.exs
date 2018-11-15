@@ -5,7 +5,7 @@ config :compressor, :adapters, %{
 }
 
 # can be worker or server
-config :compressor, :role, "server"
+config :compressor, :role, "worker"
 
 config :compressor, :worker,
   server: :compressor_server@oneeight

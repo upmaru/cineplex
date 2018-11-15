@@ -30,6 +30,7 @@ defmodule Compressor.Application do
 
   defp children("worker") do
     [
+      {Task.Supervisor, name: Compressor.TaskSupervisor},
       {Compressor.Repo, []},
       Compressor.Worker
     ]
