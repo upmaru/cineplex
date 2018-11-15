@@ -4,6 +4,8 @@ defmodule Compressor.Encode.Worker do
 
   alias Compressor.Queue.Job
 
+  @valid_current_states ~w(ready unavailable working)
+
   schema "encode_workers" do
     field(:node_name, :string)
     field(:current_state, :string)
@@ -22,6 +24,7 @@ defmodule Compressor.Encode.Worker do
     worker
     |> cast(params, [:node_name, :current_state])
     |> validate_required([:node_name, :current_state])
+    |> validate_inclusion(:node_name, @valid_current_states)
     |> unique_constraint(:node_name)
   end
 end
