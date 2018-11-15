@@ -17,7 +17,6 @@ defmodule Compressor.Worker.Registration do
     end
   end
 
-
   defp server_node do
     Application.get_env(:compressor, :worker)[:server]
   end

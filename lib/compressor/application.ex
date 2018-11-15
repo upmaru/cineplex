@@ -15,7 +15,7 @@ defmodule Compressor.Application do
     Supervisor.start_link(children(role), opts)
   end
 
-  def children("server") do
+  defp children("server") do
     [
       {Plug.Cowboy,
        scheme: :http, plug: CompressorWeb.Router, options: [port: 4000, compress: true]},
@@ -28,7 +28,7 @@ defmodule Compressor.Application do
     ]
   end
 
-  def children("worker") do
+  defp children("worker") do
     [
       {Compressor.Repo, []},
       Compressor.Worker
