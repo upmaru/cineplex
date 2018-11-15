@@ -21,7 +21,8 @@ defmodule Compressor.Application do
       ],
 
       "worker" => [
-
+        {Compressor.Repo, []},
+        Compressor.Worker
       ]
     }
 

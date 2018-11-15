@@ -3,7 +3,6 @@ defmodule Compressor.Repo.Migrations.CreateEncodeWorkers do
 
   def change do
     create table(:encode_workers) do
-      add :hostname, :string
       add :address, :inet
       add :current_state, :string
 

@@ -7,6 +7,10 @@ config :compressor, :adapters, %{
 # can be worker or server
 config :compressor, :role, "server"
 
+# configuration for server
+config :compressor, :server,
+  poller: true
+
 # config :compressor, :old, %{
 #   name: "Codemy Staging",
 #   endpoint: "https://staging.codemy.net",
