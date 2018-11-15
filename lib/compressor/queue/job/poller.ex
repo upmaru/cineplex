@@ -26,13 +26,9 @@ defmodule Compressor.Queue.Job.Poller do
   @impl true
   @spec init(any()) :: {:ok, nil}
   def init(_) do
-    if enabled() do
-      Logger.info("[Compressor.Queue.Job.Poller] Started...")
-      schedule_polling()
-      {:ok, nil}
-    else
-      :ignore
-    end
+    Logger.info("[Compressor.Queue.Job.Poller] Started...")
+    schedule_polling()
+    {:ok, nil}
   end
 
   @impl true
@@ -52,9 +48,5 @@ defmodule Compressor.Queue.Job.Poller do
 
   defp schedule_polling() do
     Process.send_after(self(), :perform, :timer.seconds(5))
-  end
-
-  defp enabled do
-    Application.get_env(:compressor, :server)[:poller]
   end
 end
