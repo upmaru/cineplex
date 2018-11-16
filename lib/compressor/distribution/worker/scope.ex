@@ -1,4 +1,4 @@
-defmodule Compressor.Encode.Worker.Scope do
+defmodule Compressor.Distribution.Worker.Scope do
   import Ecto.Query, only: [from: 2]
 
   @spec by(atom(), [{:state, binary()}]) :: Ecto.Query.t()

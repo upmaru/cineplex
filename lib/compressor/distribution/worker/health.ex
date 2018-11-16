@@ -1,10 +1,10 @@
-defmodule Compressor.Encode.Worker.Health do
+defmodule Compressor.Distribution.Worker.Health do
   @moduledoc """
   Checks health of workers
   """
   use GenServer
 
-  alias Compressor.Encode
+  alias Compressor.Distribution
 
   require Logger
 
@@ -23,7 +23,7 @@ defmodule Compressor.Encode.Worker.Health do
   @impl true
   @spec init(any()) :: {:ok, nil}
   def init(_) do
-    Logger.info("[Compressor.Queue.Worker.Health] Started...")
+    Logger.info("[Compressor.Distribution.Worker.Health] Started...")
     schedule_health_check()
     {:ok, nil}
   end
@@ -36,10 +36,10 @@ defmodule Compressor.Encode.Worker.Health do
   end
 
   defp health_check() do
-    workers = Encode.get_workers(state: "ready")
+    workers = Distribution.get_workers(state: "ready")
 
     Compressor.TaskSupervisor
-    |> Task.Supervisor.async_stream(workers, Encode.Worker.Check, :perform, [])
+    |> Task.Supervisor.async_stream(workers, Distribution.Worker.Check, :perform, [])
     |> Stream.run()
   end
 

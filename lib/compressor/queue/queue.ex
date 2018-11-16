@@ -34,4 +34,11 @@ defmodule Compressor.Queue do
     |> Job.changeset(parameters)
     |> Repo.update()
   end
+
+  @spec get_job_entry(any()) :: Job.Entry.t() | nil
+  def get_job_entry(state) do
+    Job.Entry
+    |> Job.Entry.Scope.by(state)
+    |> Repo.one()
+  end
 end

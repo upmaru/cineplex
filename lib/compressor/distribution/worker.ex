@@ -1,4 +1,4 @@
-defmodule Compressor.Encode.Worker do
+defmodule Compressor.Distribution.Worker do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -6,7 +6,7 @@ defmodule Compressor.Encode.Worker do
 
   @valid_current_states ~w(ready unavailable working)
 
-  schema "encode_workers" do
+  schema "distribution_workers" do
     field(:node_name, :string)
     field(:current_state, :string)
 
@@ -24,7 +24,7 @@ defmodule Compressor.Encode.Worker do
     worker
     |> cast(params, [:node_name, :current_state])
     |> validate_required([:node_name, :current_state])
-    |> validate_inclusion(:node_name, @valid_current_states)
+    |> validate_inclusion(:current_state, @valid_current_states)
     |> unique_constraint(:node_name)
   end
 end

@@ -6,8 +6,7 @@ defmodule Compressor.Worker.Registration do
   @spec perform() :: {:error, Ecto.Changeset.t()} | {:ok, any()}
   def perform do
     with {:ok, _worker} <- Encode.register_worker(Atom.to_string(node()), "ready"),
-         true <- Node.connect(server_node())
-    do
+         true <- Node.connect(server_node()) do
       Logger.info("[Compressor.Worker.Registration] Successful")
       {:ok, :registered}
     else

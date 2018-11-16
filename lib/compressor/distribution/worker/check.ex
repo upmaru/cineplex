@@ -1,9 +1,10 @@
-defmodule Compressor.Encode.Worker.Check do
+defmodule Compressor.Distribution.Worker.Check do
   alias Compressor.{
-    Repo, Encode
+    Repo,
+    Distribution
   }
 
-  alias Encode.Worker
+  alias Distribution.Worker
 
   @spec perform(%Worker{node_name: binary()}) :: :ok | {:ok, Worker.t()}
   def perform(worker) do
