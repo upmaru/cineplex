@@ -1,9 +1,15 @@
-defmodule Compressor.Pipelines.UpmaruStudio.Encode do
+defmodule Pipelines.UpmaruStudio.Encode do
   alias Compressor.Queue.Job
   alias Pipelines.UpmaruStudio.Encode
 
-  @spec perform(Compressor.Queue.Job.Entry.t()) :: any()
   def perform(%Job.Entry{job: job} = job_entry) do
-    Encode.Download.perform(job)
+    with {:ok, url, path} <- Encode.Setup.perform(job),
+         {:ok, downloaded} <- Encode.Download.perform(url, path),
+         {:ok, transcoded} <- Encode.Transcode.perform(job)
+    do
+
+    else
+      {:error, reason} -> {:error, reason}
+    end
   end
 end

@@ -2,7 +2,7 @@ defmodule Compressor.Pipelines.UpmaruStudio do
   @behaviour Compressor.Pipeline
 
   alias Compressor.Queue.Job
-  alias Pipelines.UpmaruStudio
+  alias Compressor.Pipelines.UpmaruStudio
 
   @spec task(Job.Entry.t()) :: any()
   def task(job_entry), do: UpmaruStudio.Encode.perform(job_entry)
