@@ -35,10 +35,10 @@ defmodule Compressor.Queue do
     |> Repo.update()
   end
 
-  @spec get_job_entry(any()) :: Job.Entry.t() | nil
-  def get_job_entry(state) do
+  @spec get_job_entries(any()) :: [Job.Entry.t()] | []
+  def get_job_entries(state) do
     Job.Entry
     |> Job.Entry.Scope.by(state)
-    |> Repo.one()
+    |> Repo.all()
   end
 end

@@ -1,4 +1,7 @@
 defmodule Compressor.Adapter do
+  alias Compressor.Queu.Job
+
+  @callback work(Job.Entry.t()) :: any()
   @callback setting(Tesla.Client.t()) ::
               {:ok, %{presets: list(), storage: map()}} | {:error, :invalid_setting}
 

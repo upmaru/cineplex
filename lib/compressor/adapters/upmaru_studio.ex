@@ -1,6 +1,12 @@
 defmodule Compressor.Adapters.UpmaruStudio do
   @behaviour Compressor.Adapter
 
+  alias Compressor.Queue.Job
+  alias Compressor.Adapters.UpmaruStudio
+
+  @spec work(Job.Entry.t()) :: any()
+  def work(job_entry), do: UpmaruStudio.Encode.perform(job_entry)
+
   @spec client(any(), binary()) :: Tesla.Client.t()
   def client(endpoint, token) do
     middleware = [

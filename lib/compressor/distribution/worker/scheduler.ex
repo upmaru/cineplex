@@ -1,7 +1,10 @@
 defmodule Compressor.Distribution.Worker.Scheduler do
   use GenServer
 
-  alias Compressor.Distribution
+  alias Compressor.{
+    Distribution, Queue
+  }
+
   alias Distribution.Worker
 
   require Logger
@@ -28,17 +31,18 @@ defmodule Compressor.Distribution.Worker.Scheduler do
 
   @impl true
   def handle_info(:perform, state) do
-    distribute()
+    schedule_work()
     run_next_cycle()
     {:noreply, state}
   end
 
-  defp distribute do
+  defp schedule_work do
     workers = Distribution.get_workers(state: "ready")
+    job_entries = Queue.get_job_entries(:waiting)
+    matchings = Enum.zip(workers, job_entries)
 
-    # max concurrency 1 so jobs don't get distributed twice
     Compressor.TaskSupervisor
-    |> Task.Supervisor.async_stream(workers, Worker.Distribute, :to, [], max_concurrency: 1)
+    |> Task.Supervisor.async_stream(matchings, Worker.Distribute, :perform, [])
     |> Stream.run()
   end
 

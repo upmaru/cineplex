@@ -13,7 +13,9 @@ defmodule Compressor.Worker.Begin do
   def perform(job_entry) do
     case assign_job_entry_to_self(job_entry) do
       {:ok, %{job_entry: assigned_job_entry, worker: _working_worker}} ->
-        Compressor.Encode.perform(assigned_job_entry)
+        assigned_job_entry_with_source = Repo.preload(assigned_job_entry, [job: [:source]])
+        adapter = Compressor.Adapter.from_source(assigned_job_entry_with_source.job.source)
+        adapter.work(assigned_job_entry)
       _ ->
         {:error, :starting}
     end

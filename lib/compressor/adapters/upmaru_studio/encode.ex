@@ -1,4 +1,4 @@
-defmodule Compressor.Encode do
+defmodule Compressor.Adapters.UpmaruStudio.Encode do
   def perform(job_entry) do
     IO.inspect(job_entry)
   end
