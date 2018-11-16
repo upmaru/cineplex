@@ -5,7 +5,7 @@ defmodule Compressor.Repo.Migrations.CreateQueueSources do
     create table(:queue_sources) do
       add :name, :string
       add :endpoint, :string
-      add :adapter, :string
+      add :pipeline, :string
 
       add :token, :text
 
