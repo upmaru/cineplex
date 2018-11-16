@@ -1,7 +1,7 @@
-defmodule Compressor.Adapter do
+defmodule Compressor.Pipeline do
   alias Compressor.Queue.Job
 
-  @callback work(Job.Entry.t()) :: any()
+  @callback task(Job.Entry.t()) :: any()
   @callback setting(Tesla.Client.t()) ::
               {:ok, %{presets: list(), storage: map()}} | {:error, :invalid_setting}
 
@@ -11,6 +11,6 @@ defmodule Compressor.Adapter do
 
   @spec from_source(Source.t()) :: atom()
   def from_source(source) do
-    Application.get_env(:compressor, :adapters)[source.adapter]
+    Application.get_env(:compressor, :pipelines)[source.pipeline]
   end
 end

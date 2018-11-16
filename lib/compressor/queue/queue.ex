@@ -8,9 +8,9 @@ defmodule Compressor.Queue do
 
   @spec create_source(binary(), binary(), binary()) ::
           {:error, Ecto.Changeset.t()} | {:ok, Source.t()}
-  def create_source(endpoint, token, adapter) do
+  def create_source(endpoint, token, pipeline) do
     %Source{}
-    |> Source.changeset(%{endpoint: endpoint, token: token, adapter: adapter})
+    |> Source.changeset(%{endpoint: endpoint, token: token, pipeline: pipeline})
     |> Repo.insert()
   end
 

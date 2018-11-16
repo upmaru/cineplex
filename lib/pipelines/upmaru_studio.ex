@@ -1,11 +1,9 @@
-defmodule Compressor.Adapters.UpmaruStudio do
-  @behaviour Compressor.Adapter
-
+defmodule Pipelines.UpmaruStudio do
   alias Compressor.Queue.Job
-  alias Compressor.Adapters.UpmaruStudio
+  alias Pipelines.UpmaruStudio
 
-  @spec work(Job.Entry.t()) :: any()
-  def work(job_entry), do: UpmaruStudio.Encode.perform(job_entry)
+  @spec task(Job.Entry.t()) :: any()
+  def task(job_entry), do: UpmaruStudio.Encode.perform(job_entry)
 
   @spec client(any(), binary()) :: Tesla.Client.t()
   def client(endpoint, token) do

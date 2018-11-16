@@ -9,8 +9,8 @@ defmodule Compressor.Queue.Source.Add do
   @spec perform(binary(), binary(), binary()) ::
           {:ok, %{source: Source.t(), presets: [Source.Preset.t()]}}
           | {:error, Ecto.Changeset.t() | atom}
-  def perform(endpoint, token, adapter) do
-    with {:ok, source} <- Queue.create_source(endpoint, token, adapter),
+  def perform(endpoint, token, pipeline) do
+    with {:ok, source} <- Queue.create_source(endpoint, token, pipeline),
          {:ok, setting} <- load_setting(source),
          {_count, created_presets} <- insert_all_presets(source, setting),
          {:ok, source_with_storage} <- Queue.update_source(source, %{storage: setting.storage}) do
@@ -21,10 +21,10 @@ defmodule Compressor.Queue.Source.Add do
   end
 
   defp load_setting(%{token: token, endpoint: endpoint} = source) do
-    adapter = Compressor.Adapter.from_source(source)
-    client = adapter.client(endpoint, token)
+    pipeline = Compressor.Pipeline.from_source(source)
+    client = pipeline.client(endpoint, token)
 
-    adapter.setting(client)
+    pipeline.setting(client)
   end
 
   defp insert_all_presets(source, %{presets: presets} = _setting) do

@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :compressor, :adapters, %{
+config :compressor, :pipelines, %{
   "upmaru_studio" => Compressor.Adapters.UpmaruStudio
 }
 

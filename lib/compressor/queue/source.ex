@@ -12,7 +12,7 @@ defmodule Compressor.Queue.Source do
   schema "queue_sources" do
     field(:name, :string)
     field(:endpoint, :string)
-    field(:adapter, :string)
+    field(:pipeline, :string)
     field(:token, :string)
 
     field(:storage, :map)
@@ -23,8 +23,8 @@ defmodule Compressor.Queue.Source do
     timestamps(type: :utc_datetime)
   end
 
-  @valid_attrs ~w(endpoint adapter token storage)a
-  @required_attrs ~w(endpoint adapter token)a
+  @valid_attrs ~w(endpoint pipeline token storage)a
+  @required_attrs ~w(endpoint pipeline token)a
 
   def changeset(source, params \\ %{}) do
     source
