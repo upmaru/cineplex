@@ -23,8 +23,8 @@ defmodule Compressor.Application do
       # {Compressor.Worker, arg},
       {Task.Supervisor, name: Compressor.TaskSupervisor},
       {Compressor.Repo, []},
-      Compressor.Encode.Worker.Health,
-      Compressor.Encode.Worker.Scheduler,
+      Compressor.Distribution.Worker.Health,
+      Compressor.Distribution.Worker.Scheduler,
       Compressor.Queue.Job.Poller
     ]
   end

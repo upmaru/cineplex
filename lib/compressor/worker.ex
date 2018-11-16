@@ -3,10 +3,6 @@ defmodule Compressor.Worker do
   This GenServer is started on the Worker node and registers
   itself into the pool of workers.
   """
-  alias Compressor.{
-    Distribution,
-    Repo
-  }
 
   use GenServer
 
