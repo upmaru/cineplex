@@ -1,4 +1,4 @@
-defmodule Pipelines.UpmaruStudio.Encode.Download do
+defmodule Compressor.Pipelines.UpmaruStudio.Encode.Download do
   alias Compressor.Queue.Job
 
   alias Pipelines.UpmaruStudio.Encode.Download

@@ -1,4 +1,4 @@
-defmodule Pipelines.UpmaruStudio.Encode.Download.Setup do
+defmodule Compressor.Pipelines.UpmaruStudio.Encode.Download.Setup do
   alias Upstream.B2
 
   @spec perform(binary()) :: {:error, atom()} | {:ok, binary(), binary()}

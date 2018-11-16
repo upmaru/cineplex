@@ -1,4 +1,4 @@
-defmodule Pipelines.UpmaruStudio do
+defmodule Compressor.Pipelines.UpmaruStudio do
   @behaviour Compressor.Pipeline
 
   alias Compressor.Queue.Job
