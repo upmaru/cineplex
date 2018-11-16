@@ -7,7 +7,9 @@ defmodule Compressor.Worker do
   use GenServer
 
   alias Compressor.Worker.{
-    Begin, Finish, Registration
+    Begin,
+    Finish,
+    Registration
   }
 
   @spec start_link(any()) :: :ignore | {:error, any()} | {:ok, pid()}

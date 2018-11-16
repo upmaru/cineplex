@@ -2,7 +2,8 @@ defmodule Compressor.Distribution.Worker.Scheduler do
   use GenServer
 
   alias Compressor.{
-    Distribution, Queue
+    Distribution,
+    Queue
   }
 
   alias Distribution.Worker

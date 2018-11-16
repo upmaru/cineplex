@@ -1,6 +1,8 @@
 defmodule Compressor.Worker.Finish do
   alias Compressor.{
-    Distribution, Queue, Repo
+    Distribution,
+    Queue,
+    Repo
   }
 
   alias Queue.Job
@@ -14,7 +16,7 @@ defmodule Compressor.Worker.Finish do
   def perform(job_entry) do
     myself = Distribution.get_worker(node_name: Atom.to_string(node()))
 
-    Multi.new
+    Multi.new()
     |> Multi.update(:job_entry, finish_changeset(job_entry))
     |> Multi.update(:worker, ready_changeset(myself))
     |> Repo.transaction()

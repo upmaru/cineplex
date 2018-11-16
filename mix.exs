@@ -60,6 +60,9 @@ defmodule Compressor.Mixfile do
       {:ecto, "~> 3.0", override: true},
       {:postgrex, "~> 0.14.0"},
 
+      # gen stage
+      {:gen_stage, "~> 0.14"},
+
       # logging
       {:timber, "~> 2.8"},
 

@@ -1,5 +1,8 @@
 defmodule Pipelines.UpmaruStudio.Encode do
-  def perform(job_entry) do
-    IO.inspect(job_entry)
+  alias Compressor.Queue.Job
+  alias Pipelines.UpmaruStudio.Encode
+
+  def perform(%Job.Entry{job: job} = job_entry) do
+    Encode.Download.perform(job.object)
   end
 end

@@ -1,7 +1,7 @@
 use Mix.Config
 
 config :compressor, :pipelines, %{
-  "upmaru_studio" => Compressor.Adapters.UpmaruStudio
+  "upmaru_studio" => Pipelines.UpmaruStudio
 }
 
 # can be worker or server

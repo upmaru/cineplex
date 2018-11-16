@@ -1,6 +1,7 @@
 defmodule Compressor.Distribution.Worker.Distribute do
   alias Compressor.{
-    Distribution, Worker
+    Distribution,
+    Worker
   }
 
   @spec perform(Distribution.Worker.t()) :: Task.t()
