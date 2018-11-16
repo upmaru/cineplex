@@ -1,5 +1,5 @@
 defmodule Compressor.Adapter do
-  alias Compressor.Queu.Job
+  alias Compressor.Queue.Job
 
   @callback work(Job.Entry.t()) :: any()
   @callback setting(Tesla.Client.t()) ::
