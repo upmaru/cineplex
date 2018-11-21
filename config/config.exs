@@ -2,10 +2,15 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :compressor,
-  ecto_repos: [Compressor.Repo]
+config :tesla, adapter: Tesla.Adapter.Hackney
 
-config :compressor, :storage,
+config :cineplex, :networking,
+  interface: "eth0"
+
+config :cineplex,
+  ecto_repos: [Cineplex.Repo]
+
+config :cineplex, :storage,
   upload_timeout: 0
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
@@ -23,7 +28,7 @@ config :compressor, :storage,
 #
 # You can also configure a 3rd-party app:
 #
-#     config :logger, level: :info
+config :logger, level: :info
 #
 
 # It is also possible to import configuration files, relative to this

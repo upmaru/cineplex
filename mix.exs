@@ -26,6 +26,8 @@ defmodule Compressor.Mixfile do
         :ffmpex,
         :httpoison,
         :upstream,
+        :plug_cowboy,
+        :plug,
         :parse_trans,
         :downstream
       ],
@@ -41,19 +43,22 @@ defmodule Compressor.Mixfile do
 
       # for transfer
       {:downstream, "~> 0.1.0"},
-      {:upstream, "~> 1.6.0"},
+      {:upstream, "~> 1.7.0"},
+      {:jason, ">= 1.0.0"},
 
       # http client
       {:tesla, "~> 1.2.0"},
+      {:hackney, "~> 1.14.0"},
+
+      # web
+      {:plug_cowboy, "~> 2.0"},
+      {:plug, "~> 1.7"},
+      {:jsonapi, "~> 0.8.0"},
 
       # database
       {:ecto_sql, "~> 3.0"},
       {:ecto, "~> 3.0", override: true},
       {:postgrex, "~> 0.14.0"},
-
-
-      # json
-      {:jason, ">= 1.0.0"},
 
       # logging
       {:timber, "~> 2.8"},

@@ -1,4 +1,0 @@
-#!/bin/sh
-
-rc-service compressor stop
-rc-update del compressor

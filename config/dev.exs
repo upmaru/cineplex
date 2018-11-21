@@ -1,9 +1,27 @@
 use Mix.Config
 
-config :compressor, Compressor.Repo,
-  database: "compressor_dev",
+config :cineplex, :pipelines, %{
+  "upmaru_studio" => Pipelines.UpmaruStudio
+}
+
+# can be worker or server
+config :cineplex, :role, System.get_env("CINEPLEX_ROLE")
+
+config :cineplex, :worker,
+  server: :cineplex_server@oneeight
+
+# configuration for server
+config :cineplex, :server,
+  poller: false
+
+# config :cineplex, :old, %{
+#   name: "Codemy Staging",
+#   endpoint: "https://staging.codemy.net",
+#   adapter: Cineplex.Adapters.UpmaruStudio,
+#   token: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJTdHVkaW8iLCJleHAiOjE1NDQ2MDY0OTYsImlhdCI6MTU0MjAxNDQ5NiwiaXNzIjoiU3R1ZGlvIiwianRpIjoiMjgwNjJkMTMtMDNmZi00Y2E5LWJhNzAtZmVmODk1YWFjOTE1IiwibmJmIjoxNTQyMDE0NDk1LCJwZW0iOnsiYm90IjozfSwic3ViIjoiMiIsInR5cCI6ImFjY2VzcyJ9.lBT6sldgBh8IBOuVQzrYZx8HT-KlRpFoMj8bgf_4Xg4lpAzp9U4Ar_-bG_CT8_dPwytGUHiDTZM78JiYuj3U4A"
+# }
+
+config :cineplex, Cineplex.Repo,
+  database: "cineplex_dev",
   username: "zacksiri",
   hostname: "localhost"
-
-config :exq,
-  url: "redis://127.0.0.1:6379/0"

@@ -1,4 +1,0 @@
-#!/bin/sh
-
-rc-update add compressor
-rc-service compressor start

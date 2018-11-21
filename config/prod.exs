@@ -1,4 +1,6 @@
 use Mix.Config
 
-config :exq,
-  url: "${REDIS_URL}"
+config :cineplex, Cineplex.Repo,
+  database: "cineplex_production",
+  username: "zacksiri",
+  hostname: "localhost"
