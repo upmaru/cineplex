@@ -1,4 +1,4 @@
-defmodule Pipelines.UpmaruStudio.Encode.Download do
+defmodule Compressor.Pipelines.UpmaruStudio.Encode.Download do
   @spec perform(binary(), binary()) :: {:ok, binary()} | {:error, :download_failed}
   def perform(url, path) do
     with {:ok, file} <- File.open(path, [:write]),

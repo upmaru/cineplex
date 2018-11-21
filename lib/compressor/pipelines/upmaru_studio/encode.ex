@@ -3,15 +3,16 @@ defmodule Compressor.Pipelines.UpmaruStudio.Encode do
   alias Compressor.Pipelines.UpmaruStudio.Encode
 
   alias Encode.{
-    Setup, Download, Transcode, Store
+    Setup, Download, Transcode, Store, Clean
   }
 
-  @spec perform(Job.Entry.t()) :: {:error, any()}
+  @spec perform(Job.Entry.t()) :: {:ok, :encoded} | {:error, any()}
   def perform(%Job.Entry{job: job, preset: preset} = _job_entry) do
     with {:ok, url, path} <- Setup.perform(job),
          {:ok, downloaded} <- Download.perform(url, path),
          {:ok, transcoded} <- Transcode.perform(preset, downloaded),
-         {:ok, :store} <- Store.perform(job.source, preset, transcoded)
+         {:ok, :stored} <- Store.perform(job.source, preset, transcoded),
+         {:ok, :cleaned} <- Clean.perform(path)
     do
       {:ok, :encoded}
     else
