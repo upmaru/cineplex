@@ -16,7 +16,7 @@ defmodule Cineplex.Queue.Job.Entry do
     field(:started_at, :utc_datetime)
     field(:finished_at, :utc_datetime)
 
-    belongs_to(:worker, Distribution.Worker)
+    belongs_to(:node, Distribution.Node)
 
     timestamps(type: :utc_datetime)
   end

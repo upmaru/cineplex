@@ -1,14 +1,16 @@
-defmodule Cineplex.Distribution.Worker do
+defmodule Cineplex.Distribution.Node do
   use Ecto.Schema
   import Ecto.Changeset
 
   alias Cineplex.Queue.Job
 
   @valid_current_states ~w(ready unavailable working)
+  @valid_roles ~w(server worker)
 
-  schema "distribution_workers" do
-    field(:node_name, :string)
+  schema "distribution_nodes" do
+    field(:name, :string)
     field(:current_state, :string)
+    field(:role, :string)
 
     has_one(:entry, Job.Entry)
 
@@ -22,9 +24,10 @@ defmodule Cineplex.Distribution.Worker do
         ) :: Ecto.Changeset.t()
   def changeset(worker, params \\ %{}) do
     worker
-    |> cast(params, [:node_name, :current_state])
-    |> validate_required([:node_name, :current_state])
+    |> cast(params, [:name, :current_state, :role])
+    |> validate_required([:name, :current_state, :role])
     |> validate_inclusion(:current_state, @valid_current_states)
-    |> unique_constraint(:node_name)
+    |> validate_inclusion(:role, @valid_roles)
+    |> unique_constraint(:name)
   end
 end

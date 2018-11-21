@@ -6,6 +6,8 @@ defmodule Cineplex.Worker do
 
   use GenServer
 
+  alias Cineplex.Queue.Job
+
   alias Cineplex.Worker.{
     Begin,
     Finish,
@@ -17,7 +19,8 @@ defmodule Cineplex.Worker do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
-  def perform(job_entry) do
+  @spec perform(Job.Entry.t()) :: any()
+  def perform(%Job.Entry{} = job_entry) do
     GenServer.call(__MODULE__, {:perform, job_entry}, :infinity)
   end
 

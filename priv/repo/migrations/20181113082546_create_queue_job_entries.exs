@@ -9,13 +9,13 @@ defmodule Cineplex.Repo.Migrations.CreateQueueJobEntries do
       add :started_at, :utc_datetime
       add :finished_at, :utc_datetime
 
-      add :worker_id, references(:distribution_workers)
+      add :node_id, references(:distribution_nodes)
       add :parent_id, references(:queue_job_entries)
 
       timestamps()
     end
 
-    create index(:queue_job_entries, [:worker_id])
+    create index(:queue_job_entries, [:node_id])
     create index(:queue_job_entries, [:parent_id])
     create index(:queue_job_entries, [:job_id, :preset_id])
   end

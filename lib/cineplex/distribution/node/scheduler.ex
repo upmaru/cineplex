@@ -1,4 +1,4 @@
-defmodule Cineplex.Distribution.Worker.Scheduler do
+defmodule Cineplex.Distribution.Node.Scheduler do
   use GenServer
 
   alias Cineplex.{
@@ -6,7 +6,6 @@ defmodule Cineplex.Distribution.Worker.Scheduler do
     Queue
   }
 
-  alias Distribution.Worker
 
   require Logger
 
@@ -25,7 +24,7 @@ defmodule Cineplex.Distribution.Worker.Scheduler do
   @impl true
   @spec init(any()) :: {:ok, nil}
   def init(_) do
-    Logger.info("[Cineplex.Distribution.Worker.Scheduler] Started...")
+    Logger.info("[Cineplex.Distribution.Node.Scheduler] Started...")
     run_next_cycle()
     {:ok, nil}
   end
@@ -43,7 +42,7 @@ defmodule Cineplex.Distribution.Worker.Scheduler do
     matchings = Enum.zip(workers, job_entries)
 
     Cineplex.TaskSupervisor
-    |> Task.Supervisor.async_stream(matchings, Worker.Distribute, :perform, [])
+    |> Task.Supervisor.async_stream(matchings, Distribution.Node.Distribute, :perform, [])
     |> Stream.run()
   end
 

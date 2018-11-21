@@ -1,4 +1,4 @@
-defmodule Cineplex.Distribution.Worker.Health do
+defmodule Cineplex.Distribution.Node.Health do
   @moduledoc """
   Checks health of workers
   """
@@ -23,7 +23,7 @@ defmodule Cineplex.Distribution.Worker.Health do
   @impl true
   @spec init(any()) :: {:ok, nil}
   def init(_) do
-    Logger.info("[Cineplex.Distribution.Worker.Health] Started...")
+    Logger.info("[Cineplex.Distribution.Node.Health] Started...")
     schedule_health_check()
     {:ok, nil}
   end
@@ -36,10 +36,10 @@ defmodule Cineplex.Distribution.Worker.Health do
   end
 
   defp health_check() do
-    workers = Distribution.get_workers(state: "ready")
+    nodes = Distribution.get_nodes(state: "ready")
 
     Cineplex.TaskSupervisor
-    |> Task.Supervisor.async_stream(workers, Distribution.Worker.Check, :perform, [])
+    |> Task.Supervisor.async_stream(nodes, Distribution.Node.Check, :perform, [])
     |> Stream.run()
   end
 

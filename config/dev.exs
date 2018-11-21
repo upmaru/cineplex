@@ -7,9 +7,6 @@ config :cineplex, :pipelines, %{
 # can be worker or server
 config :cineplex, :role, System.get_env("CINEPLEX_ROLE")
 
-config :cineplex, :worker,
-  server: :cineplex_server@oneeight
-
 # config :cineplex, :old, %{
 #   name: "Codemy Staging",
 #   endpoint: "https://staging.codemy.net",

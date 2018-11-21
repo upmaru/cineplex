@@ -5,8 +5,8 @@ defmodule Cineplex.Worker.Registration do
 
   @spec perform() :: {:error, Ecto.Changeset.t()} | {:ok, any()}
   def perform do
-    with {:ok, _worker} <- Distribution.register_worker(Atom.to_string(node()), "ready"),
-         true <- Node.connect(server_node()) do
+    with {:ok, _node} <- Distribution.register_node(Atom.to_string(node()), "worker", "ready"),
+         :ok <- connect_to_servers() do
       Logger.info("[Cineplex.Worker.Registration] Successful")
       {:ok, :registered}
     else
@@ -16,7 +16,10 @@ defmodule Cineplex.Worker.Registration do
     end
   end
 
-  defp server_node do
-    Application.get_env(:cineplex, :worker)[:server]
+  defp connect_to_servers do
+    servers = Distribution.get_servers(current_state: "ready")
+    Enum.each(servers, &connect/1)
   end
+
+  defp connect(%Distribution.Node{name: name}), do: Node.connect(String.to_atom(name))
 end

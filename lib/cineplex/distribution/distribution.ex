@@ -4,28 +4,48 @@ defmodule Cineplex.Distribution do
     Repo
   }
 
-  alias Distribution.Worker
 
-  @spec register_worker(binary(), binary()) ::
-          {:ok, Distribution.Worker.t()} | {:error, Ecto.Changeset.t()}
-  def register_worker(node_name, state) do
-    case Repo.get_by(Distribution.Worker, node_name: node_name) do
-      nil -> %Distribution.Worker{node_name: node_name}
+  @spec register_node(binary(), binary(), binary()) ::
+          {:ok, Distribution.Node.t()} | {:error, Ecto.Changeset.t()}
+  def register_node(name, role, state) do
+    case Repo.get_by(Distribution.Node, name: name) do
+      nil -> %Distribution.Node{name: name}
       worker -> worker
     end
-    |> Distribution.Worker.changeset(%{current_state: state})
+    |> Distribution.Node.changeset(%{current_state: state, type: role})
     |> Repo.insert_or_update()
   end
 
-  @spec get_worker([{:node_name, binary()}]) :: Worker.t()
-  def get_worker(node_name: node_name) do
-    Repo.get_by(Worker, node_name: node_name)
+  @spec get_node([{:name, binary()}]) :: Distribution.Node.t()
+  def get_node(name: name) do
+    Repo.get_by(Distritbution.Node, name: name)
   end
 
-  @spec get_workers([{:state, binary()}]) :: [Worker.t()]
+  def get_nodes(state: current_state) do
+    Distribution.Node
+    |> Distribution.Node.Scope.by(state: current_state)
+    |> Repo.all()
+  end
+
+  @spec get_servers([{:state, binary()}]) :: [Distribution.Node.t()]
+  def get_servers(state: current_state) do
+    Distribution.Node
+    |> Distribution.Node.Scope.by("server", state: current_state)
+    |> Repo.all()
+  end
+
+  @spec get_other_servers(binary(), [{:state, binary()}]) :: [Distribution.Node.t()]
+  def get_other_servers(name, state: current_state) do
+    Distribution.Node
+    |> Distribution.Node.Scope.except("server", name)
+    |> Distribution.Node.Scope.by("server", state: current_state)
+    |> Repo.all()
+  end
+
+  @spec get_workers([{:state, binary()}]) :: [Distribution.Node.t()]
   def get_workers(state: current_state) do
-    Worker
-    |> Worker.Scope.by(state: current_state)
+    Distribution.Node
+    |> Distribution.Node.Scope.by("worker", state: current_state)
     |> Repo.all()
   end
 end

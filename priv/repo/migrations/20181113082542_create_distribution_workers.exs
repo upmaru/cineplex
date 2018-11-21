@@ -1,14 +1,15 @@
-defmodule Cineplex.Repo.Migrations.CreateDistributionWorkers do
+defmodule Cineplex.Repo.Migrations.CreateDistributionNodes do
   use Ecto.Migration
 
   def change do
-    create table(:distribution_workers) do
-      add :node_name, :string
+    create table(:distribution_nodes) do
+      add :name, :string
       add :current_state, :string
+      add :role, :string
 
       timestamps()
     end
 
-    create index(:distribution_workers, [:node_name], unique: true)
+    create index(:distribution_nodes, [:name], unique: true)
   end
 end
