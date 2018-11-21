@@ -1,10 +1,10 @@
 #!/sbin/openrc-run
 
-name='compressor'
+name='cineplex'
 description="Compressor Encoder"
 supervisor="s6"
 s6_service_path="${RC_SVCDIR}/s6-scan/${name}"
-command=/var/lib/compressor/bin/compressor
+command=/var/lib/cineplex/bin/cineplex
 
 depend() {
   need net s6-svscan

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-name=compressor
-command=/var/lib/compressor/bin/compressor
+name=cineplex
+command=/var/lib/cineplex/bin/cineplex
 
 source config_${name} && exec ${command} foreground > /var/log/${name}.log 2>&1

@@ -21,11 +21,11 @@ if [ "${BUILD}" = "" ]; then
     PATCH=$DESCRIBE
 fi
 
-pkgname=compressor
+pkgname=cineplex
 pkgver=$VERSION
 pkgrel=$BUILD
 pkgdesc="Video Encoder"
-url="https://gitlab.com/upmaru/compressor"
+url="https://gitlab.com/upmaru/cineplex"
 options="!check"
 arch="all"
 license="MIT"

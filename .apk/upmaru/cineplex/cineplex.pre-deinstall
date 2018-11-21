@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rc-service cineplex stop
+rc-update del cineplex

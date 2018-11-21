@@ -9,6 +9,6 @@ for k in ${keys}; do
   export ${k}=$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.${k});
 done
 
-export HOME=/var/lib/compressor
+export HOME=/var/lib/cineplex
 export REPLACE_OS_VARS=true
 export MIX_ENV=prod
