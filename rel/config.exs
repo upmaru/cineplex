@@ -45,8 +45,8 @@ end
 # when running `mix release`, the first release in the file
 # will be used by default
 
-release :compressor do
-  set version: current_version(:compressor)
+release :cineplex do
+  set version: current_version(:cineplex)
   set applications: [
     :runtime_tools
   ]
