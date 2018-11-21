@@ -4,13 +4,13 @@ defmodule Compressor.Mixfile do
 
   def project do
     [
-      app: :compressor,
+      app: :cineplex,
       version: "0.7.0",
       elixir: "~> 1.6",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
-      source_url: "https://github.com/upmaru/compressor",
-      name: "Compressor",
+      source_url: "https://github.com/upmaru/complex",
+      name: "Complex",
       description: description(),
       deps: deps(),
       package: package()
@@ -31,7 +31,7 @@ defmodule Compressor.Mixfile do
         :parse_trans,
         :downstream
       ],
-      mod: {Compressor.Application, []}
+      mod: {Cineplex.Application, []}
     ]
   end
 
@@ -73,17 +73,17 @@ defmodule Compressor.Mixfile do
 
   defp description do
     """
-    Compressor is a distributed video compressor. It's designed to be used with Upmaru Studio
+    Cineplex is a distributed video worker. It's designed to be used with Upmaru Studio
     """
   end
 
   defp package do
     [
-      name: :compressor,
+      name: :cineplex,
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Zack Siri"],
       licenses: ["MIT"],
-      links: %{"GitLab" => "https://gitlab.com/upmaru/compressor"}
+      links: %{"GitLab" => "https://gitlab.com/upmaru/cineplex"}
     ]
   end
 end
