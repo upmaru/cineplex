@@ -2,7 +2,6 @@ defmodule Compressor.Pipelines.UpmaruStudio.Encode.Store do
   alias Compressor.Queue.Source
   alias Upstream.Uploader
 
-
   @spec perform(Compressor.Queue.Source.t(), Source.Preset.t(), any()) ::
           {:error, :store_failed} | {:ok, :stored}
   def perform(%Source{storage: storage} = _source, %Source.Preset{name: name} = _preset, transcoded_path) do
