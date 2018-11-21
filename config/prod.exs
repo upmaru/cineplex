@@ -1,6 +1,8 @@
 use Mix.Config
 
+config :cineplex, :role, "${CINEPLEX_ROLE}"
+
 config :cineplex, Cineplex.Repo,
-  database: "cineplex_production",
-  username: "zacksiri",
-  hostname: "localhost"
+  url: "${DATABASE_URL}",
+  pool_size: "${DATABASE_POOL_SIZE}"
+

@@ -10,10 +10,6 @@ config :cineplex, :role, System.get_env("CINEPLEX_ROLE")
 config :cineplex, :worker,
   server: :cineplex_server@oneeight
 
-# configuration for server
-config :cineplex, :server,
-  poller: false
-
 # config :cineplex, :old, %{
 #   name: "Codemy Staging",
 #   endpoint: "https://staging.codemy.net",

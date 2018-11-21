@@ -4,9 +4,6 @@ use Mix.Config
 
 config :tesla, adapter: Tesla.Adapter.Hackney
 
-config :cineplex, :networking,
-  interface: "eth0"
-
 config :cineplex,
   ecto_repos: [Cineplex.Repo]
 
