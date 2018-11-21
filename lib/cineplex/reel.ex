@@ -1,4 +1,4 @@
-defmodule Cineplex.Pipeline do
+defmodule Cineplex.Reel do
   alias Cineplex.Queue.Job
 
   @callback task(Job.Entry.t()) :: any()
