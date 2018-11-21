@@ -1,11 +1,14 @@
 defmodule Pipelines.UpmaruStudio.Encode do
   alias Compressor.Queue.Job
   alias Pipelines.UpmaruStudio.Encode
+  alias Encode.{
+    Setup, Download, Transcode
+  }
 
   def perform(%Job.Entry{job: job} = job_entry) do
-    with {:ok, url, path} <- Encode.Setup.perform(job),
-         {:ok, downloaded} <- Encode.Download.perform(url, path),
-         {:ok, transcoded} <- Encode.Transcode.perform(job)
+    with {:ok, url, path} <- Setup.perform(job),
+         {:ok, downloaded} <- Download.perform(url, path),
+         {:ok, transcoded} <- Transcode.perform(job)
     do
 
     else
