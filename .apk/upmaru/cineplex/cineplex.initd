@@ -1,7 +1,7 @@
 #!/sbin/openrc-run
 
 name='cineplex'
-description="Compressor Encoder"
+description="Video Workbench"
 supervisor="s6"
 s6_service_path="${RC_SVCDIR}/s6-scan/${name}"
 command=/var/lib/cineplex/bin/cineplex
