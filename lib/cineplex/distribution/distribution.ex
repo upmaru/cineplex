@@ -8,11 +8,11 @@ defmodule Cineplex.Distribution do
   @spec register_node(binary(), binary(), binary()) ::
           {:ok, Distribution.Node.t()} | {:error, Ecto.Changeset.t()}
   def register_node(name, role, state) do
-    case Repo.get_by(Distribution.Node, name: name) do
-      nil -> %Distribution.Node{name: name}
+    case Repo.get_by(Distribution.Node, name: name, role: role) do
+      nil -> %Distribution.Node{name: name, role: role}
       worker -> worker
     end
-    |> Distribution.Node.changeset(%{current_state: state, type: role})
+    |> Distribution.Node.changeset(%{current_state: state, role: role})
     |> Repo.insert_or_update()
   end
 
@@ -21,10 +21,16 @@ defmodule Cineplex.Distribution do
     Repo.get_by(Distritbution.Node, name: name)
   end
 
+  @spec get_nodes([{:state, binary()}, ...]) :: any()
   def get_nodes(state: current_state) do
     Distribution.Node
     |> Distribution.Node.Scope.by(state: current_state)
     |> Repo.all()
+  end
+
+  @spec get_worker([{:name, binary()}]) :: Distribution.Node.t()
+  def get_worker(name: name) do
+    Repo.get_by(Distritbution.Node, name: name, role: "worker")
   end
 
   @spec get_servers([{:state, binary()}]) :: [Distribution.Node.t()]

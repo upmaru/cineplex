@@ -3,8 +3,8 @@ defmodule Cineplex.Server do
 
   alias Cineplex.Distribution
 
-  @spec start_link() :: any()
-  def start_link do
+  @spec start_link(any()) :: any()
+  def start_link(_) do
     Task.start_link(__MODULE__, :register, [])
   end
 

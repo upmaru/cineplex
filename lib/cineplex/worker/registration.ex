@@ -17,7 +17,7 @@ defmodule Cineplex.Worker.Registration do
   end
 
   defp connect_to_servers do
-    servers = Distribution.get_servers(current_state: "ready")
+    servers = Distribution.get_servers(state: "ready")
     Enum.each(servers, &connect/1)
   end
 

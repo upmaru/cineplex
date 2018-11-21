@@ -1,7 +1,7 @@
 use Mix.Config
 
-config :cineplex, :pipelines, %{
-  "upmaru_studio" => Pipelines.UpmaruStudio
+config :cineplex, :reels, %{
+  "upmaru_studio" => Cineplex.Reels.UpmaruStudio
 }
 
 # can be worker or server

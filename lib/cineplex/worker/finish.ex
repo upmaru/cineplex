@@ -14,7 +14,7 @@ defmodule Cineplex.Worker.Finish do
           | %{:__struct__ => atom() | %{__changeset__: map()}, optional(atom()) => any()}
         ) :: any()
   def perform(job_entry) do
-    myself = Distribution.get_worker(node_name: Atom.to_string(node()))
+    myself = Distribution.get_worker(name: Atom.to_string(node()))
 
     Multi.new()
     |> Multi.update(:job_entry, finish_changeset(job_entry))
@@ -27,6 +27,6 @@ defmodule Cineplex.Worker.Finish do
   end
 
   defp ready_changeset(worker) do
-    Distribution.Worker.changeset(worker, %{current_state: "ready"})
+    Distribution.Node.changeset(worker, %{current_state: "ready"})
   end
 end

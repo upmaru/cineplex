@@ -28,7 +28,7 @@ defmodule Cineplex.Queue.Job.Entry do
         ) :: Ecto.Changeset.t()
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:started_at, :finished_at, :worker_id])
-    |> cast_assoc(:worker)
+    |> cast(params, [:started_at, :finished_at, :node_id])
+    |> cast_assoc(:node)
   end
 end

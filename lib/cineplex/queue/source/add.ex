@@ -21,7 +21,7 @@ defmodule Cineplex.Queue.Source.Add do
   end
 
   defp load_setting(%{token: token, endpoint: endpoint} = source) do
-    pipeline = Cineplex.Pipeline.from_source(source)
+    pipeline = Cineplex.Reel.from_source(source)
     client = pipeline.client(endpoint, token)
 
     pipeline.setting(client)
