@@ -14,8 +14,8 @@ defmodule Cineplex.Worker.Begin do
     case assign_job_entry_to_self(job_entry) do
       {:ok, %{job_entry: assigned_job_entry, worker: _working_worker}} ->
         assigned_job_entry_with_source = Repo.preload(assigned_job_entry, [job: [:source]])
-        pipeline = Cineplex.Pipeline.from_source(assigned_job_entry_with_source.job.source)
-        pipeline.task(assigned_job_entry)
+        reel = Cineplex.Reel.from_source(assigned_job_entry_with_source.job.source)
+        reel.task(assigned_job_entry)
       _ ->
         {:error, :starting}
     end
