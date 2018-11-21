@@ -2,7 +2,7 @@ defmodule Compressor.Pipelines.UpmaruStudio.Encode.Setup do
   alias Compressor.Queue.Job
   alias Upstream.B2
 
-  @spec perform(binary()) :: {:error, :setup_failed} | {:ok, binary(), binary()}
+  @spec perform(Job.t()) :: {:error, :setup_failed} | {:ok, binary(), binary()}
   def perform(%Job{object: object} = _job) do
     with {:ok, auth} <- get_authorization_key(object),
          {:ok, path} <- setup_tmp_directory(object),
