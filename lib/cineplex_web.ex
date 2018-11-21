@@ -1,0 +1,2 @@
+defmodule CineplexWeb do
+end

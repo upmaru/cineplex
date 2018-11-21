@@ -1,4 +1,4 @@
-defmodule Compressor.Repo.Migrations.CreateQueueJobEntries do
+defmodule Cineplex.Repo.Migrations.CreateQueueJobEntries do
   use Ecto.Migration
 
   def change do

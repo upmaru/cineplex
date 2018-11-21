@@ -4,13 +4,13 @@ use Mix.Config
 
 config :tesla, adapter: Tesla.Adapter.Hackney
 
-config :compressor, :networking,
+config :cineplex, :networking,
   interface: "eth0"
 
-config :compressor,
-  ecto_repos: [Compressor.Repo]
+config :cineplex,
+  ecto_repos: [Cineplex.Repo]
 
-config :compressor, :storage,
+config :cineplex, :storage,
   upload_timeout: 0
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this

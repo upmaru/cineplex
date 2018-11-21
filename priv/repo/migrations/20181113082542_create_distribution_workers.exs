@@ -1,4 +1,4 @@
-defmodule Compressor.Repo.Migrations.CreateDistributionWorkers do
+defmodule Cineplex.Repo.Migrations.CreateDistributionWorkers do
   use Ecto.Migration
 
   def change do

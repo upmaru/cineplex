@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :compressor, Compressor.Repo,
-  database: "compressor_production",
+config :cineplex, Cineplex.Repo,
+  database: "cineplex_production",
   username: "zacksiri",
   hostname: "localhost"

@@ -1,4 +1,4 @@
-defmodule Compressor.Repo.Migrations.CreateQueueSourcePresets do
+defmodule Cineplex.Repo.Migrations.CreateQueueSourcePresets do
   use Ecto.Migration
 
   def change do
