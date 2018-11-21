@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
     bucket  = "terraform.artello.network"
-    prefix  = "upmaru/compressor/state"
+    prefix  = "upmaru/cineplex/state"
   }
 
   provider "lxd" {
@@ -25,21 +25,21 @@ variable "nodes" {
 }
 
 
-resource "lxd_container" "encoder" {
-  count    = "${var.nodes[terraform.workspace]}"
-  name     = "compressor-${terraform.workspace}-${count.index + 1}"
+resource "lxd_container" "cineplex-server" {
+  count    = "1"
+  name     = "cineplex-server-1"
   image    = "app-${terraform.workspace}"
-  profiles = ["compressor-${terraform.workspace}"]
+  profiles = ["cineplex-server-${terraform.workspace}"]
 
   limits {
-    cpu    = "${terraform.workspace == "production" ? 2 : 1}"
+    cpu    = "1"
     memory = "1GB"
   }
 
   provisioner "remote-exec" {
     inline = [
       "gcsfuse -o ro --implicit-dirs packages.apk.build /mnt/packages",
-      "apk update && apk add compressor@upmaru",
+      "apk update && apk add cineplex@upmaru",
       "fusermount -u /mnt/packages"
     ]
     
@@ -49,8 +49,8 @@ resource "lxd_container" "encoder" {
   }
 }
 
-resource "null_resource" "updater" {
-  count = "${terraform.workspace == "production" ? 3 : 1}"
+resource "null_resource" "cineplex-server-updater" {
+  count = "1"
 
   triggers {
     version = "${var.version}"
@@ -59,7 +59,7 @@ resource "null_resource" "updater" {
   provisioner "remote-exec" {
     inline     = [
       "gcsfuse -o ro --implicit-dirs packages.apk.build /mnt/packages",
-      "apk update && apk add --upgrade compressor@upmaru",
+      "apk update && apk add --upgrade cineplex@upmaru",
       "fusermount -u /mnt/packages"
     ]
     
