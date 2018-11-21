@@ -1,6 +1,6 @@
-defmodule Cineplex.Pipelines.UpmaruStudio.Encode do
+defmodule Cineplex.Reels.UpmaruStudio.Encode do
   alias Cineplex.Queue.Job
-  alias Cineplex.Pipelines.UpmaruStudio.Encode
+  alias Cineplex.Reels.UpmaruStudio.Encode
 
   alias Encode.{
     Setup, Download, Transcode, Store, Clean

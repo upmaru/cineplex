@@ -1,4 +1,4 @@
-defmodule Cineplex.Pipelines.UpmaruStudio.Encode.Setup do
+defmodule Cineplex.Reels.UpmaruStudio.Encode.Setup do
   alias Cineplex.Queue.Job
   alias Upstream.B2
 

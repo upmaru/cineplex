@@ -1,4 +1,4 @@
-defmodule Cineplex.Pipelines.UpmaruStudio.Encode.Clean do
+defmodule Cineplex.Reels.UpmaruStudio.Encode.Clean do
   @spec perform(
           binary()
           | maybe_improper_list(

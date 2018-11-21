@@ -1,14 +1,18 @@
-defmodule Cineplex.Presets do
-  @moduledoc """
-  A Collection of presets
-  """
+
+defmodule Cineplex.Reels.UpmaruStudio.Encode.Transcode do
+  alias Cineplex.Queue.Source.Preset
 
   import FFmpex
   use FFmpex.Options
 
-  @spec streamable(binary(), binary() | FFmpex.File.t(), map()) ::
-          :ok | {:error, {any(), pos_integer()}}
-  def streamable(input_file_path, output_file_path, opts \\ %{}) do
+  @spec perform(Preset.t(), binary()) :: {:ok, binary()} | {:error, {any(), pos_integer()}}
+  def perform(%Preset{name: name, parameters: parameters} = _preset, input_path) do
+    output_name = generate_output_name(name, input_path)
+    :ok = transcode(input_path, output_name, parameters)
+    {:ok, output_name}
+  end
+
+  defp transcode(input_file_path, output_file_path, opts) do
     resolution = Map.get(opts, "resolution", "1920x1080")
     video_rate = integer_opt(opts, "video_rate", 4_000_000)
     audio_rate = integer_opt(opts, "audio_rate", 192_000)
@@ -33,7 +37,15 @@ defmodule Cineplex.Presets do
     |> add_file_option(option_movflags("faststart"))
     |> add_file_option(option_preset("veryfast"))
     |> add_file_option(option_g(gop_duration))
+    |> add_file_option(option_threads(threads()))
     |> execute
+  end
+
+  defp threads() do
+    threads_count = System.schedulers_online()
+    if threads_count > 1,
+      do: threads_count - 1,
+      else: 1
   end
 
   defp new_command_common_options do
@@ -55,5 +67,23 @@ defmodule Cineplex.Presets do
       |> Enum.map(&String.to_integer/1)
 
     numerator / denominator
+  end
+
+  defp generate_output_name(name, file_path) do
+    [file_name, extension] =
+      file_path
+      |> Path.expand()
+      |> Path.basename()
+      |> String.split(".")
+
+    Enum.join([
+      Path.dirname(file_path),
+      "/",
+      file_name,
+      "_",
+      name,
+      ".",
+      extension
+    ])
   end
 end

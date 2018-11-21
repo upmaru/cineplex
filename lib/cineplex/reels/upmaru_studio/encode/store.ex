@@ -1,4 +1,4 @@
-defmodule Cineplex.Pipelines.UpmaruStudio.Encode.Store do
+defmodule Cineplex.Reels.UpmaruStudio.Encode.Store do
   alias Cineplex.Queue.Source
   alias Upstream.Uploader
 

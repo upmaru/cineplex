@@ -1,8 +1,8 @@
-defmodule Cineplex.Pipelines.UpmaruStudio do
-  @behaviour Cineplex.Pipeline
+defmodule Cineplex.Reels.UpmaruStudio do
+  @behaviour Cineplex.Reel
 
   alias Cineplex.Queue.Job
-  alias Cineplex.Pipelines.UpmaruStudio
+  alias Cineplex.Reels.UpmaruStudio
 
   @spec task(Job.Entry.t()) :: any()
   def task(job_entry), do: UpmaruStudio.Encode.perform(job_entry)
