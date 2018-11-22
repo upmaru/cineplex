@@ -15,6 +15,13 @@ variable "app_version" {
 }
 
 module "cineplex_server" {
-  source = "./infrastructure/server"
+  source = "./infrastructure/node"
   app_version = "${var.app_version}"
+  role = "server"
+}
+
+module "cineplex_worker" {
+  source = "./infrastructure/node"
+  app_version = "${var.app_version}"
+  role = "worker"
 }
