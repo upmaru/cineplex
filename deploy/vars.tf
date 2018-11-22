@@ -1,3 +1,0 @@
-variable "version" {
-  type = "string"
-}
