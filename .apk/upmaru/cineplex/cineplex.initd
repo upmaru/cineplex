@@ -2,9 +2,18 @@
 
 name='cineplex'
 description="Video Workbench"
+extra_commands="migrate seed"
 supervisor="s6"
 s6_service_path="${RC_SVCDIR}/s6-scan/${name}"
 command=/var/lib/cineplex/bin/cineplex
+
+migrate() {
+  source config_studio && $command migrate
+}
+
+seed() {
+  source config_studio && $command seed
+}
 
 depend() {
   need net s6-svscan
