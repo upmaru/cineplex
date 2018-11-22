@@ -12,7 +12,7 @@ defmodule Cineplex.Queue.Source do
   schema "queue_sources" do
     field(:name, :string)
     field(:endpoint, :string)
-    field(:pipeline, :string)
+    field(:reel, :string)
     field(:token, :string)
 
     field(:storage, :map)
@@ -23,8 +23,8 @@ defmodule Cineplex.Queue.Source do
     timestamps(type: :utc_datetime)
   end
 
-  @valid_attrs ~w(endpoint pipeline token storage)a
-  @required_attrs ~w(endpoint pipeline token)a
+  @valid_attrs ~w(endpoint reel token storage)a
+  @required_attrs ~w(endpoint reel token)a
 
   def changeset(source, params \\ %{}) do
     source

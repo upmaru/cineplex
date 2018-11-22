@@ -8,9 +8,9 @@ defmodule Cineplex.Queue do
 
   @spec create_source(binary(), binary(), binary()) ::
           {:error, Ecto.Changeset.t()} | {:ok, Source.t()}
-  def create_source(endpoint, token, pipeline) do
+  def create_source(endpoint, token, reel) do
     %Source{}
-    |> Source.changeset(%{endpoint: endpoint, token: token, pipeline: pipeline})
+    |> Source.changeset(%{endpoint: endpoint, token: token, reel: reel})
     |> Repo.insert()
   end
 

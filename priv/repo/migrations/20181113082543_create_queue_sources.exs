@@ -5,7 +5,7 @@ defmodule Cineplex.Repo.Migrations.CreateQueueSources do
     create table(:queue_sources) do
       add :name, :string
       add :endpoint, :string
-      add :pipeline, :string
+      add :reel, :string
 
       add :token, :text
 
