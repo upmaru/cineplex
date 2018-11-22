@@ -4,7 +4,6 @@ keys="
   CINEPLEX_ROLE
   TIMBER_API_KEY
   DATABASE_URL
-  DATABASE_POOL_SIZE
 "
 
 for k in ${keys}; do
