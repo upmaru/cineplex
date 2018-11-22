@@ -27,7 +27,7 @@ variable "nodes" {
 
 resource "lxd_container" "cineplex_server" {
   count    = "1"
-  name     = "cineplex-server-1"
+  name     = "cineplex-server-${terraform.workspace}-1"
   image    = "app-${terraform.workspace}"
   profiles = ["cineplex-server-${terraform.workspace}"]
 
