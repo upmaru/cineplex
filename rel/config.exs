@@ -50,5 +50,9 @@ release :cineplex do
   set applications: [
     :runtime_tools
   ]
+  set commands: [
+    "migrate": "rel/commands/migrate.sh",
+    "seed": "rel/commands/seed.sh"
+  ]
 end
 
