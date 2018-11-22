@@ -59,6 +59,8 @@ resource "null_resource" "cineplex_server_updater" {
   provisioner "remote-exec" {
     inline     = [
       "gcsfuse -o ro --implicit-dirs packages.apk.build /mnt/packages",
+      "rm -f /var/lib/studio/.self",
+      "echo ${lxd_container.cineplex_server.*.ip_address[count.index]} > /var/lib/studio/.self",
       "apk update && apk add --upgrade cineplex@upmaru",
       "fusermount -u /mnt/packages"
     ]
