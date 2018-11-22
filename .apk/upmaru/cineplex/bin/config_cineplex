@@ -11,7 +11,7 @@ for k in ${keys}; do
   export ${k}=$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.${k});
 done
 
-export NODE_IP=`cat /var/lib/studio/.self`
+export NODE_IP=`cat /var/lib/cineplex/.self`
 
 export HOME=/var/lib/cineplex
 export REPLACE_OS_VARS=true
