@@ -11,6 +11,6 @@ defmodule Cineplex.Reel do
 
   @spec from_source(Source.t()) :: atom()
   def from_source(source) do
-    Application.get_env(:cineplex, :reels)[source.pipeline]
+    Application.get_env(:cineplex, :reels)[source.reel]
   end
 end
