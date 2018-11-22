@@ -25,7 +25,7 @@ variable "nodes" {
 }
 
 
-resource "lxd_container" "cineplex-server" {
+resource "lxd_container" "cineplex_server" {
   count    = "1"
   name     = "cineplex-server-1"
   image    = "app-${terraform.workspace}"
@@ -49,7 +49,7 @@ resource "lxd_container" "cineplex-server" {
   }
 }
 
-resource "null_resource" "cineplex-server-updater" {
+resource "null_resource" "cineplex_server_updater" {
   count = "1"
 
   triggers {
@@ -64,7 +64,7 @@ resource "null_resource" "cineplex-server-updater" {
     ]
     
     connection {
-      host = "${lxd_container.encoder.*.ip_address[count.index]}"
+      host = "${lxd_container.cineplex_server.*.ip_address[count.index]}"
       private_key = "${file("/home/builder/.ssh/id_rsa")}"
     }
   }
