@@ -1,9 +1,5 @@
 use Mix.Config
 
-config :cineplex, :reels, %{
-  "upmaru_studio" => Cineplex.Reels.UpmaruStudio
-}
-
 # can be worker or server
 config :cineplex, :role, System.get_env("CINEPLEX_ROLE")
 
