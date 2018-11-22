@@ -1,3 +1,7 @@
+
+variable "version" {
+  type = "string"
+}
 resource "lxd_container" "cineplex_server" {
   count    = "1"
   name     = "cineplex-server-${terraform.workspace}-1"
