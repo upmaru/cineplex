@@ -33,6 +33,7 @@ install="
   $pkgname.post-install 
   $pkgname.post-upgrade
   $pkgname.pre-deinstall
+  $pkgname.pre-install
 "
 subpackages=""
 

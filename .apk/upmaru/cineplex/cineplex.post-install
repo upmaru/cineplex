@@ -1,4 +1,5 @@
 #!/bin/sh
 
 rc-update add cineplex
+rc-service cineplex migrate
 rc-service cineplex start
