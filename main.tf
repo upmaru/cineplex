@@ -10,11 +10,11 @@ terraform {
   }
 }
 
-variable "version" {
+variable "app_version" {
   type = "string"
 }
 
 module "cineplex_server" {
   source = "./infrastructure/server"
-  version = "${var.version}"
+  app_version = "${var.app_version}"
 }

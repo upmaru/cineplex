@@ -33,8 +33,8 @@ build:
   script:
     - terraform init
     - terraform workspace select ${CI_ENVIRONMENT_SLUG}
-    - terraform plan -out=tfplan -var version="$(git describe --tags --always)"
-    - terraform apply -auto-approve -var version="$(git describe --tags --always)"
+    - terraform plan -out=tfplan -var app_version="$(git describe --tags --always)"
+    - terraform apply -auto-approve -var app_version="$(git describe --tags --always)"
 
 deploy_staging:
   <<: *terraform

@@ -1,5 +1,5 @@
 
-variable "version" {
+variable "app_version" {
   type = "string"
 }
 resource "lxd_container" "cineplex_server" {
@@ -30,7 +30,7 @@ resource "null_resource" "cineplex_server_updater" {
   count = "1"
 
   triggers {
-    version = "${var.version}"
+    version = "${var.app_version}"
   }
 
   provisioner "remote-exec" {
