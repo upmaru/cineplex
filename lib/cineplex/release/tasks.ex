@@ -13,7 +13,7 @@ defmodule Cineplex.Release.Tasks do
 
   @repos Application.get_env(:cineplex, :ecto_repos, [])
 
-  def migrate(_argv) do
+  def migrate do
     start_services()
 
     run_migrations()
@@ -21,7 +21,7 @@ defmodule Cineplex.Release.Tasks do
     stop_services()
   end
 
-  def seed(_argv) do
+  def seed do
     start_services()
 
     run_migrations()
