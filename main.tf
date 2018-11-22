@@ -18,10 +18,12 @@ module "cineplex_server" {
   source = "./infrastructure/node"
   app_version = "${var.app_version}"
   role = "server"
+  cores = "1"
 }
 
 module "cineplex_worker" {
   source = "./infrastructure/node"
   app_version = "${var.app_version}"
   role = "worker"
+  cores = "2"
 }

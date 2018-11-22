@@ -7,6 +7,10 @@ variable "role" {
   type = "string"
 }
 
+variable "cores" {
+  type = "string"
+}
+
 resource "lxd_container" "cineplex_node" {
   count    = "1"
   name     = "cineplex-${var.role}-${terraform.workspace}-1"
@@ -14,7 +18,7 @@ resource "lxd_container" "cineplex_node" {
   profiles = ["cineplex-${var.role}-${terraform.workspace}"]
 
   limits {
-    cpu    = "1"
+    cpu    = "${var.cores}"
     memory = "1GB"
   }
 
