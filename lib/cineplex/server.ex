@@ -17,7 +17,7 @@ defmodule Cineplex.Server do
   defp connect_to_others do
     node()
     |> Atom.to_string()
-    |> Distribution.get_other_servers(state: "ready")
+    |> Distribution.get_other_nodes(state: "ready")
     |> Enum.each(&connect/1)
   end
 

@@ -17,11 +17,11 @@ defmodule Cineplex.Distribution.Node.Scope do
     )
   end
 
-  @spec except(atom() | Ecto.Query.t(), binary(), binary()) :: Ecto.Query.t()
-  def except(queryable, role, name) do
+  @spec except(atom() | Ecto.Query.t(), binary()) :: Ecto.Query.t()
+  def except(queryable, name) do
     from(
       n in queryable,
-      where: n.name != ^name and n.role == ^role
+      where: n.name != ^name
     )
   end
 end

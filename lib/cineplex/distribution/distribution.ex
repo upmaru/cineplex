@@ -40,11 +40,11 @@ defmodule Cineplex.Distribution do
     |> Repo.all()
   end
 
-  @spec get_other_servers(binary(), [{:state, binary()}]) :: [Distribution.Node.t()]
-  def get_other_servers(name, state: current_state) do
+  @spec get_other_nodes(binary(), [{:state, binary()}]) :: [Distribution.Node.t()]
+  def get_other_nodes(name, state: current_state) do
     Distribution.Node
-    |> Distribution.Node.Scope.except("server", name)
-    |> Distribution.Node.Scope.by("server", state: current_state)
+    |> Distribution.Node.Scope.except(name)
+    |> Distribution.Node.Scope.by(state: current_state)
     |> Repo.all()
   end
 
