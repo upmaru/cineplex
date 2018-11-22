@@ -1,8 +1,10 @@
 #!/bin/sh
 
 keys="
-  REDIS_URL \
-  TIMBER_API_KEY \
+  ROLE
+  TIMBER_API_KEY
+  DATABASE_URL
+  DATABASE_POOL_SIZE
 "
 
 for k in ${keys}; do
