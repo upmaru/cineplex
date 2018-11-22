@@ -12,6 +12,7 @@ defmodule Compressor.Mixfile do
       source_url: "https://github.com/upmaru/complex",
       name: "Complex",
       description: description(),
+      aliases: aliases(),
       deps: deps(),
       package: package()
     ]
@@ -84,6 +85,14 @@ defmodule Compressor.Mixfile do
       maintainers: ["Zack Siri"],
       licenses: ["MIT"],
       links: %{"GitLab" => "https://gitlab.com/upmaru/cineplex"}
+    ]
+  end
+
+  defp aliases do
+    [
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate", "run priv/repo/seeds.exs", "test"]
     ]
   end
 end
