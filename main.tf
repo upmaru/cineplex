@@ -10,10 +10,6 @@ terraform {
   }
 }
 
-variable "version" {
-  type = "string"
-}
-
 module "cineplex_server" {
   source = "./infrastructure/server"
 }

@@ -22,6 +22,10 @@ resource "lxd_container" "cineplex_server" {
   }
 }
 
+variable "version" {
+  type = "string"
+}
+
 resource "null_resource" "cineplex_server_updater" {
   count = "1"
 
