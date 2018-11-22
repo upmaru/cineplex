@@ -30,7 +30,7 @@ defmodule Cineplex.Worker.Begin do
     |> Repo.transaction()
   end
 
-  defp assignment_changeset(job_entry, %Distribution.Node{id: id} = _worker) do
+  defp assignment_changeset(job_entry, %Distribution.Node{id: id} = _myself) do
     Job.Entry.changeset(job_entry, %{node_id: id, started_at: DateTime.utc_now()})
   end
 

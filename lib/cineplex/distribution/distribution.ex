@@ -18,7 +18,7 @@ defmodule Cineplex.Distribution do
 
   @spec get_node([{:name, binary()}]) :: Distribution.Node.t()
   def get_node(name: name) do
-    Repo.get_by(Distritbution.Node, name: name)
+    Repo.get_by(Distribution.Node, name: name)
   end
 
   @spec get_nodes([{:state, binary()}, ...]) :: any()
@@ -30,7 +30,7 @@ defmodule Cineplex.Distribution do
 
   @spec get_worker([{:name, binary()}]) :: Distribution.Node.t()
   def get_worker(name: name) do
-    Repo.get_by(Distritbution.Node, name: name, role: "worker")
+    Repo.get_by(Distribution.Node, name: name, role: "worker")
   end
 
   @spec get_servers([{:state, binary()}]) :: [Distribution.Node.t()]
