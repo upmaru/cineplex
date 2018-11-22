@@ -8,11 +8,11 @@ s6_service_path="${RC_SVCDIR}/s6-scan/${name}"
 command=/var/lib/cineplex/bin/cineplex
 
 migrate() {
-  source config_studio && $command migrate
+  source config_cineplex && $command migrate
 }
 
 seed() {
-  source config_studio && $command seed
+  source config_cineplex && $command seed
 }
 
 depend() {
