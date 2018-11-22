@@ -3,8 +3,9 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Setup do
   alias Upstream.B2
 
   @spec perform(Job.t()) :: {:error, :setup_failed} | {:ok, binary(), binary()}
-  def perform(%Job{object: object} = _job) do
-    with {:ok, auth} <- get_authorization_key(object),
+  def perform(%Job{object: object, source: source} = _job) do
+    with {:ok, [_apps]} <- Upstream.set_config(to_keyword_list(source.storage)),
+         {:ok, auth} <- get_authorization_key(object),
          {:ok, path} <- setup_tmp_directory(object),
          url when is_binary(url) <- get_download_url(object, auth) do
       {:ok, url, path}
@@ -33,4 +34,12 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Setup do
 
   defp get_download_url(object, %{authorization_token: token} = _auth),
     do: B2.Download.url(object, token)
+
+  defp to_keyword_list(config) do
+    config
+    |> Enum.into([])
+    |> Enum.map(fn {key, value} ->
+      {String.to_atom(key), value}
+    end)
+  end
 end

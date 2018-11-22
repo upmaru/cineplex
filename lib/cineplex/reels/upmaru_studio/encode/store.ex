@@ -4,11 +4,8 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Store do
 
   @spec perform(Cineplex.Queue.Source.t(), Source.Preset.t(), any()) :: {:error, :store_failed} | {:ok, :stored}
   def perform(%Source{storage: storage} = _source, %Source.Preset{name: name} = _preset, transcoded_path) do
-    with {:ok, [_apps]} <- Upstream.set_config(to_keyword_list(storage)),
-         {:ok, _} <- upload(transcoded_path, metadata(name))
-    do
-      {:ok, :stored}
-    else
+    case upload(transcoded_path, metadata(name)) do
+      {:ok, _} -> {:ok, :stored}
       _ -> {:error, :store_failed}
     end
   end
@@ -19,12 +16,4 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Store do
   end
 
   defp metadata(name), do: %{preset_name: name, uploader: "cineplex"}
-
-  defp to_keyword_list(config) do
-    config
-    |> Enum.into([])
-    |> Enum.map(fn {key, value} ->
-      {String.to_atom(key), value}
-    end)
-  end
 end
