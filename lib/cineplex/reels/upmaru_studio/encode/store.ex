@@ -3,7 +3,7 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Store do
   alias Upstream.Uploader
 
   @spec perform(Cineplex.Queue.Source.t(), Source.Preset.t(), any()) :: {:error, :store_failed} | {:ok, :stored}
-  def perform(%Source{storage: storage} = _source, %Source.Preset{name: name} = _preset, transcoded_path) do
+  def perform(%Source{} = _source, %Source.Preset{name: name} = _preset, transcoded_path) do
     case upload(transcoded_path, metadata(name)) do
       {:ok, _} -> {:ok, :stored}
       _ -> {:error, :store_failed}
