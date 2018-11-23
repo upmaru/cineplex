@@ -4,7 +4,6 @@ defmodule Cineplex.Distribution.Node.Check do
     Distribution
   }
 
-
   @spec perform(%Distribution.Node{name: binary()}) :: :ok | {:ok, Distribution.Node.t()}
   def perform(node) do
     case Node.ping(String.to_atom(node.name)) do

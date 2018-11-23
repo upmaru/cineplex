@@ -15,7 +15,7 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Setup do
   end
 
   defp setup_tmp_directory(object) do
-    path = ("tmp/" <> object)
+    path = "tmp/" <> object
 
     :ok =
       path

@@ -1,6 +1,8 @@
 defmodule Cineplex.Worker.Begin do
   alias Cineplex.{
-    Distribution, Repo, Queue
+    Distribution,
+    Repo,
+    Queue
   }
 
   alias Queue.Job
@@ -13,9 +15,10 @@ defmodule Cineplex.Worker.Begin do
   def perform(job_entry) do
     case assign_job_entry_to_self(job_entry) do
       {:ok, %{job_entry: assigned_job_entry, node: _working_worker}} ->
-        assigned_job_entry_with_source = Repo.preload(assigned_job_entry, [job: [:source]])
+        assigned_job_entry_with_source = Repo.preload(assigned_job_entry, job: [:source])
         reel = Cineplex.Reel.from_source(assigned_job_entry_with_source.job.source)
         reel.task(assigned_job_entry)
+
       _ ->
         {:error, :starting}
     end

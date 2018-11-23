@@ -11,7 +11,8 @@ defmodule Cineplex.Server do
   @spec register() :: {:error, Ecto.Changeset.t()} | {:ok, :connected}
   def register do
     with {:ok, _node} <- Distribution.register_node(Atom.to_string(node()), "server", "ready"),
-         :ok <- connect_to_others(), do: {:ok, :connected}
+         :ok <- connect_to_others(),
+         do: {:ok, :connected}
   end
 
   defp connect_to_others do

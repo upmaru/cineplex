@@ -4,7 +4,6 @@ defmodule Cineplex.Distribution do
     Repo
   }
 
-
   @spec register_node(binary(), binary(), binary()) ::
           {:ok, Distribution.Node.t()} | {:error, Ecto.Changeset.t()}
   def register_node(name, role, state) do

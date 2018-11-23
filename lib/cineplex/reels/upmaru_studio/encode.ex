@@ -3,7 +3,11 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
   alias Cineplex.Reels.UpmaruStudio.Encode
 
   alias Encode.{
-    Setup, Download, Transcode, Store, Clean
+    Setup,
+    Download,
+    Transcode,
+    Store,
+    Clean
   }
 
   @spec perform(Job.Entry.t()) :: {:ok, :encoded} | {:error, any()}
@@ -12,8 +16,7 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
          {:ok, downloaded} <- Download.perform(url, path),
          {:ok, transcoded} <- Transcode.perform(preset, downloaded),
          {:ok, :stored} <- Store.perform(job.source, preset, transcoded),
-         {:ok, :cleaned} <- Clean.perform(path)
-    do
+         {:ok, :cleaned} <- Clean.perform(path) do
       {:ok, :encoded}
     else
       {:error, reason} -> {:error, reason}

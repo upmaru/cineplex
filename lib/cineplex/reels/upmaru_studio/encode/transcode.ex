@@ -1,4 +1,3 @@
-
 defmodule Cineplex.Reels.UpmaruStudio.Encode.Transcode do
   alias Cineplex.Queue.Source.Preset
 
@@ -43,6 +42,7 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Transcode do
 
   defp threads() do
     threads_count = System.schedulers_online()
+
     if threads_count > 1,
       do: threads_count - 1,
       else: 1

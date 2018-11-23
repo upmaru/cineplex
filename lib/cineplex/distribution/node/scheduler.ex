@@ -6,7 +6,6 @@ defmodule Cineplex.Distribution.Node.Scheduler do
     Queue
   }
 
-
   require Logger
 
   @spec start_link(any()) :: :ignore | {:ok, any()} | {:error, any()}
