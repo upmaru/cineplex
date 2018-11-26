@@ -28,13 +28,24 @@ build:
     - "gsutil -m rsync -r -d ${PACKAGE_DEST} ${GCS_DEST}"
 
 .terraform: &terraform
+  stage: deploy
   tags:
     - gcp
+  variables:
+    DEPLOY_MARKER_URL: https://push.appsignal.com/1/markers?api_key=${APPSIGNAL_API_KEY}&name=${APPSIGNAL_APP_NAME}&environment=${CI_ENVIRONMENT_SLUG}
+    DEPLOY_MARKER_DATA: |
+      {
+        "revision": "${CI_COMMIT_SHA}",
+        "user": "${GITLAB_USER_NAME}", 
+        "repository": "${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
+      }
+
   script:
     - terraform init
     - terraform workspace select ${CI_ENVIRONMENT_SLUG}
     - terraform plan -out=tfplan -var app_version="$(git describe --tags --always)"
     - terraform apply -auto-approve -var app_version="$(git describe --tags --always)"
+    - "curl -v \"${DEPLOY_MARKER_URL}\" -H 'Content-Type: application/json' -d \"${DEPLOY_MARKER_DATA}\""
 
 deploy_staging:
   <<: *terraform
