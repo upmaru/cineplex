@@ -18,6 +18,9 @@ defmodule Cineplex.Queue.Job.Fetch do
          {:ok, job} <- Queue.create_job(source, params) do
       Extract.perform(job)
     else
+      {:error, %Ecto.Changeset{changes: %{resource: resource}} = _changeset} ->
+        job = Queue.get_job(resource: resource)
+        Extract.perform(job)
       {:error, reason} -> {:error, reason}
     end
   end

@@ -7,3 +7,6 @@ config :cineplex, Cineplex.Repo,
   database: "cineplex_dev",
   username: "zacksiri",
   hostname: "localhost"
+
+# config :logger, level: :debug
+

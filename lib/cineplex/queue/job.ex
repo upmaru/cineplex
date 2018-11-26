@@ -17,7 +17,7 @@ defmodule Cineplex.Queue.Job do
     belongs_to(:source, Source)
 
     has_many(:entries, Entry)
-
+    has_many(:parent_entries, Entry, where: {Job.Entry, :parent_only, []})
     timestamps(type: :utc_datetime)
   end
 

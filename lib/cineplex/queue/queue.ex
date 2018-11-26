@@ -6,6 +6,13 @@ defmodule Cineplex.Queue do
 
   alias Cineplex.Repo
 
+  @spec get_job([{:resource, binary()}, ...]) :: Job.t() | nil
+  def get_job(resource: resource) do
+    Job
+    |> Repo.get_by!(resource: resource)
+    |> Repo.preload([:source])
+  end
+
   @spec create_source(binary(), binary(), binary()) ::
           {:error, Ecto.Changeset.t()} | {:ok, Source.t()}
   def create_source(endpoint, token, reel) do

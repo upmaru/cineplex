@@ -1,6 +1,7 @@
 defmodule Cineplex.Queue.Job.Entry do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query, only: [dynamic: 2]
 
   alias Cineplex.Queue.{
     Job,
@@ -17,6 +18,9 @@ defmodule Cineplex.Queue.Job.Entry do
     field(:finished_at, :utc_datetime)
 
     belongs_to(:node, Distribution.Node)
+    belongs_to(:parent, __MODULE__)
+
+    has_many(:retries, __MODULE__, foreign_key: :parent_id)
 
     timestamps(type: :utc_datetime)
   end
@@ -31,4 +35,7 @@ defmodule Cineplex.Queue.Job.Entry do
     |> cast(params, [:started_at, :finished_at, :node_id])
     |> cast_assoc(:node)
   end
+
+  @spec parent_only() :: Ecto.Query.DynamicExpr.t()
+  def parent_only, do: dynamic([entry], is_nil(entry.parent_id))
 end
