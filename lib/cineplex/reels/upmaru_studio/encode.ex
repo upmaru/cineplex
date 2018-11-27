@@ -1,5 +1,6 @@
 defmodule Cineplex.Reels.UpmaruStudio.Encode do
-  alias Cineplex.Queue.Job
+  alias Cineplex.Queue
+  alias Queue.Job
   alias Cineplex.Reels.UpmaruStudio.Encode
 
   alias Cineplex.Worker.Event
@@ -13,9 +14,9 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
   }
 
   @spec perform(Job.Entry.t()) :: {:ok, :encoded} | {:error, any()}
-  def perform(%Job.Entry{job: job, preset: preset} = _job_entry) do
+  def perform(%Job.Entry{job: job, preset: preset} = job_entry) do
     with {:ok, url, path} <- setup(job, preset),
-         {:ok, downloaded} <- download(job, preset, url, path),
+         {:ok, downloaded} <- download(job_entry, url, path),
          {:ok, transcoded} <- transcode(job, preset, downloaded),
          {:ok, :stored} <- store(job, preset, transcoded),
          {:ok, :cleaned} <- clean(job, preset, path) do
@@ -32,10 +33,11 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
     Setup.perform(job)
   end
 
-  defp download(job, preset, url, path) do
+  defp download(%Job.Entry{job: job, preset: preset} = job_entry, url, path) do
     Event.track(job, "download", %{preset_name: preset.name})
     Download.perform(url, path, on_fail: fn ->
-
+      Event.track(job, "retry", %{preset_name: preset.name})
+      Queue.retry_job_entry(job_entry)
     end)
   end
 

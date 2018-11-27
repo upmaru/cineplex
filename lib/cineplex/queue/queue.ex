@@ -35,6 +35,13 @@ defmodule Cineplex.Queue do
     |> Repo.insert()
   end
 
+  @spec retry_job_entry(Job.Entry.t()) :: {:error, Ecto.Changeset.t()} | {:ok, Job.Entry.t()}
+  def retry_job_entry(%Job.Entry{job: job, preset: preset} = job_entry) do
+    %Job.Entry{parent: job_entry, job: job, preset: preset}
+    |> Job.Entry.changeset()
+    |> Repo.insert()
+  end
+
   @spec update_job(Job.t(), map()) :: {:error, Ecto.Changeset.t()} | {:ok, Job.t()}
   def update_job(job, parameters) do
     job
