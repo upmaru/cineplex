@@ -16,6 +16,6 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Download do
   defp on_fail(opts) do
     Keyword.get(opts, :on_fail, fn ->
       Logger.error("[Cineplex.Reels.UpmaruStudio.Encode.Download] failed")
-    end)
+    end).()
   end
 end

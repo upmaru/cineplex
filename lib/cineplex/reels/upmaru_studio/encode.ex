@@ -34,7 +34,9 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
 
   defp download(job, preset, url, path) do
     Event.track(job, "download", %{preset_name: preset.name})
-    Download.perform(url, path)
+    Download.perform(url, path, on_fail: fn ->
+
+    end)
   end
 
   defp transcode(job, preset, downloaded) do
