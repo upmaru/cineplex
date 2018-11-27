@@ -38,4 +38,6 @@ defmodule Cineplex.Queue.Job.Entry do
 
   @spec parent_only() :: Ecto.Query.DynamicExpr.t()
   def parent_only, do: dynamic([entry], is_nil(entry.parent_id))
+  @spec unfinished() :: Ecto.Query.DynamicExpr.t()
+  def unfinished, do: dynamic([entry], is_nil(entry.started_at) or is_nil(entry.finished_at))
 end
