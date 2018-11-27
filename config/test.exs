@@ -6,3 +6,5 @@ config :cineplex, Cineplex.Repo,
   database: "cineplex_test",
   username: "zacksiri",
   hostname: "localhost"
+
+config :appsignal, :config, active: false

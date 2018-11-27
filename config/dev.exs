@@ -10,3 +10,5 @@ config :cineplex, Cineplex.Repo,
 
 # config :logger, level: :debug
 
+
+config :appsignal, :config, active: false

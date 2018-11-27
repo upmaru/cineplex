@@ -64,6 +64,9 @@ defmodule Compressor.Mixfile do
       # logging
       {:timber, "~> 2.8"},
 
+      # monitoring
+      {:appsignal, "~> 1.0"},
+
       # deployment
       {:distillery, "~> 1.5", runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev}
