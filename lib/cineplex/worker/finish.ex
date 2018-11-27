@@ -15,7 +15,7 @@ defmodule Cineplex.Worker.Finish do
           {map(), map()}
           | %{:__struct__ => atom() | %{__changeset__: map()}, optional(atom()) => any()}
         ) :: any()
-  def perform(%Job.Entry{job: job, preset: _preset} = job_entry) do
+  def perform(%Job.Entry{job: job, preset: preset} = job_entry) do
     myself = Distribution.get_worker(name: Atom.to_string(node()))
 
     Multi.new()

@@ -44,7 +44,9 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
 
   defp store(%Job{source: source} = job, preset, transcoded) do
     Event.track(job, "store", %{preset_name: preset.name})
-    Store.perform(source, preset, transcoded)
+    Store.perform(source, preset, transcoded, on_done: fn ->
+      Event.track(job, "uploaded", %{preset_name: preset.name})
+    end)
   end
 
   defp clean(job, preset, path) do
