@@ -10,7 +10,7 @@ defmodule Cineplex.Reels.UpmaruStudio do
   @spec track(Tesla.Client.t(), Job.t(), map) :: {:ok, :tracked} | {:error, :tracking_failed}
   def track(client, %Job{events_callback_url: url} = _job, data) do
     case Tesla.post(client, url, data) do
-      {:ok, %{body: _body, status: 200}} -> {:ok, :tracked}
+      {:ok, %{body: _body, status: 201}} -> {:ok, :tracked}
       _ -> {:error, :tracking_failed}
     end
   end

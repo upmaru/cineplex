@@ -12,10 +12,10 @@ defmodule Cineplex.Worker.Event do
 
     case reel.track(client, job, %{"name" => name, "metadata" => metadata}) do
       {:ok, :tracked} ->
-        Logger.info("[Cineplex.Worker.Event] #{name}", event: %{"#{name}" => metadata})
+        Logger.info("[Cineplex.Worker.Event] tracked #{name}", event: %{"#{name}" => metadata})
         :ok
       {:error, :tracking_failed} ->
-        Logger.info("[Cineplex.Worker.Event] #{name} failed")
+        Logger.info("[Cineplex.Worker.Event] tracking #{name} failed")
         :error
     end
   end
