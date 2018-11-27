@@ -22,7 +22,7 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
       {:ok, :encoded}
     else
       {:error, reason} ->
-        Event.track(job, Atom.to_string(reason))
+        Event.track(job, Atom.to_string(reason), %{preset_name: preset.name})
         {:error, reason}
     end
   end
