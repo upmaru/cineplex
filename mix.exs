@@ -22,6 +22,7 @@ defmodule Compressor.Mixfile do
   def application do
     [
       extra_applications: [
+        :appsignal,
         :timber,
         :logger,
         :ffmpex,
