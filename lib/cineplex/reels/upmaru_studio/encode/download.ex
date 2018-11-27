@@ -1,4 +1,6 @@
 defmodule Cineplex.Reels.UpmaruStudio.Encode.Download do
+  alias Cineplex.Worker.Event
+
   @spec perform(binary(), binary()) :: {:ok, binary()} | {:error, :download_failed}
   def perform(url, path) do
     with {:ok, file} <- File.open(path, [:write]),

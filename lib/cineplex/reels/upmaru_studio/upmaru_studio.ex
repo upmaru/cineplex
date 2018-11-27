@@ -7,6 +7,14 @@ defmodule Cineplex.Reels.UpmaruStudio do
   @spec task(Job.Entry.t()) :: any()
   def task(job_entry), do: UpmaruStudio.Encode.perform(job_entry)
 
+  @spec track(Tesla.Client.t(), Job.t(), map) :: {:ok, :tracked} | {:error, :tracking_failed}
+  def track(client, %Job{events_callback_url: url} = _job, data) do
+    case Tesla.post(client, url, data) do
+      {:ok, %{body: _body, status: 200}} -> {:ok, :tracked}
+      _ -> {:error, :tracking_failed}
+    end
+  end
+
   @spec client(any(), binary()) :: Tesla.Client.t()
   def client(endpoint, token) do
     middleware = [

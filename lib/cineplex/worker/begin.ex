@@ -2,9 +2,11 @@ defmodule Cineplex.Worker.Begin do
   alias Cineplex.{
     Distribution,
     Repo,
-    Queue
+    Queue,
+    Worker
   }
 
+  alias Worker.Event
   alias Queue.Job
   alias Ecto.Multi
 
@@ -12,11 +14,12 @@ defmodule Cineplex.Worker.Begin do
           {map(), map()}
           | %{:__struct__ => atom() | %{__changeset__: map()}, optional(atom()) => any()}
         ) :: any()
-  def perform(job_entry) do
+  def perform(%Job.Entry{job: job, preset: preset} = job_entry) do
     case assign_job_entry_to_self(job_entry) do
       {:ok, %{job_entry: assigned_job_entry, node: _working_worker}} ->
         assigned_job_entry_with_source = Repo.preload(assigned_job_entry, job: [:source])
         reel = Cineplex.Reel.from_source(assigned_job_entry_with_source.job.source)
+        Event.track(job, "starting", %{preset_name: preset.name})
         reel.task(assigned_job_entry)
 
       _ ->
