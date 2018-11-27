@@ -7,8 +7,8 @@ config :tesla, adapter: Tesla.Adapter.Hackney
 config :cineplex,
   ecto_repos: [Cineplex.Repo]
 
-config :cineplex, :storage,
-  upload_timeout: 0
+# upload timeout in milliseconds
+config :upstream, :upload, timeout: 600_000
 
 config :cineplex, :reels, %{
   "upmaru_studio" => Cineplex.Reels.UpmaruStudio
