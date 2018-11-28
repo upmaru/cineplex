@@ -14,11 +14,21 @@ variable "app_version" {
   type = "string"
 }
 
+variable "worker_count" {
+  type = "map"
+
+  default = {
+    "production" = 2
+    "staging" = 1
+  }
+}
+
 module "cineplex_server" {
   source = "./infrastructure/node"
   app_version = "${var.app_version}"
   role = "server"
   cores = "1"
+  count = 1
 }
 
 module "cineplex_worker" {
@@ -26,4 +36,5 @@ module "cineplex_worker" {
   app_version = "${var.app_version}"
   role = "worker"
   cores = "2"
+  count = "${var.worker_count[terraform.workspace]}"
 }

@@ -3,23 +3,32 @@ variable "app_version" {
   type = "string"
 }
 
+variable "count" {
+  type = "integer"
+}
+
 variable "role" {
   type = "string"
 }
+
 
 variable "cores" {
   type = "string"
 }
 
 resource "lxd_container" "cineplex_node" {
-  count    = "1"
-  name     = "cineplex-${var.role}-${terraform.workspace}-1"
+  count    = "${var.count}"
+  name     = "cineplex-${var.role}-${terraform.workspace}-${count.index + 1}"
   image    = "app-${terraform.workspace}"
-  profiles = ["cineplex-${var.role}-${terraform.workspace}"]
+  profiles = ["cineplex-${terraform.workspace}"]
 
   limits {
     cpu    = "${var.cores}"
     memory = "1GB"
+  }
+
+  config {
+    user.CINEPLEX_ROLE = "${var.role}"
   }
 
   provisioner "remote-exec" {
@@ -36,7 +45,7 @@ resource "lxd_container" "cineplex_node" {
 }
 
 resource "null_resource" "cineplex_node_updater" {
-  count = "1"
+  count     = "${var.count}"
 
   triggers {
     version = "${var.app_version}"
