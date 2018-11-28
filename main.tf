@@ -28,7 +28,7 @@ module "cineplex_server" {
   app_version = "${var.app_version}"
   role = "server"
   cores = "1"
-  count = 1
+  count = "1"
 }
 
 module "cineplex_worker" {

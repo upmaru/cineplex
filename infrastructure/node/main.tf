@@ -4,7 +4,7 @@ variable "app_version" {
 }
 
 variable "count" {
-  type = "integer"
+  type = "string"
 }
 
 variable "role" {
