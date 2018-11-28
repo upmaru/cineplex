@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rc-service cineplex migrate
+rc-service cineplex restart

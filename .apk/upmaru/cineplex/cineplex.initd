@@ -1,0 +1,26 @@
+#!/sbin/openrc-run
+
+name='cineplex'
+description="Video Workbench"
+extra_commands="migrate seed"
+supervisor="s6"
+s6_service_path="${RC_SVCDIR}/s6-scan/${name}"
+command=/var/lib/cineplex/bin/cineplex
+
+migrate() {
+  source config_cineplex && $command migrate
+}
+
+seed() {
+  source config_cineplex && $command seed
+}
+
+depend() {
+  need net s6-svscan
+}
+
+start_pre() {
+  if [ ! -L "${RC_SVCDIR}/s6-scan/${name}" ]; then
+    ln -s "/var/lib/${name}/service" "${RC_SVCDIR}/s6-scan/${name}"
+  fi
+}

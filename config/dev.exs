@@ -1,4 +1,14 @@
 use Mix.Config
 
-config :exq,
-  url: "redis://127.0.0.1:6379/0"
+# can be worker or server
+config :cineplex, :role, System.get_env("CINEPLEX_ROLE")
+
+config :cineplex, Cineplex.Repo,
+  database: "cineplex_dev",
+  username: "zacksiri",
+  hostname: "localhost"
+
+# config :logger, level: :debug
+
+
+config :appsignal, :config, active: false

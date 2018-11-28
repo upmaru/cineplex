@@ -4,14 +4,15 @@ defmodule Compressor.Mixfile do
 
   def project do
     [
-      app: :compressor,
-      version: "0.7.0",
+      app: :cineplex,
+      version: "1.0.0",
       elixir: "~> 1.6",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
-      source_url: "https://github.com/upmaru/compressor",
-      name: "Compressor",
+      source_url: "https://github.com/upmaru/cineplex",
+      name: "Cineplex",
       description: description(),
+      aliases: aliases(),
       deps: deps(),
       package: package()
     ]
@@ -21,16 +22,18 @@ defmodule Compressor.Mixfile do
   def application do
     [
       extra_applications: [
+        :appsignal,
         :timber,
         :logger,
         :ffmpex,
-        :exq,
         :httpoison,
         :upstream,
+        :plug_cowboy,
+        :plug,
         :parse_trans,
         :downstream
       ],
-      mod: {Compressor.Application, []}
+      mod: {Cineplex.Application, []}
     ]
   end
 
@@ -40,18 +43,30 @@ defmodule Compressor.Mixfile do
       # ffmpeg
       {:ffmpex, "~> 0.5.2"},
 
-      # queue
-      {:exq, "~> 0.10.1"},
-
       # for transfer
       {:downstream, "~> 0.1.0"},
-      {:upstream, "~> 1.6.0"},
+      {:upstream, "~> 1.8"},
+      {:jason, ">= 1.0.0"},
 
       # http client
-      {:httpoison, "~> 1.0.0"},
+      {:tesla, "~> 1.2.0"},
+      {:hackney, "~> 1.14.0"},
+
+      # web
+      {:plug_cowboy, "~> 2.0"},
+      {:plug, "~> 1.7"},
+      {:jsonapi, "~> 0.8.0"},
+
+      # database
+      {:ecto_sql, "~> 3.0"},
+      {:ecto, "~> 3.0", override: true},
+      {:postgrex, "~> 0.14.0"},
 
       # logging
-      {:timber, "~> 2.5"},
+      {:timber, "~> 2.8"},
+
+      # monitoring
+      {:appsignal, "~> 1.0"},
 
       # deployment
       {:distillery, "~> 1.5", runtime: false},
@@ -63,17 +78,25 @@ defmodule Compressor.Mixfile do
 
   defp description do
     """
-    Compressor is a distributed video compressor. It's designed to be used with Upmaru Studio
+    Cineplex is a distributed video worker. It's designed to be used with Upmaru Studio
     """
   end
 
   defp package do
     [
-      name: :compressor,
+      name: :cineplex,
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Zack Siri"],
       licenses: ["MIT"],
-      links: %{"GitLab" => "https://gitlab.com/upmaru/compressor"}
+      links: %{"GitLab" => "https://gitlab.com/upmaru/cineplex"}
+    ]
+  end
+
+  defp aliases do
+    [
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate", "run priv/repo/seeds.exs", "test"]
     ]
   end
 end

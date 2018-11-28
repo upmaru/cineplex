@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
     bucket  = "terraform.artello.network"
-    prefix  = "upmaru/compressor/state"
+    prefix  = "upmaru/cineplex/state"
   }
 
   provider "lxd" {
@@ -10,12 +10,11 @@ terraform {
   }
 }
 
-variable "version" {
+variable "app_version" {
   type = "string"
 }
 
-
-variable "nodes" {
+variable "worker_count" {
   type = "map"
 
   default = {
@@ -24,48 +23,18 @@ variable "nodes" {
   }
 }
 
-
-resource "lxd_container" "encoder" {
-  count    = "${var.nodes[terraform.workspace]}"
-  name     = "compressor-${terraform.workspace}-${count.index + 1}"
-  image    = "app-${terraform.workspace}"
-  profiles = ["compressor-${terraform.workspace}"]
-
-  limits {
-    cpu    = "${terraform.workspace == "production" ? 2 : 1}"
-    memory = "1GB"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "gcsfuse -o ro --implicit-dirs packages.apk.build /mnt/packages",
-      "apk update && apk add compressor@upmaru",
-      "fusermount -u /mnt/packages"
-    ]
-    
-    connection {
-      private_key = "${file("/home/builder/.ssh/id_rsa")}"
-    }
-  }
+module "cineplex_server" {
+  source = "./infrastructure/node"
+  app_version = "${var.app_version}"
+  role = "server"
+  cores = "1"
+  count = "1"
 }
 
-resource "null_resource" "updater" {
-  count = "${var.nodes[terraform.workspace]}"
-
-  triggers {
-    version = "${var.version}"
-  }
-
-  provisioner "remote-exec" {
-    inline     = [
-      "gcsfuse -o ro --implicit-dirs packages.apk.build /mnt/packages",
-      "apk update && apk add --upgrade compressor@upmaru",
-      "fusermount -u /mnt/packages"
-    ]
-    
-    connection {
-      host = "${lxd_container.encoder.*.ip_address[count.index]}"
-      private_key = "${file("/home/builder/.ssh/id_rsa")}"
-    }
-  }
+module "cineplex_worker" {
+  source = "./infrastructure/node"
+  app_version = "${var.app_version}"
+  role = "worker"
+  cores = "2"
+  count = "${var.worker_count[terraform.workspace]}"
 }

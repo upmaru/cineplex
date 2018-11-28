@@ -2,15 +2,17 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :exq,
-  name: Exq,
-  namespace: "exq",
-  concurrency: 1,
-  queues: ["encoder"],
-  start_on_application: false
+config :tesla, adapter: Tesla.Adapter.Hackney
 
-config :compressor, :storage,
-  upload_timeout: 0
+config :cineplex,
+  ecto_repos: [Cineplex.Repo]
+
+# upload timeout in milliseconds
+config :upstream, :upload, timeout: 600_000
+
+config :cineplex, :reels, %{
+  "upmaru_studio" => Cineplex.Reels.UpmaruStudio
+}
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
 # file won't be loaded nor affect the parent project. For this reason,
@@ -27,7 +29,7 @@ config :compressor, :storage,
 #
 # You can also configure a 3rd-party app:
 #
-#     config :logger, level: :info
+config :logger, level: :info
 #
 
 # It is also possible to import configuration files, relative to this
@@ -40,3 +42,5 @@ import_config "#{Mix.env}.exs"
 
 # Import Timber, structured logging
 import_config "timber.exs"
+
+import_config "appsignal.exs"

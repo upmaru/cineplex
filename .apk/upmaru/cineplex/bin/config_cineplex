@@ -1,0 +1,20 @@
+#!/bin/sh
+
+keys="
+  APPSIGNAL_APP_NAME
+  APPSIGNAL_API_KEY
+  APPSIGNAL_ENV
+  CINEPLEX_ROLE
+  TIMBER_API_KEY
+  DATABASE_URL
+"
+
+for k in ${keys}; do
+  export ${k}=$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.${k});
+done
+
+export NODE_IP=`cat /var/lib/cineplex/.self`
+
+export HOME=/var/lib/cineplex
+export REPLACE_OS_VARS=true
+export MIX_ENV=prod
