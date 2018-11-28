@@ -6,12 +6,19 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Store do
 
   @spec perform(Cineplex.Queue.Source.t(), Source.Preset.t(), any(), [{:on_done, fun}]) ::
           {:error, :store_failed} | {:ok, :stored}
-  def perform(%Source{} = _source, %Source.Preset{name: name} = _preset, transcoded_path, opts \\ []) do
+  def perform(
+        %Source{} = _source,
+        %Source.Preset{name: name} = _preset,
+        transcoded_path,
+        opts \\ []
+      ) do
     case upload(transcoded_path, metadata(name)) do
       {:ok, _} ->
         on_done(opts)
         {:ok, :stored}
-      _ -> {:error, :store_failed}
+
+      _ ->
+        {:error, :store_failed}
     end
   end
 

@@ -42,10 +42,13 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
 
   defp download(%Job.Entry{job: job, preset: preset} = job_entry, url, path) do
     Event.track(job, "download", %{preset_name: preset.name})
-    Download.perform(url, path, on_fail: fn ->
-      Event.track(job, "retry", %{preset_name: preset.name})
-      Queue.retry_job_entry(job_entry)
-    end)
+
+    Download.perform(url, path,
+      on_fail: fn ->
+        Event.track(job, "retry", %{preset_name: preset.name})
+        Queue.retry_job_entry(job_entry)
+      end
+    )
   end
 
   defp transcode(job, preset, downloaded) do
@@ -55,9 +58,12 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
 
   defp store(%Job{source: source} = job, preset, transcoded) do
     Event.track(job, "store", %{preset_name: preset.name})
-    Store.perform(source, preset, transcoded, on_done: fn ->
-      Event.track(job, "uploaded", %{preset_name: preset.name})
-    end)
+
+    Store.perform(source, preset, transcoded,
+      on_done: fn ->
+        Event.track(job, "uploaded", %{preset_name: preset.name})
+      end
+    )
   end
 
   defp clean(job, preset, path) do

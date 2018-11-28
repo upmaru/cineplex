@@ -15,26 +15,22 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.CheckExisting do
     case B2.List.by_file_name(output_name) do
       {:ok, %{files: []}} -> {:ok, :not_encoded}
       {:ok, %{files: files}} ->
-        find_match(files, output_name)
+        find_matched(files, output_name)
 
       {:error, _} -> {:error, :check_existing_failed}
     end
   end
 
-  def find_match(files, output_name) do
+  defp find_matched(files, output_name) do
     matched_count =
       files
-      |> Enum.filter(&(match_by_filename(&1, output_name))
+      |> Enum.filter(fn file ->
+        file["fileName"] == output_name
+      end)
       |> Enum.count()
 
-    if matched_count > 0 do
-      {:error, :already_encoded}
-    else
-      {:ok, :not_encoded}
-    end
-  end
-
-  defp match_by_file_name(file, output_name) do
-    file["fileName"] == output_name
+    if matched_count == 0,
+      do: {:ok, :not_encoded},
+      else: {:error, :already_encoded}
   end
 end

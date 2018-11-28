@@ -21,7 +21,9 @@ defmodule Cineplex.Queue.Job.Fetch do
       {:error, %Ecto.Changeset{changes: %{resource: resource}} = _changeset} ->
         job = Queue.get_job(resource: resource)
         Extract.perform(job)
-      {:error, reason} -> {:error, reason}
+
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 end

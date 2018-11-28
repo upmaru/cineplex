@@ -1,12 +1,17 @@
 defmodule Cineplex.Worker.Event do
   alias Cineplex.Queue.{
-    Job, Source
+    Job,
+    Source
   }
 
   require Logger
 
   @spec track(any(), Cineplex.Queue.Job.t(), any()) :: :error | :ok
-  def track(%Job{source: %Source{endpoint: endpoint, token: token} = source} = job, name, metadata \\ %{}) do
+  def track(
+        %Job{source: %Source{endpoint: endpoint, token: token} = source} = job,
+        name,
+        metadata \\ %{}
+      ) do
     reel = Cineplex.Reel.from_source(source)
     client = reel.client(endpoint, token)
 
@@ -14,6 +19,7 @@ defmodule Cineplex.Worker.Event do
       {:ok, :tracked} ->
         Logger.info("[Cineplex.Worker.Event] tracked #{name}", event: %{"#{name}" => metadata})
         :ok
+
       {:error, :tracking_failed} ->
         Logger.info("[Cineplex.Worker.Event] tracking #{name} failed")
         :error
