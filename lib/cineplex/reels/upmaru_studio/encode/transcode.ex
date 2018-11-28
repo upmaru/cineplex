@@ -6,9 +6,28 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Transcode do
 
   @spec perform(Preset.t(), binary()) :: {:ok, binary()} | {:error, {any(), pos_integer()}}
   def perform(%Preset{name: name, parameters: parameters} = _preset, input_path) do
-    output_name = generate_output_name(name, input_path)
+    output_name = output_name(name, input_path)
     :ok = transcode(input_path, output_name, parameters)
     {:ok, output_name}
+  end
+
+  @spec output_name(binary(), binary()) :: binary()
+  def output_name(name, file_path) do
+    [file_name, extension] =
+      file_path
+      |> Path.expand()
+      |> Path.basename()
+      |> String.split(".")
+
+    Enum.join([
+      Path.dirname(file_path),
+      "/",
+      file_name,
+      "_",
+      name,
+      ".",
+      extension
+    ])
   end
 
   defp transcode(input_file_path, output_file_path, opts) do
@@ -67,23 +86,5 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Transcode do
       |> Enum.map(&String.to_integer/1)
 
     numerator / denominator
-  end
-
-  defp generate_output_name(name, file_path) do
-    [file_name, extension] =
-      file_path
-      |> Path.expand()
-      |> Path.basename()
-      |> String.split(".")
-
-    Enum.join([
-      Path.dirname(file_path),
-      "/",
-      file_name,
-      "_",
-      name,
-      ".",
-      extension
-    ])
   end
 end

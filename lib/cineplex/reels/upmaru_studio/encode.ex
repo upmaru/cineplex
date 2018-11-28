@@ -7,6 +7,7 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
 
   alias Encode.{
     Setup,
+    CheckExisting,
     Download,
     Transcode,
     Store,
@@ -16,6 +17,7 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
   @spec perform(Job.Entry.t()) :: {:ok, :encoded} | {:error, any()}
   def perform(%Job.Entry{job: job, preset: preset} = job_entry) do
     with {:ok, url, path} <- setup(job, preset),
+         {:ok, :not_encoded} <- check_existing(job, preset, path),
          {:ok, downloaded} <- download(job_entry, url, path),
          {:ok, transcoded} <- transcode(job, preset, downloaded),
          {:ok, :stored} <- store(job, preset, transcoded),
@@ -31,6 +33,11 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
   defp setup(job, preset) do
     Event.track(job, "setup", %{preset_name: preset.name})
     Setup.perform(job)
+  end
+
+  defp check_existing(job, preset, path) do
+    Event.track(job, "check_existing", %{preset_name: preset.name})
+    CheckExisting.perform(preset, path)
   end
 
   defp download(%Job.Entry{job: job, preset: preset} = job_entry, url, path) do
