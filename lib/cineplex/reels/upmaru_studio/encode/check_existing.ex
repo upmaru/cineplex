@@ -29,8 +29,10 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.CheckExisting do
       end)
       |> Enum.count()
 
-    if matched_count == 0,
-      do: {:ok, :not_encoded},
-      else: {:error, :already_encoded}
+    if matched_count == 0 do
+      {:ok, :not_encoded}
+    else
+      {:error, :already_encoded}
+    end
   end
 end

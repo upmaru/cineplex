@@ -26,6 +26,11 @@ defmodule Cineplex.Queue.Source do
   @valid_attrs ~w(endpoint reel token storage)a
   @required_attrs ~w(endpoint reel token)a
 
+  @spec changeset(
+          {map(), map()}
+          | %{:__struct__ => atom() | %{__changeset__: map()}, optional(atom()) => any()},
+          :invalid | %{optional(:__struct__) => none(), optional(atom() | binary()) => any()}
+        ) :: Ecto.Changeset.t()
   def changeset(source, params \\ %{}) do
     source
     |> cast(params, @valid_attrs)

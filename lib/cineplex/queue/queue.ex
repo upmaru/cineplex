@@ -18,7 +18,7 @@ defmodule Cineplex.Queue do
   def create_source(endpoint, token, reel) do
     %Source{}
     |> Source.changeset(%{endpoint: endpoint, token: token, reel: reel})
-    |> Repo.insert()
+    |> Repo.insert(on_conflict: :nothing)
   end
 
   @spec update_source(Source.t(), map()) :: {:error, Ecto.Changeset.t()} | {:ok, Source.t()}
