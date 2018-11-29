@@ -81,6 +81,7 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Transcode do
       file_path
       |> FFprobe.streams()
       |> Enum.map(fn r -> r["r_frame_rate"] end)
+      |> Enum.reject(fn r -> r == "0/0" end)
       |> List.first()
       |> String.split("/")
       |> Enum.map(&String.to_integer/1)
