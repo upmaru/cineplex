@@ -1,6 +1,6 @@
 defmodule Cineplex.Reels.UpmaruStudio.Encode.Store do
   alias Cineplex.Queue.Source
-  alias Upstream.Uploader
+  alias Upstream.B2
 
   require Logger
 
@@ -30,7 +30,7 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Store do
 
   defp upload(transcoded_path, meta) do
     [_, name] = String.split(transcoded_path, "tmp/")
-    Uploader.upload_file!(transcoded_path, name, meta)
+    B2.upload_file(transcoded_path, name, meta)
   end
 
   defp metadata(name), do: %{preset_name: name, uploader: "cineplex"}
