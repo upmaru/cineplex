@@ -9,8 +9,6 @@ config :cineplex,
 
 # upload timeout in milliseconds
 config :upstream, :upload, timeout: 600_000
-config :upstream, Upstream,
-  concurrency: 1
 
 config :cineplex, :reels, %{
   "upmaru_studio" => Cineplex.Reels.UpmaruStudio
