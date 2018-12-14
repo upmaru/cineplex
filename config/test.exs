@@ -8,7 +8,8 @@ config :tesla, adapter: Tesla.Adapter.Hackney
 
 config :cineplex, Cineplex.Repo,
   database: "cineplex_test",
-  username: "zacksiri",
+  username: System.get_env("DATABASE_POSTGRESQL_USERNAME") || "zacksiri",
+  password: System.get_env("DATABASE_POSTGRESQL_PASSWORD") || "",
   hostname: "localhost"
 
 config :appsignal, :config, active: false

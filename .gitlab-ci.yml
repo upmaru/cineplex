@@ -4,6 +4,7 @@ stages:
   - deploy
 
 variables:
+  DATABASE_POSTGRESQL_USERNAME: postgres
   REPODEST: /home/builder/packages/${CI_COMMIT_REF_NAME}
   PACKAGE_DEST: /home/builder/packages/${CI_COMMIT_REF_NAME}/${CI_PROJECT_NAMESPACE}/
   GCS_DEST: gs://packages.apk.build/${CI_COMMIT_REF_NAME}/${CI_PROJECT_NAMESPACE}/
