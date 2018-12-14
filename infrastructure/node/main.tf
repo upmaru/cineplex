@@ -11,6 +11,9 @@ variable "role" {
   type = "string"
 }
 
+variable "profiles" {
+  type = "list"
+}
 
 variable "cores" {
   type = "string"
