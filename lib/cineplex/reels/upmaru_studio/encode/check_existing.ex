@@ -11,13 +11,17 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.CheckExisting do
           {:error, :already_encoded | :check_existing_failed} | {:ok, :not_encoded}
   def perform(%Job{object: object}, %Source.Preset{name: name}) do
     object_name = Transcode.suffixed_name(name, object)
+    auth = B2.Account.authorization()
 
-    case B2.List.by_file_name(object_name) do
-      {:ok, %{files: []}} -> {:ok, :not_encoded}
+    case B2.List.by_file_name(auth, object_name) do
+      {:ok, %{files: []}} ->
+        {:ok, :not_encoded}
+
       {:ok, %{files: files}} ->
         find_matched(files, object_name)
 
-      {:error, _} -> {:error, :check_existing_failed}
+      {:error, _} ->
+        {:error, :check_existing_failed}
     end
   end
 

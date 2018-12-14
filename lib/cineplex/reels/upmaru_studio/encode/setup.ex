@@ -32,8 +32,8 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Setup do
     |> B2.Download.authorize(3600)
   end
 
-  defp get_download_url(object, %{authorization_token: token} = _auth),
-    do: B2.Download.url(object, token)
+  defp get_download_url(object, %{authorization_token: token} = auth),
+    do: B2.Download.url(auth, object, token)
 
   defp to_keyword_list(config) do
     config

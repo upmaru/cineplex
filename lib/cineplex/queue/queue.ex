@@ -13,6 +13,11 @@ defmodule Cineplex.Queue do
     |> Repo.preload([:source])
   end
 
+  @spec get_source([{:endpoint, any()}, ...]) :: Source.t() | nil
+  def get_source(endpoint: endpoint) do
+    Repo.get_by(Source, endpoint: endpoint)
+  end
+
   @spec create_source(binary(), binary(), binary()) ::
           {:error, Ecto.Changeset.t()} | {:ok, Source.t()}
   def create_source(endpoint, token, reel) do
