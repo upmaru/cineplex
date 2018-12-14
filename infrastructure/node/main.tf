@@ -16,14 +16,6 @@ variable "cores" {
   type = "string"
 }
 
-variable "profiles" {
-  type = "list"
-
-  default = {
-
-  }
-}
-
 resource "lxd_container" "cineplex_node" {
   count    = "${var.count}"
   name     = "cineplex-${var.role}-${terraform.workspace}-${count.index + 1}"
