@@ -18,7 +18,7 @@ defmodule Cineplex.Application do
   defp children("server") do
     [
       {Plug.Cowboy,
-       scheme: :http, plug: CineplexWeb.Router, options: [port: 4000, compress: true]},
+       scheme: :http, plug: CineplexWeb, options: [port: 4000, compress: true]},
       {Task.Supervisor, name: Cineplex.TaskSupervisor},
       {Cineplex.Repo, []},
       Cineplex.Distribution.Node.Health,

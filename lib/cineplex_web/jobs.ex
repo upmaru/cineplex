@@ -1,27 +1,14 @@
-defmodule CineplexWeb.Router do
+defmodule CineplexWeb.Jobs do
   use Plug.Router
 
   alias Cineplex.Queue
-
-  plug(
-    Plug.Parsers,
-    parsers: [:urlencoded, :json],
-    pass: ["application/json"],
-    json_decoder: Jason
-  )
-
-  plug(Timber.Integrations.EventPlug)
 
   plug(CineplexWeb.AuthorizePlug)
 
   plug(:match)
   plug(:dispatch)
 
-  get "/health" do
-    send_resp(conn, :ok, "ok")
-  end
-
-  post "/jobs" do
+  post "/" do
     %{source: source} = conn.assigns
 
     with {:ok, job} <- Queue.create_job(source, conn.body_params),
@@ -37,9 +24,5 @@ defmodule CineplexWeb.Router do
       _ ->
         send_resp(conn, :unprocessable_entity, "")
     end
-  end
-
-  match _ do
-    send_resp(conn, 404, "not found")
   end
 end
