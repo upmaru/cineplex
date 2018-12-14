@@ -10,6 +10,8 @@ defmodule CineplexWeb.Router do
     json_decoder: Jason
   )
 
+  plug(Timber.Integrations.EventPlug)
+
   plug(CineplexWeb.AuthorizePlug)
 
   plug(:match)
