@@ -9,12 +9,12 @@ defmodule CineplexWeb.AuthorizePlug do
 
   @spec call(Plug.Conn.t(), any()) :: Plug.Conn.t()
   def call(conn, _options) do
-    case Queue.get_source(endpoint: conn.host) do
-      %Source{} = source ->
-        assign(conn, :source, source)
-
-      nil ->
-        handle_not_authorized(conn)
+    with %{"x-source" => endpoint} <- Enum.into(conn.req_headers, %{}),
+         %Source{} = source <- Queue.get_source(endpoint: endpoint)
+    do
+      assign(conn, :source, source)
+    else
+      _ -> handle_not_authorized(conn)
     end
   end
 

@@ -18,13 +18,18 @@ defmodule CineplexWeb.Router do
   post "/jobs" do
     %{source: source} = conn.assigns
 
-    case Queue.create_job(source, conn.body_params) do
-      {:ok, job} ->
+    with {:ok, job} <- Queue.create_job(source, conn.body_params),
+         {:ok, %{job: _job, entries: _entries}} <- Queue.Job.Extract.perform(job)
+    do
+      send_resp(conn, :created, "")
+    else
+      {:error, %Ecto.Changeset{changes: %{resource: resource}} = _changeset} ->
+        job = Queue.get_job(resource: resource)
         Queue.Job.Extract.perform(job)
+        send_resp(conn, :created, "")
 
       _ ->
-        conn
-        |> send_resp(:unprocessable_entity, "")
+        send_resp(conn, :unprocessable_entity, "")
     end
   end
 

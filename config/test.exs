@@ -1,5 +1,9 @@
 use Mix.Config
 
+
+# can be worker or server
+config :cineplex, :role, System.get_env("CINEPLEX_ROLE")
+
 config :tesla, adapter: Tesla.Adapter.Hackney
 
 config :cineplex, Cineplex.Repo,

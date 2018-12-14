@@ -23,7 +23,6 @@ defmodule Cineplex.Application do
       {Cineplex.Repo, []},
       Cineplex.Distribution.Node.Health,
       Cineplex.Distribution.Node.Scheduler,
-      Cineplex.Queue.Job.Poller,
       {Cineplex.Server, []}
     ]
   end
