@@ -20,7 +20,7 @@ resource "lxd_container" "cineplex_node" {
   count    = "${var.count}"
   name     = "cineplex-${var.role}-${terraform.workspace}-${count.index + 1}"
   image    = "app-${terraform.workspace}"
-  profiles = ["${var.profiles}"]
+  profiles = "${var.profiles}"
 
   limits {
     cpu    = "${var.cores}"
