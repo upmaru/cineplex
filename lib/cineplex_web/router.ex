@@ -15,6 +15,10 @@ defmodule CineplexWeb.Router do
   plug(:match)
   plug(:dispatch)
 
+  get "/health" do
+    send_resp(conn, :ok, "ok")
+  end
+
   post "/jobs" do
     %{source: source} = conn.assigns
 
