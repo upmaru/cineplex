@@ -16,11 +16,19 @@ variable "cores" {
   type = "string"
 }
 
+variable "profiles" {
+  type = "list"
+
+  default = {
+
+  }
+}
+
 resource "lxd_container" "cineplex_node" {
   count    = "${var.count}"
   name     = "cineplex-${var.role}-${terraform.workspace}-${count.index + 1}"
   image    = "app-${terraform.workspace}"
-  profiles = ["cineplex-${terraform.workspace}", "${var.extra_profile}"]
+  profiles = ["${var.profiles}"]
 
   limits {
     cpu    = "${var.cores}"
