@@ -1,4 +1,5 @@
 stages:
+  - test
   - build
   - deploy
 
@@ -7,6 +8,30 @@ variables:
   PACKAGE_DEST: /home/builder/packages/${CI_COMMIT_REF_NAME}/${CI_PROJECT_NAMESPACE}/
   GCS_DEST: gs://packages.apk.build/${CI_COMMIT_REF_NAME}/${CI_PROJECT_NAMESPACE}/
   GIT_STRATEGY: fetch
+
+
+test_server:
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - _build
+      - deps
+
+  stage: test
+  tags:
+    - gcp
+    - postgresql
+    - redis
+    - apk
+
+  variables:
+    CINEPLEX_ROLE: server
+
+  script:
+    - "cd .apk/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
+    - "abuild check"
+  
+
 
 build:
   stage: build

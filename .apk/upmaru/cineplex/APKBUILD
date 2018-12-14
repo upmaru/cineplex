@@ -26,7 +26,6 @@ pkgver=$VERSION
 pkgrel=$BUILD
 pkgdesc="Video Encoder"
 url="https://gitlab.com/upmaru/cineplex"
-options="!check"
 arch="all"
 license="MIT"
 install="
@@ -76,6 +75,27 @@ build() {
   mix local.rebar --force
   MIX_ENV=prod mix do deps.get --only prod, compile
   MIX_ENV=prod mix release --env=prod
+}
+
+check() {
+  abuild clean
+  abuild deps
+
+  export MIX_ENV=test
+
+  echo "--- Preparing for Tests"
+  cd "$root"
+
+  mix local.hex --force
+  mix local.rebar --force
+  mix deps.get --only test
+
+  echo "--- Running Tests"
+  mix ecto.drop
+  mix ecto.create
+  mix ecto.migrate
+  
+  mix test
 }
 
 package() {
