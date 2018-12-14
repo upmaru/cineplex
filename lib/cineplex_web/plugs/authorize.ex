@@ -1,4 +1,4 @@
-defmodule CineplexWeb.AuthorizePlug do
+defmodule CineplexWeb.Plugs.Authorize do
   import Plug.Conn
 
   alias Cineplex.Queue

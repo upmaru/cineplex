@@ -3,7 +3,7 @@ defmodule CineplexWeb.Jobs do
 
   alias Cineplex.Queue
 
-  plug(CineplexWeb.AuthorizePlug)
+  plug(CineplexWeb.Plugs.Authorize)
 
   plug(:match)
   plug(:dispatch)

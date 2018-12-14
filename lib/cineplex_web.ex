@@ -8,14 +8,12 @@ defmodule CineplexWeb do
     json_decoder: Jason
   )
 
+  plug(CineplexWeb.Plugs.Health)
+
   plug(Timber.Integrations.EventPlug)
 
   plug(:match)
   plug(:dispatch)
-
-  get "/health" do
-    send_resp(conn, :ok, "ok")
-  end
 
   forward("/jobs", to: CineplexWeb.Jobs)
 
