@@ -44,6 +44,6 @@ defmodule Cineplex.Queue.Job do
     job
     |> cast(params, @valid_attrs)
     |> validate_required(@required_attrs)
-    |> unique_constraint(:resource)
+    |> unique_constraint(:resource_source_constraint, name: :queue_jobs_resource_source_id_index)
   end
 end
