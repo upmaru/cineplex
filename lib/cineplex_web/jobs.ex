@@ -17,7 +17,7 @@ defmodule CineplexWeb.Jobs do
       send_resp(conn, :created, "")
     else
       {:error, %Ecto.Changeset{changes: %{resource: resource}} = _changeset} ->
-        job = Queue.get_job(resource: resource)
+        job = Queue.get_job(source, resource: resource)
         Queue.Job.Extract.perform(job)
         send_resp(conn, :created, "")
 
