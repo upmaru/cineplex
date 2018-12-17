@@ -14,7 +14,7 @@ defmodule Cineplex.Queue.Source do
     field(:endpoint, :string)
     field(:reel, :string)
     field(:token, :string)
-    field(:live, :boolean)
+    field(:live, :boolean, default: true)
 
     field(:storage, :map)
 
