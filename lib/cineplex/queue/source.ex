@@ -14,6 +14,7 @@ defmodule Cineplex.Queue.Source do
     field(:endpoint, :string)
     field(:reel, :string)
     field(:token, :string)
+    field(:live, :boolean)
 
     field(:storage, :map)
 
@@ -23,7 +24,7 @@ defmodule Cineplex.Queue.Source do
     timestamps(type: :utc_datetime)
   end
 
-  @valid_attrs ~w(endpoint reel token storage)a
+  @valid_attrs ~w(endpoint reel token storage live)a
   @required_attrs ~w(endpoint reel token)a
 
   @spec changeset(
