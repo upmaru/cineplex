@@ -5,7 +5,7 @@ defmodule Compressor.Mixfile do
   def project do
     [
       app: :cineplex,
-      version: "1.0.5",
+      version: "1.1.0",
       elixir: "~> 1.6",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -14,9 +14,13 @@ defmodule Compressor.Mixfile do
       description: description(),
       aliases: aliases(),
       deps: deps(),
-      package: package()
+      package: package(),
+      elixirc_paths: elixirc_paths(Mix.env)
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Run "mix help compile.app" to learn about applications.
   def application do
@@ -68,6 +72,9 @@ defmodule Compressor.Mixfile do
       # monitoring
       {:appsignal, "~> 1.0"},
 
+      # test
+      {:ex_machina, "~> 2.2", only: :test},
+
       # deployment
       {:distillery, "~> 1.5", runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev}
@@ -96,7 +103,7 @@ defmodule Compressor.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate", "run priv/repo/seeds.exs", "test"]
+      test: ["ecto.reset", "run priv/repo/seeds.exs", "test"]
     ]
   end
 end

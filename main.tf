@@ -29,6 +29,7 @@ module "cineplex_server" {
   role = "server"
   cores = "1"
   count = "1"
+  profiles = ["cineplex-${terraform.workspace}", "cineplex-web-${terraform.workspace}"]
 }
 
 module "cineplex_worker" {
@@ -37,4 +38,5 @@ module "cineplex_worker" {
   role = "worker"
   cores = "2"
   count = "${var.worker_count[terraform.workspace]}"
+  profiles = ["cineplex-${terraform.workspace}"]
 }

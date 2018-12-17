@@ -6,11 +6,17 @@ defmodule Cineplex.Queue do
 
   alias Cineplex.Repo
 
-  @spec get_job([{:resource, binary()}, ...]) :: Job.t() | nil
-  def get_job(resource: resource) do
+
+  @spec get_job(Source.t(), [{:resource, any()}, ...]) :: nil | Job.t()
+  def get_job(source, resource: resource) do
     Job
+    |> Job.Scope.by(source)
     |> Repo.get_by!(resource: resource)
-    |> Repo.preload([:source])
+  end
+
+  @spec get_source([{:endpoint, any()}, ...]) :: Source.t() | nil
+  def get_source(endpoint: endpoint) do
+    Repo.get_by(Source, endpoint: endpoint)
   end
 
   @spec create_source(binary(), binary(), binary()) ::

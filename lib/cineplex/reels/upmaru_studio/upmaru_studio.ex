@@ -26,26 +26,6 @@ defmodule Cineplex.Reels.UpmaruStudio do
     Tesla.client(middleware)
   end
 
-  @spec job(Tesla.Client.t()) ::
-          {:ok, %{object: binary, resource: binary, events_callback_url: binary}}
-          | {:error, :invalid_job}
-  def job(client) do
-    case Tesla.get(client, "/v1/bot/cineplex/media/jobs") do
-      {:ok, %{body: body, status: 200}} ->
-        job = body["data"]["attributes"]
-
-        {:ok,
-         %{
-           object: job["object"],
-           resource: job["resource"],
-           events_callback_url: job["events_callback_url"]
-         }}
-
-      _ ->
-        {:error, :invalid_job}
-    end
-  end
-
   @spec setting(Tesla.Client.t()) ::
           {:ok, %{presets: list(), storage: map()}} | {:error, :invalid_setting}
   def setting(client) do

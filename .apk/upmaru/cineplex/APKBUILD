@@ -78,6 +78,27 @@ build() {
   MIX_ENV=prod mix release --env=prod
 }
 
+check() {
+  abuild clean
+  abuild deps
+
+  export MIX_ENV=test
+
+  echo "--- Preparing for Tests"
+  cd "$root"
+
+  mix local.hex --force
+  mix local.rebar --force
+  mix deps.get --only test
+
+  echo "--- Running Tests"
+  mix ecto.drop
+  mix ecto.create
+  mix ecto.migrate
+  
+  mix test
+}
+
 package() {
   mkdir -p "$pkgdir"
 
