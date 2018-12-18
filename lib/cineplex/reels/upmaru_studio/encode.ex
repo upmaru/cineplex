@@ -56,10 +56,10 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode do
     Transcode.perform(preset, downloaded)
   end
 
-  defp store(authorization, %Job{source: source} = job, preset, transcoded) do
+  defp store(authorization, job, preset, transcoded) do
     Event.track(job, "store", %{preset_name: preset.name})
 
-    Store.perform(authorization, source, preset, transcoded,
+    Store.perform(authorization, preset, transcoded,
       on_done: fn ->
         Event.track(job, "uploaded", %{preset_name: preset.name})
       end

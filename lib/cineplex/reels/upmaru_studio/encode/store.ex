@@ -4,11 +4,10 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Store do
 
   require Logger
 
-  @spec perform(B2.Account.Authorization.t(), Cineplex.Queue.Source.t(), Source.Preset.t(), any(), [{:on_done, fun}]) ::
+  @spec perform(B2.Account.Authorization.t(), Source.Preset.t(), any(), [{:on_done, fun}]) ::
           {:error, :store_failed} | {:ok, :stored}
   def perform(
         %B2.Account.Authorization{} = authorization,
-        %Source{} = _source,
         %Source.Preset{name: name} = _preset,
         transcoded_path,
         opts \\ []
