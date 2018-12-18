@@ -5,7 +5,7 @@ defmodule Compressor.Mixfile do
   def project do
     [
       app: :cineplex,
-      version: "1.1.6",
+      version: "1.1.7",
       elixir: "~> 1.6",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
