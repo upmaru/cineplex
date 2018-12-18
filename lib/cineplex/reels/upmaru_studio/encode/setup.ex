@@ -5,9 +5,10 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Setup do
   @spec perform(Job.t()) :: {:error, :setup_failed} | {:ok, binary(), binary()}
   def perform(%Job{object: object, source: source} = _job) do
     with {:ok, [_apps]} <- Upstream.set_config(to_keyword_list(source.storage)),
-         {:ok, auth} <- get_authorization_key(object),
+         %B2.Account.Authorization{} = authorization <- B2.Account.authorization(),
+         {:ok, download_auth} <- get_authorization_key(authorization, object),
          {:ok, path} <- setup_tmp_directory(object),
-         url when is_binary(url) <- get_download_url(object, auth) do
+         url when is_binary(url) <- get_download_url(authorization, object, download_auth) do
       {:ok, url, path}
     else
       _ -> {:error, :setup_failed}
@@ -25,19 +26,17 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Setup do
     {:ok, path}
   end
 
-  defp get_authorization_key(object) do
-    auth = B2.Account.authorization()
-
+  defp get_authorization_key(authorization, object) do
     prefix =
       object
       |> String.split("/")
       |> List.first()
 
-    B2.Download.authorize(auth, prefix, 3600)
+    B2.Download.authorize(authorization, prefix, 3600)
   end
 
-  defp get_download_url(object, %{authorization_token: token} = auth),
-    do: B2.Download.url(auth, object, token)
+  defp get_download_url(authorization, object, %{authorization_token: token} = _download_auth),
+    do: B2.Download.url(authorization, object, token)
 
   defp to_keyword_list(config) do
     config
