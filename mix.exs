@@ -5,7 +5,7 @@ defmodule Compressor.Mixfile do
   def project do
     [
       app: :cineplex,
-      version: "1.1.7",
+      version: "1.1.8",
       elixir: "~> 1.6",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -49,7 +49,7 @@ defmodule Compressor.Mixfile do
 
       # for transfer
       {:downstream, "~> 0.1.0"},
-      {:upstream, "~> 2.0"},
+      {:upstream, "~> 2.1"},
       {:jason, ">= 1.0.0"},
 
       # http client
