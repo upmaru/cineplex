@@ -26,10 +26,14 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Setup do
   end
 
   defp get_authorization_key(object) do
-    object
-    |> String.split("/")
-    |> List.first()
-    |> B2.Download.authorize(3600)
+    auth = B2.Account.authorization()
+
+    prefix =
+      object
+      |> String.split("/")
+      |> List.first()
+
+    B2.Download.authorize(auth, prefix, 3600)
   end
 
   defp get_download_url(object, %{authorization_token: token} = auth),
