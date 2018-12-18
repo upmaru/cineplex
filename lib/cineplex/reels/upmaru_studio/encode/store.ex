@@ -4,15 +4,16 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Store do
 
   require Logger
 
-  @spec perform(Cineplex.Queue.Source.t(), Source.Preset.t(), any(), [{:on_done, fun}]) ::
+  @spec perform(B2.Account.Authorization.t(), Cineplex.Queue.Source.t(), Source.Preset.t(), any(), [{:on_done, fun}]) ::
           {:error, :store_failed} | {:ok, :stored}
   def perform(
+        %B2.Account.Authorization{} = authorization,
         %Source{} = _source,
         %Source.Preset{name: name} = _preset,
         transcoded_path,
         opts \\ []
       ) do
-    case upload(transcoded_path, metadata(name)) do
+    case upload(authorization, transcoded_path, metadata(name)) do
       {:ok, _} ->
         on_done(opts)
         {:ok, :stored}
@@ -28,9 +29,9 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Store do
     end).()
   end
 
-  defp upload(transcoded_path, meta) do
+  defp upload(authorization, transcoded_path, meta) do
     [_, name] = String.split(transcoded_path, "tmp/")
-    B2.upload_file(transcoded_path, name, meta)
+    B2.upload_file(authorization, transcoded_path, name, meta)
   end
 
   defp metadata(name), do: %{preset_name: name, uploader: "cineplex"}

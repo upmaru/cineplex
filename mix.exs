@@ -49,7 +49,7 @@ defmodule Compressor.Mixfile do
 
       # for transfer
       {:downstream, "~> 0.1.0"},
-      {:upstream, "~> 2.0"},
+      {:upstream, "~> 2.1"},
       {:jason, ">= 1.0.0"},
 
       # http client
