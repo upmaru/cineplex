@@ -9,7 +9,6 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Clean do
   def perform(path) do
     case File.rm_rf(path) do
       {:ok, _} ->
-        Upstream.reset()
         {:ok, :cleaned}
 
       {:error, _, _} ->

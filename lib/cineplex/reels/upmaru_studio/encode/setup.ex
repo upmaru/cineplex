@@ -4,8 +4,7 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.Setup do
 
   @spec perform(Job.t()) :: {:error, :setup_failed} | {:ok, B2.Account.Authorization.t(), binary(), binary()}
   def perform(%Job{object: object, source: source} = _job) do
-    with {:ok, [_apps]} <- Upstream.set_config(to_keyword_list(source.storage)),
-         %B2.Account.Authorization{} = authorization <- B2.Account.authorization(),
+    with {:ok, authorization} <- Upstream.set_config(to_keyword_list(source.storage)),
          {:ok, download_auth} <- get_authorization_key(authorization, object),
          {:ok, path} <- setup_tmp_directory(object),
          url when is_binary(url) <- get_download_url(authorization, object, download_auth) do
