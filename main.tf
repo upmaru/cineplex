@@ -18,7 +18,7 @@ variable "worker_count" {
   type = "map"
 
   default = {
-    "production" = 2
+    "production" = 3
     "staging" = 1
   }
 }
