@@ -7,13 +7,12 @@ defmodule Cineplex.Reels.UpmaruStudio.Encode.CheckExisting do
   alias Cineplex.Reels.UpmaruStudio.Encode.Transcode
   alias Upstream.B2
 
-  @spec perform(Job.t(), Source.Preset.t()) ::
+  @spec perform(B2.Account.Authorization.t(), Job.t(), Source.Preset.t()) ::
           {:error, :already_encoded | :check_existing_failed} | {:ok, :not_encoded}
-  def perform(%Job{object: object}, %Source.Preset{name: name}) do
+  def perform(authorization, %Job{object: object}, %Source.Preset{name: name}) do
     object_name = Transcode.suffixed_name(name, object)
-    auth = B2.Account.authorization()
 
-    case B2.List.by_file_name(auth, object_name) do
+    case B2.List.by_file_name(authorization, object_name) do
       {:ok, %{files: []}} ->
         {:ok, :not_encoded}
 
